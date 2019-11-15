@@ -275,7 +275,7 @@ defmodule Unicode.Transform.Combinators do
     Unicode.Script.scripts()
     |> Map.keys()
     |> Enum.map(&String.replace(&1, "_", " "))
-    |> Enum.map(fn s -> String.split(s) |> Enum.map(&String.capitalize/1) |> Enum.join end)
+    |> Enum.map(&String.downcase/1)
     |> Enum.map(fn script ->
       quote do
         string(unquote(script))
