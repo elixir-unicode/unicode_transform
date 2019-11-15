@@ -381,6 +381,12 @@ defmodule Unicode.Transform.Combinators do
     |> label("whitespace")
   end
 
+  def trailing_whitespace do
+    ascii_char([?\s, ?\t, ?\n, ?\r])
+    |> repeat()
+    |> label("trailing whitespace")
+  end
+
   def name do
     times(ascii_char([?a..?z, ?A..?Z]), min: 1)
     |> label("name")
@@ -432,12 +438,12 @@ defmodule Unicode.Transform.Combinators do
     |> ignore(string(";"))
     |> ignore(optional(whitespace()))
     |> ignore(optional(comment()))
+    |> label("valid rule")
   end
 
   def comment do
     string("#")
-    |> repeat(utf8_char([]))
-    |> eos()
+    |> repeat(utf8_char([{:not, ?\r}, {:not, ?\n}]))
   end
 
   def transform_rule do
@@ -487,21 +493,36 @@ defmodule Unicode.Transform.Combinators do
     |> concat(end_of_rule())
     |> tag(:set_variable)
     |> label("variable definition")
+    |> post_traverse(:store_variable_in_context)
+  end
+
+  def store_variable_in_context(_rest, args, context, _line, _offset) do
+    [set_variable: [variable_name: variable_name, value: value]] = args
+    context = Map.put(context, variable_name, value)
+    {[], context}
   end
 
   def variable_value do
-    characters_or_class()
-    |> repeat(ignore(optional(whitespace())) |> concat(characters_or_class()))
+    characters_or_variable_or_class()
+    |> repeat(ignore(optional(whitespace())) |> concat(characters_or_variable_or_class()))
     |> tag(:value)
   end
 
-  def characters_or_class do
+  def characters_or_variable_or_class do
     choice([
       unicode_set(),
       character_class(),
-      ignore(string("$")) |> concat(variable_name()),
+      ignore(string("$")) |> concat(variable_name() |> post_traverse(:insert_variable)),
       character_string()
     ])
+  end
+
+  def insert_variable(_rest, args, context, _line, _offset) do
+    [variable_name: variable_name] = args
+    case Map.get(context, variable_name) do
+      nil -> {:error, "Unknown variable #{inspect variable_name}"}
+      variable_value -> {variable_value, context}
+    end
   end
 
   def character_string do
@@ -536,5 +557,14 @@ defmodule Unicode.Transform.Combinators do
     chars
     |> List.to_string()
     |> String.to_integer(16)
+  end
+
+  def end_of_line do
+    choice([
+      string("\n"),
+      string("\r\n")
+    ])
+    |> repeat()
+    |> ignore()
   end
 end

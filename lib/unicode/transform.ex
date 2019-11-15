@@ -6,5 +6,16 @@ defmodule Unicode.Transform do
   import NimbleParsec
   import Unicode.Transform.Combinators
 
-  defparsec(:rule, choice([filter_rule(), transform_rule(), variable_definition()]))
+  defparsec(:parse_rule,
+    choice([
+      filter_rule(),
+      transform_rule(),
+      variable_definition(),
+      end_of_rule()
+    ]))
+
+  defparsec(:parse,
+    parsec(:parse_rule)
+    |> repeat(end_of_line() |> parsec(:parse_rule))
+    |> ignore(optional(trailing_whitespace())))
 end
