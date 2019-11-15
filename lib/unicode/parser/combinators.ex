@@ -270,7 +270,9 @@ defmodule Unicode.Transform.Combinators do
   """
 
   import NimbleParsec
+  alias Unicode.Transform.Utils
 
+  # Known script names in Unicode
   script_names =
     Unicode.Script.scripts()
     |> Map.keys()
@@ -282,6 +284,34 @@ defmodule Unicode.Transform.Combinators do
       end
     end)
 
+  # Known block names in Unicode
+  block_names =
+    Unicode.Block.blocks()
+    |> Map.keys()
+    |> Enum.map(&Atom.to_string/1)
+    |> Enum.map(&String.replace(&1, "_", " "))
+    |> Enum.map(&String.upcase/1)
+    |> Enum.map(fn block ->
+      quote do
+        string(unquote(block))
+      end
+    end)
+
+  # Characters that are valid to start
+  # an identifier
+  id_start =
+    Unicode.Property.properties
+    |> Map.get(:id_start)
+    |> Utils.ranges_to_combinator_utf8_list
+
+  # Characters that are valid for
+  # an identifier after the first
+  # character
+  id_continue =
+    Unicode.Property.properties
+    |> Map.get(:id_continue)
+    |> Utils.ranges_to_combinator_utf8_list
+
   def character_class do
     ignore(string("["))
     |> choice([
@@ -292,6 +322,7 @@ defmodule Unicode.Transform.Combinators do
       characters()
     ])
     |> ignore(string("]"))
+    |> label("character class")
   end
 
   def script do
@@ -300,14 +331,17 @@ defmodule Unicode.Transform.Combinators do
     |> concat(script_name())
     |> ignore(string(":"))
     |> unwrap_and_tag(:script)
+    |> label("unicode script")
   end
 
   def block do
     ignore(string(":"))
     |> ignore(string("block="))
-    |> concat(name())
+    |> choice(unquote(block_names))
     |> ignore(string(":"))
+    |> reduce(:to_lower_atom)
     |> unwrap_and_tag(:block)
+    |> label("unicode block name")
   end
 
   def category do
@@ -315,6 +349,7 @@ defmodule Unicode.Transform.Combinators do
     |> concat(name())
     |> ignore(string(":"))
     |> unwrap_and_tag(:category)
+    |> label("unicode category")
   end
 
   def canonical_combining_class do
@@ -323,10 +358,11 @@ defmodule Unicode.Transform.Combinators do
     |> concat(name())
     |> ignore(string(":"))
     |> unwrap_and_tag(:combining_class)
+    |> label("canonical combining class")
   end
 
   def characters do
-    utf8_char([{:not, ?]}])
+    utf8_char([{:not, ?]}, {:not, ?:}])
     |> times(min: 1)
     |> tag(:character_class)
   end
@@ -336,21 +372,35 @@ defmodule Unicode.Transform.Combinators do
     ignore(string("["))
     |> times(character_class(), min: 1)
     |> ignore(string("]"))
+    |> label("unicode character set")
   end
 
   def whitespace do
     ascii_char([?\s, ?\t])
     |> repeat()
+    |> label("whitespace")
   end
 
   def name do
+    times(ascii_char([?a..?z, ?A..?Z]), min: 1)
+    |> label("name")
+  end
+
+  def variable_name do
     optional(ascii_char([?^]))
-    |> times(ascii_char([?a..?z, ?A..?Z, ?\s]), min: 1)
-    |> reduce(:to_lower_atom)
+    |> utf8_char(unquote(id_start))
+    |> repeat(utf8_char(unquote(id_continue)))
+    |> reduce(:to_string)
+    |> unwrap_and_tag(:variable_name)
+    |> label("variable name")
   end
 
   def script_name do
     choice(unquote(script_names))
+  end
+
+  def block_name do
+    choice(unquote(block_names))
   end
 
   def to_lower_atom([?^ | args]) do
@@ -374,6 +424,7 @@ defmodule Unicode.Transform.Combinators do
     ])
     |> concat(end_of_rule())
     |> tag(:filter_rule)
+    |> label("filter rule")
   end
 
   def end_of_rule do
@@ -399,6 +450,7 @@ defmodule Unicode.Transform.Combinators do
     ])
     |> concat(end_of_rule())
     |> tag(:transform)
+    |> label("transform rule")
   end
 
   def forward_transform do
@@ -434,13 +486,7 @@ defmodule Unicode.Transform.Combinators do
     |> concat(variable_value())
     |> concat(end_of_rule())
     |> tag(:set_variable)
-  end
-
-  def variable_name do
-    utf8_char([?a..?z, ?A..?Z])
-    |> repeat(utf8_char([{:not, ?\s}, {:not, ?\t}]))
-    |> reduce({List, :to_string, []})
-    |> unwrap_and_tag(:variable_name)
+    |> label("variable definition")
   end
 
   def variable_value do
@@ -468,9 +514,10 @@ defmodule Unicode.Transform.Combinators do
   def one_character do
     choice([
       ignore(string("\\")) |> utf8_char([]),
+      ignore(string("''")) |> replace("'"),
       ignore(string("'")) |> concat(encoded_character()) |> ignore(string("'")),
       ignore(string("'")) |> repeat(utf8_char([{:not, ?'}])) |> ignore(string("'")),
-      utf8_char([{:not, ?[}, {:not, ?;}, {:not, ?\s}])
+      utf8_char([?a..?z, ?A..?Z, ?0..?9])
     ])
   end
 
