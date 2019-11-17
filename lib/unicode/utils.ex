@@ -1,5 +1,4 @@
 defmodule Unicode.Transform.Utils do
-
   @doc """
   Converts a list of codepoint ranges (represented
   as a 2-tuple) into a list of character ranges
@@ -30,5 +29,4 @@ defmodule Unicode.Transform.Utils do
       [unquote(first)..unquote(last) | unquote(ranges_to_combinator_utf8_list(rest))]
     end
   end
-
 end

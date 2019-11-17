@@ -20,9 +20,9 @@ defmodule UnicodeTransform.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_unicode, "~> 1.0"},
+      {:ex_unicode, path: "../unicode"},
       {:sweet_xml, "~> 0.6", only: [:dev, :test]},
-      {:nimble_parsec, "~> 0.5", only: [:dev, :test]}
+      {:nimble_parsec, "~> 0.5", runtime: false}
     ]
   end
 end
