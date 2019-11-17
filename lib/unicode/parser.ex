@@ -1,4 +1,4 @@
-defmodule Unicode.Transform.Combinators do
+defmodule Unicode.Transform.Parser do
   @doc """
   Parses a transliteration rule set.
 
@@ -270,324 +270,56 @@ defmodule Unicode.Transform.Combinators do
   """
 
   import NimbleParsec
-  alias Unicode.Transform.Utils
+  import Unicode.Transform.Parser.Rule
+  import Unicode.Transform.Parser.Set
+  import Unicode.Transform.Parser.Variable
+  import Unicode.Transform.Parser.Reducer
 
-  # Known script names in Unicode
-  script_names =
-    Unicode.Script.scripts()
-    |> Map.keys()
-    |> Enum.map(&String.replace(&1, "_", " "))
-    |> Enum.map(&String.downcase/1)
-    |> Enum.sort()
-    |> Enum.reverse()
-    |> Enum.map(fn script ->
-      quote do
-        string(unquote(script))
-      end
-    end)
-
-  # Known block names in Unicode
-  block_names =
-    Unicode.Block.blocks()
-    |> Map.keys()
-    |> Enum.map(&Atom.to_string/1)
-    |> Enum.map(&String.replace(&1, "_", " "))
-    |> Enum.map(&String.upcase/1)
-    |> Enum.sort()
-    |> Enum.reverse()
-    |> Enum.map(fn block ->
-      quote do
-        string(unquote(block))
-      end
-    end)
-
-  # Known block names in Unicode
-  category_names =
-    Unicode.Category.categories()
-    |> Map.keys()
-    |> Enum.map(&Atom.to_string/1)
-    |> Enum.sort()
-    |> Enum.reverse()
-    |> Enum.map(fn category ->
-      quote do
-        string(unquote(category))
-      end
-    end)
-
-  # Characters that are valid to start
-  # an identifier
-  id_start =
-    Unicode.Property.properties()
-    |> Map.get(:id_start)
-    |> Utils.ranges_to_combinator_utf8_list()
-
-  # Characters that are valid for
-  # an identifier after the first
-  # character
-  id_continue =
-    Unicode.Property.properties()
-    |> Map.get(:id_continue)
-    |> Utils.ranges_to_combinator_utf8_list()
-
-  def script do
-    ignore(string(":"))
-    |> ignore(optional(string("script=")))
-    |> concat(script_name())
-    |> ignore(string(":"))
-    |> unwrap_and_tag(:script)
-    |> label("unicode script")
-  end
-
-  def block do
-    ignore(string(":"))
-    |> ignore(string("block="))
-    |> choice(unquote(block_names))
-    |> ignore(string(":"))
-    |> reduce(:to_lower_atom)
-    |> unwrap_and_tag(:block)
-    |> label("unicode block name")
-  end
-
-  def category do
-    ignore(string(":"))
-    |> concat(category_name())
-    |> ignore(string(":"))
-    |> unwrap_and_tag(:category)
-    |> label("unicode category")
-  end
-
-  def canonical_combining_class do
-    ignore(string(":"))
-    |> ignore(string("ccc="))
-    |> concat(combining_class_name())
-    |> ignore(string(":"))
-    |> unwrap_and_tag(:combining_class)
-    |> label("canonical combining class")
-  end
-
-  def set_operator do
-    ignore(optional(parsec(:whitespace)))
-    |> choice([
-      ascii_char([?-]) |> tag(:difference),
-      ascii_char([?&]) |> tag(:intersection)
+  defparsec(
+    :parse_rule,
+    choice([
+      filter_rule(),
+      transform_rule(),
+      variable_definition(),
+      comment(),
+      end_of_rule()
     ])
-    |> ignore(optional(parsec(:whitespace)))
-  end
+  )
 
-  def trailing_whitespace do
-    ascii_char([?\s, ?\t, ?\n, ?\r])
+  defparsec(
+    :parse,
+    ignore(optional(trailing_whitespace()))
+    |> parsec(:parse_rule)
+    |> repeat(end_of_line() |> ignore(optional(parsec(:whitespace))) |> parsec(:parse_rule))
+    |> ignore(optional(trailing_whitespace()))
+  )
+
+  defparsec(
+    :whitespace,
+    ascii_char([?\s, ?\t])
     |> repeat()
-    |> label("trailing whitespace")
-  end
+    |> label("whitespace")
+  )
 
-  def variable_name do
-    utf8_char(unquote(id_start))
-    |> repeat(utf8_char(unquote(id_continue)))
-    |> reduce(:to_string)
-    |> unwrap_and_tag(:variable_name)
-    |> label("variable name")
-  end
-
-  def combining_class_name do
-    times(ascii_char([?a..?z, ?A..?Z]), min: 1)
-    |> label("name")
-  end
-
-  def script_name do
-    choice([parsec(:variable) | unquote(script_names)])
-    |> reduce(:to_atom)
-  end
-
-  def category_name do
-    choice([parsec(:variable) | unquote(category_names)])
-    |> reduce(:to_atom)
-  end
-
-  def block_name do
-    choice([parsec(:variable) | unquote(block_names)])
-    |> reduce(:to_atom)
-  end
-
-  def filter_rule do
-    ignore(string("::"))
-    |> ignore(optional(parsec(:whitespace)))
-    |> choice([
-      parsec(:unicode_set),
-      character_class()
-    ])
-    |> concat(end_of_rule())
-    |> tag(:filter_rule)
-    |> label("filter rule")
-  end
-
-  def end_of_rule do
-    ignore(optional(parsec(:whitespace)))
-    |> ignore(string(";"))
-    |> ignore(optional(parsec(:whitespace)))
-    |> ignore(optional(comment()))
-    |> label("valid rule")
-  end
-
-  def comment do
-    string("#")
-    |> repeat(utf8_char([{:not, ?\r}, {:not, ?\n}]))
-  end
-
-  def transform_rule do
-    ignore(string("::"))
-    |> ignore(optional(parsec(:whitespace)))
-    |> choice([
-      both_transform(),
-      forward_transform(),
-      inverse_transform()
-    ])
-    |> concat(end_of_rule())
-    |> tag(:transform)
-    |> label("transform rule")
-  end
-
-  def forward_transform do
-    transform_name()
-    |> unwrap_and_tag(:forward_transform)
-  end
-
-  def inverse_transform do
-    ignore(string("("))
-    |> ignore(optional(parsec(:whitespace)))
-    |> optional(transform_name() |> unwrap_and_tag(:inverse_transform))
-    |> ignore(optional(parsec(:whitespace)))
-    |> ignore(string(")"))
-  end
-
-  def both_transform do
-    forward_transform()
-    |> ignore(optional(parsec(:whitespace)))
-    |> concat(inverse_transform())
-  end
-
-  def transform_name do
-    times(ascii_char([?a..?z, ?A..?Z, ?-, ?_]), min: 1)
-    |> reduce({List, :to_string, []})
-  end
-
-  def variable_definition do
+  defparsec(
+    :variable,
     ignore(string("$"))
     |> concat(variable_name())
-    |> ignore(optional(parsec(:whitespace)))
-    |> ignore(string("="))
-    |> ignore(optional(parsec(:whitespace)))
-    |> concat(variable_value())
-    |> concat(end_of_rule())
-    |> tag(:set_variable)
-    |> label("variable definition")
-    |> post_traverse(:store_variable_in_context)
-  end
+    |> post_traverse(:insert_variable)
+  )
 
-  def variable_value do
-    characters_or_variable_or_class()
-    |> repeat(ignore(optional(parsec(:whitespace))) |> concat(characters_or_variable_or_class()))
-    |> reduce(:consolidate_string)
-    |> tag(:value)
-  end
-
-  def characters_or_variable_or_class do
-    choice([
-      parsec(:unicode_set),
-      character_class(),
-      parsec(:variable),
-      character_string(),
-      repeat_or_optional_flags()
-    ])
-  end
-
-  def character_class do
+  defparsec(
+    :unicode_set,
     ignore(string("["))
-    |> ignore(optional(parsec(:whitespace)))
     |> optional(ascii_char([?^]))
-    |> choice([
-      parsec(:unicode_set),
-      block(),
-      canonical_combining_class(),
-      script(),
-      category(),
-      class_characters()
-    ])
+    |> concat(unicode_set_or_character_class())
+    |> repeat(
+      optional(set_operator())
+      |> ignore(optional(parsec(:whitespace)))
+      |> concat(unicode_set_or_character_class())
+    )
     |> ignore(string("]"))
-    |> reduce(:maybe_not)
-    |> label("character class")
-  end
-
-  def character_strings do
-    character_string()
-    |> repeat(ignore(optional(parsec(:whitespace))) |> concat(character_string()))
-    |> reduce(:consolidate_string)
-  end
-
-  def character_string do
-    choice([
-      parsec(:variable),
-      one_character()
-    ])
-    |> times(min: 1)
-    |> reduce(:consolidate_string)
-  end
-
-  def class_characters do
-    class_character()
-    |> repeat(ignore(optional(parsec(:whitespace))) |> concat(class_character()))
-    |> reduce(:consolidate_string)
-  end
-
-  @class_chars [{:not, ?\s}, {:not, ?[}, {:not, ?]}, {:not, ?:}]
-
-  def class_character do
-    choice([
-      ignore(string("\\")) |> utf8_char([]),
-      ignore(string("''")) |> replace("'"),
-      ignore(string("'")) |> concat(encoded_character()) |> ignore(string("'")),
-      ignore(string("'")) |> repeat(utf8_char([{:not, ?'}])) |> ignore(string("'")),
-      utf8_char(@class_chars)
-    ])
-  end
-
-  @syntax_chars [{:not, ?;}, {:not, ?\s}, {:not, ?[}, {:not, ?]},
-    {:not, ?;}, {:not, ?*}, {:not, ?+}, {:not, ?$}, {:not, ??}]
-
-  def one_character do
-    choice([
-      ignore(string("\\")) |> utf8_char([]),
-      ignore(string("''")) |> replace("'"),
-      ignore(string("'")) |> concat(encoded_character()) |> ignore(string("'")),
-      ignore(string("'")) |> repeat(utf8_char([{:not, ?'}])) |> ignore(string("'")),
-      utf8_char(@syntax_chars)
-    ])
-  end
-
-  def encoded_character do
-    choice([
-      ignore(string("\\u"))
-      |> times(ascii_char([?a..?f, ?A..?F, 0..9]), 4),
-      ignore(string("\\x{"))
-      |> times(ascii_char([?a..?f, ?A..?F, 0..9]), min: 1, max: 4)
-      |> ignore(string("}"))
-    ])
-    |> reduce(:hex_to_integer)
-  end
-
-  def repeat_or_optional_flags do
-    choice([
-      ascii_char([?*]) |> replace(:repeat_star),
-      ascii_char([?+]) |> replace(:repeat_plus),
-      ascii_char([??]) |> replace(:optional)
-    ])
-  end
-
-  def end_of_line do
-    choice([
-      string("\n"),
-      string("\r\n")
-    ])
-    |> repeat()
-    |> ignore()
-  end
+    |> reduce(:postfix_set_operations)
+    |> label("unicode set")
+  )
 end

@@ -29,4 +29,10 @@ defmodule Unicode.Transform.Utils do
       [unquote(first)..unquote(last) | unquote(ranges_to_combinator_utf8_list(rest))]
     end
   end
+
+  def duplicate_and_capitalize(list) do
+    new_list = Enum.map(list, &String.capitalize/1)
+    new_list ++ list
+  end
+
 end

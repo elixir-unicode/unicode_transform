@@ -1,4 +1,4 @@
-defmodule Unicode.Transform.Parser.Reducers do
+defmodule Unicode.Transform.Parser.Reducer do
   def maybe_not([?^ | [rest]]) do
     {:not, rest}
   end
@@ -109,5 +109,4 @@ defmodule Unicode.Transform.Parser.Reducers do
   def consolidate_string(head) do
     head
   end
-
 end

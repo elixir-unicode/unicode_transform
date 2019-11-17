@@ -2,6 +2,12 @@
 
 Implements the [Unicode transform rules](https://unicode.org/reports/tr35/tr35-general.html#Transforms). This is particularly useful from transliterating from one script to another.
 
+## Todo
+
+* [ ] Case insensitive lookups for scripts
+
+* [ ] (Unicode) mapping between CCC and its name
+
 ## Installation
 
 
