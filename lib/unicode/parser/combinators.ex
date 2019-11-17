@@ -297,6 +297,17 @@ defmodule Unicode.Transform.Combinators do
       end
     end)
 
+  # Known block names in Unicode
+  category_names =
+    Unicode.Category.categories()
+    |> Map.keys()
+    |> Enum.map(&Atom.to_string/1)
+    |> Enum.map(fn category ->
+      quote do
+        string(unquote(category))
+      end
+    end)
+
   # Characters that are valid to start
   # an identifier
   id_start =
@@ -315,6 +326,7 @@ defmodule Unicode.Transform.Combinators do
   def character_class do
     ignore(string("["))
     |> choice([
+      variable(),
       block(),
       canonical_combining_class(),
       script(),
@@ -327,15 +339,18 @@ defmodule Unicode.Transform.Combinators do
 
   def script do
     ignore(string(":"))
+    |> optional(ascii_char([?^]))
     |> ignore(optional(string("script=")))
     |> concat(script_name())
     |> ignore(string(":"))
+    |> reduce(:maybe_not)
     |> unwrap_and_tag(:script)
     |> label("unicode script")
   end
 
   def block do
     ignore(string(":"))
+    |> optional(ascii_char([?^]))
     |> ignore(string("block="))
     |> choice(unquote(block_names))
     |> ignore(string(":"))
@@ -346,33 +361,50 @@ defmodule Unicode.Transform.Combinators do
 
   def category do
     ignore(string(":"))
-    |> concat(name())
+    |> optional(ascii_char([?^]))
+    |> concat(category_name())
     |> ignore(string(":"))
+    |> reduce(:maybe_not)
     |> unwrap_and_tag(:category)
     |> label("unicode category")
   end
 
   def canonical_combining_class do
     ignore(string(":"))
+    |> optional(ascii_char([?^]))
     |> ignore(string("ccc="))
     |> concat(name())
     |> ignore(string(":"))
+    |> reduce(:maybe_not)
     |> unwrap_and_tag(:combining_class)
     |> label("canonical combining class")
   end
 
   def characters do
-    utf8_char([{:not, ?]}, {:not, ?:}])
+    optional(ascii_char([?^]))
+    |> utf8_char([{:not, ?]}, {:not, ?:}])
     |> times(min: 1)
-    |> tag(:character_class)
+    |> reduce(:maybe_not)
+    |> unwrap_and_tag(:character_class)
   end
 
   # Example: [[:Arabic:][:block=ARABIC:][‎ⁿ،؛؟ـً-ٕ٠-٬۰-۹﷼ښ]] ;
   def unicode_set do
     ignore(string("["))
-    |> times(character_class(), min: 1)
+    |> concat(character_class())
+    |> repeat(optional(set_operator()) |> concat(character_class()))
     |> ignore(string("]"))
+    |> reduce(:postfix_set_operations)
     |> label("unicode character set")
+  end
+
+  def set_operator do
+    ignore(optional(whitespace()))
+    |> choice([
+      ascii_char([?-]) |> tag(:set_negation),
+      ascii_char([?&]) |> tag(:set_intersection)
+    ])
+    |> ignore(optional(whitespace()))
   end
 
   def whitespace do
@@ -393,8 +425,7 @@ defmodule Unicode.Transform.Combinators do
   end
 
   def variable_name do
-    optional(ascii_char([?^]))
-    |> utf8_char(unquote(id_start))
+    utf8_char(unquote(id_start))
     |> repeat(utf8_char(unquote(id_continue)))
     |> reduce(:to_string)
     |> unwrap_and_tag(:variable_name)
@@ -403,22 +434,17 @@ defmodule Unicode.Transform.Combinators do
 
   def script_name do
     choice(unquote(script_names))
+    |> reduce(:to_atom)
+  end
+
+  def category_name do
+    choice(unquote(category_names))
+    |> reduce(:to_atom)
   end
 
   def block_name do
     choice(unquote(block_names))
-  end
-
-  def to_lower_atom([?^ | args]) do
-    {:not, to_lower_atom(args)}
-  end
-
-  def to_lower_atom(args) do
-    args
-    |> List.to_string()
-    |> String.replace(" ", "_")
-    |> String.downcase()
-    |> String.to_atom()
+    |> reduce(:to_atom)
   end
 
   def filter_rule do
@@ -496,12 +522,6 @@ defmodule Unicode.Transform.Combinators do
     |> post_traverse(:store_variable_in_context)
   end
 
-  def store_variable_in_context(_rest, args, context, _line, _offset) do
-    [set_variable: [variable_name: variable_name, value: value]] = args
-    context = Map.put(context, variable_name, value)
-    {[], context}
-  end
-
   def variable_value do
     characters_or_variable_or_class()
     |> repeat(ignore(optional(whitespace())) |> concat(characters_or_variable_or_class()))
@@ -512,17 +532,15 @@ defmodule Unicode.Transform.Combinators do
     choice([
       unicode_set(),
       character_class(),
-      ignore(string("$")) |> concat(variable_name() |> post_traverse(:insert_variable)),
+      variable(),
       character_string()
     ])
   end
 
-  def insert_variable(_rest, args, context, _line, _offset) do
-    [variable_name: variable_name] = args
-    case Map.get(context, variable_name) do
-      nil -> {:error, "Unknown variable #{inspect variable_name}"}
-      variable_value -> {variable_value, context}
-    end
+  def variable do
+    ignore(string("$"))
+    |> concat(variable_name()
+    |> post_traverse(:insert_variable))
   end
 
   def character_string do
@@ -551,12 +569,6 @@ defmodule Unicode.Transform.Combinators do
       |> ignore(string("}"))
     ])
     |> reduce(:hex_to_integer)
-  end
-
-  def hex_to_integer(chars) do
-    chars
-    |> List.to_string()
-    |> String.to_integer(16)
   end
 
   def end_of_line do

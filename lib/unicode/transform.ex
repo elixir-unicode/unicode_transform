@@ -5,6 +5,7 @@ defmodule Unicode.Transform do
   """
   import NimbleParsec
   import Unicode.Transform.Combinators
+  import Unicode.Transform.Parser.Reducers
 
   defparsec(:parse_rule,
     choice([
