@@ -5,12 +5,12 @@ defmodule Unicode.Transform.Generate do
 
   # @unavailable_names [Generate, Parser, Utils]
   # @builtin_names [AnyNFC, AnyNFD, AnyNFKC, AnyNFKC, AnyLower, AnyUpper, AnyTitle]
-  @files "*.xml"
+  @default_files "*.xml"
 
   def generate(options \\ []) do
     source_directory = Keyword.get(options, :source_dir, @source_dir)
     destination_directory = Keyword.get(options, :destination_dir, @destination_dir)
-    files = Keyword.get(options, :files, @files)
+    files = Keyword.get(options, :files, @default_files)
 
     transforms =
       source_directory
