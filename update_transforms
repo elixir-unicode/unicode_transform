@@ -1,0 +1,13 @@
+#! /bin/zsh
+
+# Copies the unicode transforms xml into
+# this repository so we have a stable source
+
+# The location of the cloned CLDR repo
+export CLDR_REPO="${CLDR_REPO:=$HOME/Development/cldr_repo}"
+[ ! -d $CLDR_REPO ] && { echo "Unicode CLDR repository $CLDR_REPO was not found."; exit 1; }
+
+export UNICODE_TRANSFORM="${UNICODE_TRANSFORMS:=$HOME/Development/unicode_transform}"
+[ ! -d $UNICODE_TRANSFORM ] && { echo "Unicode Transform repository $UNICODE_TRANSFORM was not found."; exit 1; }
+
+cp $CLDR_REPO/common/transforms/* $UNICODE_TRANSFORM/transforms/

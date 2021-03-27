@@ -17,12 +17,10 @@ defmodule UnicodeTransform.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_unicode, path: "../unicode"},
-      {:sweet_xml, "~> 0.6", only: [:dev, :test]},
-      {:nimble_parsec, "~> 0.5", runtime: false}
+      {:unicode_set, "~> 0.12", optional: true},
+      {:sweet_xml, "~> 0.6", only: [:dev, :test], optional: true}
     ]
   end
 end
