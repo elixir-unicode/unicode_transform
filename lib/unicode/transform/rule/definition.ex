@@ -25,7 +25,7 @@ defmodule Unicode.Transform.Rule.Definition do
 
   @regex ~r/(?<variable>[a-zA-Z][a-zA-Z0-9]*)\s*=\s*(?<value>[^;]*)\s*;(\#\s*(?<comment>.*))?/u
 
-  def parse(<< "$" >> <> rule) do
+  def parse(<<"$">> <> rule) do
     parsed = Regex.named_captures(@regex, rule)
     rule = %{parsed | "value" => String.trim(parsed["value"])}
     struct(__MODULE__, rule)
@@ -37,12 +37,25 @@ defmodule Unicode.Transform.Rule.Definition do
 
   defimpl Unicode.Transform.Rule do
     def to_forward_code(rule) do
-      [Comment.comment_from(rule), "define(", inspect(rule.variable), ", ", inspect(rule.value), "\n"]
+      [
+        Comment.comment_from(rule),
+        "define(",
+        inspect(rule.variable),
+        ", ",
+        inspect(rule.value),
+        "\n"
+      ]
     end
 
     def to_backward_code(rule) do
-      [Comment.comment_from(rule), "define(", inspect(rule.variable), ", ", inspect(rule.value), "\n"]
+      [
+        Comment.comment_from(rule),
+        "define(",
+        inspect(rule.variable),
+        ", ",
+        inspect(rule.value),
+        "\n"
+      ]
     end
   end
-
 end

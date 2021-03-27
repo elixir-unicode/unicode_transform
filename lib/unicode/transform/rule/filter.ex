@@ -23,15 +23,17 @@ defmodule Unicode.Transform.Rule.Filter do
 
   @regex ~r/(?<unicode_set>[^;]*)\s*;(\#\s*(?<comment>.*))?/u
 
-  def parse(<< "::[" >> <> unicode_set) do
+  def parse(<<"::[">> <> unicode_set) do
     parsed = Regex.named_captures(@regex, unicode_set)
+
     rule =
       %{parsed | "unicode_set" => "[" <> String.trim(parsed["unicode_set"])}
       |> Enum.map(fn {k, v} -> {String.to_atom(k), v} end)
+
     struct(__MODULE__, rule)
   end
 
-  def parse(<< ":: [" >> <> unicode_set) do
+  def parse(<<":: [">> <> unicode_set) do
     parse("::[" <> unicode_set)
   end
 
@@ -49,5 +51,3 @@ defmodule Unicode.Transform.Rule.Filter do
     end
   end
 end
-
-

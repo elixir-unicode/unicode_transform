@@ -1,12 +1,9 @@
 defmodule Unicode.Transform.Utils do
   import SweetXml
 
-  @directory "transforms"
-
-  def file(transform) do
-    @directory
-    |> Path.join(transform)
-    |> File.read!
+  def file(transform_file) do
+    transform_file
+    |> File.read!()
     |> String.replace(~r/<!DOCTYPE.*>\n/, "")
     |> xpath(~x"//transform",
       source: ~x"./@source"s,

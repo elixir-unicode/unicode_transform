@@ -3,5 +3,4 @@ defmodule Unicode.Transform do
   Implements the Unicode transform rules.
 
   """
-
 end

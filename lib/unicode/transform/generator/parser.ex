@@ -18,13 +18,12 @@ defmodule Unicode.Transform.Parser do
   end
 
   def parse_rule(string) do
-    IO.puts string
+    # IO.puts(string)
 
     Comment.parse(string) ||
-    Filter.parse(string) ||
-    Transform.parse(string) ||
-    Conversion.parse(string) ||
-    raise ArgumentError, "Unknown rule #{inspect string}"
+      Filter.parse(string) ||
+      Transform.parse(string) ||
+      Conversion.parse(string) ||
+      raise ArgumentError, "Unknown rule #{inspect(string)}"
   end
-
 end

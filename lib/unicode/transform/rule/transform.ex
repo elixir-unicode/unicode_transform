@@ -40,7 +40,7 @@ defmodule Unicode.Transform.Rule.Transform do
   @transform "[A-Za-z_-]"
   @regex ~r/(?<forward>#{@transform}*)?\s*(\((?<backward>#{@transform}*)\))?\s*;\s*(\#\s*(?<comment>.*))?/u
 
-  def parse(<< "::" >> <> rule) do
+  def parse(<<"::">> <> rule) do
     rule =
       Regex.named_captures(@regex, String.trim(rule))
       |> Enum.map(fn {k, v} -> {String.to_atom(k), v} end)

@@ -5,7 +5,7 @@ defmodule Unicode.Transform.Rule.Comment do
 
   defstruct [:comment]
 
-  def parse(<< "#" >> <> comment) do
+  def parse(<<"#">> <> comment) do
     struct(__MODULE__, comment: String.trim(comment))
   end
 
@@ -35,5 +35,4 @@ defmodule Unicode.Transform.Rule.Comment do
       Unicode.Transform.Rule.Comment.comment_from(rule)
     end
   end
-
 end
