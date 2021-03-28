@@ -53,15 +53,33 @@ defmodule Unicode.Transform do
         end
       end
 
-    {_counter, functions} =
+    rules =
       __CALLER__.module
       |> Module.get_attribute(:rules)
       |> Enum.reverse()
       |> group_rules()
+
+    {_counter, functions} =
+      rules
       |> Enum.filter(&is_list/1)
       |> Enum.reduce({0, []}, &generate_function(&1, &2, filter))
 
-    [guard | Enum.reverse(functions) |> List.flatten]
+    pipeline =
+      rules
+      |> Enum.reduce({0, []}, &generate_function_call(&1, &2, filter))
+      |> elem(1)
+      |> Enum.reverse()
+      |> List.insert_at(0, quote do string end)
+      |> Enum.reduce(&Macro.pipe(&2, &1, 0))
+
+    transform =
+      quote do
+        def transform(string) do
+          unquote(pipeline)
+        end
+      end
+
+    [guard, transform, Enum.reverse(functions)]
   end
 
   # Groups clusters of conversion rules together so
@@ -115,10 +133,22 @@ defmodule Unicode.Transform do
     [Enum.reverse(group)]
   end
 
-  def generate_function({:transform, name}, {counter, acc}, filter) do
+  def generate_function_call({:transform, name}, {counter, acc}, filter) do
     funcall =
       quote do
         unquote(filter_module(name)).transform(unquote(filter))
+      end
+
+    {counter, [funcall | acc]}
+  end
+
+  def generate_function_call(_rule_group, {counter, acc}, _filter) do
+    counter = counter + 1
+    function_name = :"replace_#{counter}"
+
+    funcall =
+      quote do
+        unquote(function_name)()
       end
 
     {counter, [funcall | acc]}
