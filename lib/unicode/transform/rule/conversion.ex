@@ -232,7 +232,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   end
 
   def split_at_syntax(<<"\\u", hex::binary-4>> <> string, [head | rest]) do
-    split_at_syntax(string, [head <> "\\x" <> hex | rest])
+    split_at_syntax(string, [head <> "\\u" <> hex | rest])
   end
 
   def split_at_syntax(<<"\\{">> <> string, [head | rest]) do
@@ -324,9 +324,9 @@ defmodule Unicode.Transform.Rule.Conversion do
       base_code = [
         Comment.comment_from(rule),
         "replace(",
-        inspect(from),
+        wrap(from),
         ", ",
-        inspect(to)
+        wrap(to),
       ]
 
       if options == [] do
@@ -338,6 +338,10 @@ defmodule Unicode.Transform.Rule.Conversion do
 
     def to_backward_code(_rule) do
       []
+    end
+
+    defp wrap(string) do
+      "\"" <> string <> "\""
     end
   end
 end

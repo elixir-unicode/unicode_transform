@@ -1,4 +1,10 @@
-defmodule Unicode.Transform.Generate do
+defmodule Unicode.Transform.Generator do
+  @moduledoc """
+  Generate Elixir source files from CLDR
+  XML files the define Unicode transforms.
+
+  """
+
   @source_dir "transforms"
   @destination_dir "lib/transforms"
   @base_module "Unicode.Transform"
@@ -28,7 +34,7 @@ defmodule Unicode.Transform.Generate do
     basename = Path.basename(file, ".xml") |> String.replace("-", "_") |> String.downcase()
     file = Path.join(destination_directory, [basename, ".ex"])
 
-    File.write(file, generated_code)
+    File.write!(file, generated_code)
     file
   end
 
@@ -44,8 +50,7 @@ defmodule Unicode.Transform.Generate do
       " ",
       @base_module,
       ".",
-      source,
-      target,
+      module_name(source, target),
       " ",
       "do",
       "\n",
@@ -53,11 +58,17 @@ defmodule Unicode.Transform.Generate do
       @base_module,
       "\n",
       "\n",
-      "# This file is generated. Manual changes are not recommended", "\n",
-      "# Source: #{source}", "\n",
-      "# Target: #{target}", "\n",
-      "# Transform direction: #{direction}", "\n",
-      "# Transform alias: #{alias}", "\n", "\n"
+      "# This file is generated. Manual changes are not recommended",
+      "\n",
+      "# Source: #{source}",
+      "\n",
+      "# Target: #{target}",
+      "\n",
+      "# Transform direction: #{direction}",
+      "\n",
+      "# Transform alias: #{alias}",
+      "\n",
+      "\n"
     ]
   end
 
@@ -69,5 +80,9 @@ defmodule Unicode.Transform.Generate do
 
   def generate_footer() do
     ["end", "\n"]
+  end
+
+  def module_name(source, target) do
+    String.capitalize(source) <> String.capitalize(target)
   end
 end

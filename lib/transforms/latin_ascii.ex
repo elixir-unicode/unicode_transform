@@ -1,4 +1,4 @@
-defmodule Unicode.Transform.LatinASCII do
+defmodule Unicode.Transform.LatinAscii do
   use Unicode.Transform
 
   # This file is generated. Manual changes are not recommended
@@ -73,7 +73,7 @@ defmodule Unicode.Transform.LatinASCII do
   # 0142;LATIN SMALL LETTER L WITH STROKE
   replace("ł", "l")
   # 0149;LATIN SMALL LETTER N PRECEDED BY APOSTROPHE (from ‹character-fallback›)
-  replace("ŉ", "\\'n")
+  replace("ŉ", "\'n")
   # 014A;LATIN CAPITAL LETTER ENG
   replace("Ŋ", "N")
   # 014B;LATIN SMALL LETTER ENG
@@ -1388,74 +1388,74 @@ defmodule Unicode.Transform.LatinASCII do
   # Spaces
   #
   # 00A0;NO-BREAK SPACE
-  replace("\\x00A0", "")
+  replace("\u00A0", "")
   # 2002;EN SPACE (compat)
-  replace("\\x2002", "")
+  replace("\u2002", "")
   # 2003;EM SPACE (compat)
-  replace("\\x2003", "")
+  replace("\u2003", "")
   # 2004;THREE-PER-EM SPACE (compat)
-  replace("\\x2004", "")
+  replace("\u2004", "")
   # 2005;FOUR-PER-EM SPACE (compat)
-  replace("\\x2005", "")
+  replace("\u2005", "")
   # 2006;SIX-PER-EM SPACE (compat)
-  replace("\\x2006", "")
+  replace("\u2006", "")
   # 2007;FIGURE SPACE (compat)
-  replace("\\x2007", "")
+  replace("\u2007", "")
   # 2008;PUNCTUATION SPACE (compat)
-  replace("\\x2008", "")
+  replace("\u2008", "")
   # 2009;THIN SPACE (compat)
-  replace("\\x2009", "")
+  replace("\u2009", "")
   # 200A;HAIR SPACE (compat)
-  replace("\\x200A", "")
+  replace("\u200A", "")
   # 205F;MEDIUM MATHEMATICAL SPACE (compat)
-  replace("\\x205F", "")
+  replace("\u205F", "")
   # 3000;IDEOGRAPHIC SPACE (from ‹character-fallback›)
-  replace("\\x3000", "")
+  replace("\u3000", "")
   #
   # Quotes, apostrophes
   #
   # 02B9;MODIFIER LETTER PRIME
-  replace("ʹ", "\\'")
+  replace("ʹ", "\'")
   # 02BA;MODIFIER LETTER DOUBLE PRIME
-  replace("ʺ", "\\\"")
+  replace("ʺ", "\"")
   # 02BB;MODIFIER LETTER TURNED COMMA
-  replace("ʻ", "\\'")
+  replace("ʻ", "\'")
   # 02BC;MODIFIER LETTER APOSTROPHE
-  replace("ʼ", "\\'")
+  replace("ʼ", "\'")
   # 02BD;MODIFIER LETTER REVERSED COMMA
-  replace("ʽ", "\\'")
+  replace("ʽ", "\'")
   # 02C8;MODIFIER LETTER VERTICAL LINE
-  replace("ˈ", "\\'")
+  replace("ˈ", "\'")
   # 02CB;MODIFIER LETTER GRAVE ACCENT
   replace("ˋ", "`")
   # 2018;LEFT SINGLE QUOTATION MARK (from ‹character-fallback›)
-  replace("‘", "\\'")
+  replace("‘", "\'")
   # 2019;RIGHT SINGLE QUOTATION MARK (from ‹character-fallback›)
-  replace("’", "\\'")
+  replace("’", "\'")
   # 201A;SINGLE LOW-9 QUOTATION MARK (from ‹character-fallback›)
   replace("‚", ",")
   # 201B;SINGLE HIGH-REVERSED-9 QUOTATION MARK (from ‹character-fallback›)
-  replace("‛", "\\'")
+  replace("‛", "\'")
   # 201C;LEFT DOUBLE QUOTATION MARK (from ‹character-fallback›)
-  replace("“", "\\\"")
+  replace("“", "\"")
   # 201D;RIGHT DOUBLE QUOTATION MARK (from ‹character-fallback›)
-  replace("”", "\\\"")
+  replace("”", "\"")
   # 201E;DOUBLE LOW-9 QUOTATION MARK (from ‹character-fallback›)
   replace("„", ",,")
   # 201F;DOUBLE HIGH-REVERSED-9 QUOTATION MARK (from ‹character-fallback›)
-  replace("‟", "\\\"")
+  replace("‟", "\"")
   # 2032;PRIME
-  replace("′", "\\'")
+  replace("′", "\'")
   # 2033;DOUBLE PRIME
-  replace("″", "\\\"")
+  replace("″", "\"")
   # 301D;REVERSED DOUBLE PRIME QUOTATION MARK
-  replace("〝", "\\\"")
+  replace("〝", "\"")
   # 301E;DOUBLE PRIME QUOTATION MARK
-  replace("〞", "\\\"")
+  replace("〞", "\"")
   # FF02;FULLWIDTH QUOTATION MARK (compat)
-  replace("＂", "\\\"")
+  replace("＂", "\"")
   # FF07;FULLWIDTH APOSTROPHE (compat)
-  replace("＇", "\\'")
+  replace("＇", "\'")
   # 00AB;LEFT-POINTING DOUBLE ANGLE QUOTATION MARK (from ‹character-fallback›)
   replace("«", "<<")
   # 00BB;RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (from ‹character-fallback›)
@@ -1468,7 +1468,7 @@ defmodule Unicode.Transform.LatinASCII do
   # Dashes, hyphens...
   #
   # 00AD;SOFT HYPHEN (from ‹character-fallback›)
-  replace("\\x00AD", "-")
+  replace("\u00AD", "-")
   # 2010;HYPHEN (from ‹character-fallback›)
   replace("‐", "-")
   # 2011;NON-BREAKING HYPHEN (from ‹character-fallback›)
@@ -1535,11 +1535,11 @@ defmodule Unicode.Transform.LatinASCII do
   # 204E;LOW ASTERISK
   replace("⁎", "*")
   # 2190;LEFTWARDS ARROW
-  replace("\\←", "<-")
+  replace("\←", "<-")
   # 2192;RIGHTWARDS ARROW
-  replace("\\→", "->")
+  replace("\→", "->")
   # 2194;LEFT RIGHT ARROW
-  replace("\\↔", "<->")
+  replace("\↔", "<->")
   # FFE9;HALFWIDTH LEFTWARDS ARROW
   replace("￩", "<-")
   # FFEB;HALFWIDTH RIGHTWARDS ARROW
