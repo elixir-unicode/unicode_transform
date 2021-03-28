@@ -132,14 +132,13 @@ defmodule Unicode.Transform do
       replacements
       |> Enum.map(&generate_replace_clause(&1, function_name))
       |> List.flatten
-      |> Enum.take(2)
 
     final_clause =
       quote do
         <<char::utf8>> <> rest -> <<char::utf8>> <> unquote(function_name)(rest)
       end
 
-    function =
+    primary_function =
       quote do
         defp unquote(function_name)(<<char::utf8, rest::binary>>) when iff(char) do
           case <<char::utf8, rest::binary>> do
@@ -155,7 +154,7 @@ defmodule Unicode.Transform do
         end
       end
 
-    {counter, [default_function, function | acc]}
+    {counter, [default_function, primary_function | acc]}
   end
 
   def generate_replace_clause({:replace, from, to, []}, function_name) do
