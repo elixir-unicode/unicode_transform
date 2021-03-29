@@ -19,20 +19,35 @@ defmodule Unicode.Transform.Rule.Definition do
   Variables are only replaced within other variable definition rules and within conversion rules. They have no effect on transliteration rules.
 
   """
-  defstruct [:variable, :value, :comment]
+  @fields [:variable, :value, :comment]
+  defstruct @fields
 
   alias Unicode.Transform.Rule.Comment
+  alias Unicode.Transform.Utils
 
-  @regex ~r/(?<variable>[a-zA-Z][a-zA-Z0-9]*)\s*=\s*(?<value>[^;]*)\s*;(\#\s*(?<comment>.*))?/u
+  @regex ~r/(?<variable>[a-zA-Z][a-zA-Z0-9]*)\s*=\s*(?<value>[^;]*)\s*;(\s*\#\s*(?<comment>.*))?/u
 
   def parse(<<"$">> <> rule) do
-    parsed = Regex.named_captures(@regex, rule)
-    rule = %{parsed | "value" => String.trim(parsed["value"])}
-    struct(__MODULE__, rule)
+    parsed =
+      @regex
+      |> Regex.named_captures(rule)
+      |> unquote_value()
+      |> Utils.atomize_keys()
+
+    struct(__MODULE__, parsed)
   end
 
   def parse(_other) do
     nil
+  end
+
+  defp unquote_value(%{"value" => value} = rule) do
+    value =
+      value
+      |> String.trim
+      |> Utils.unescape_string()
+
+    %{rule | "value" => value}
   end
 
   defimpl Unicode.Transform.Rule do
@@ -40,9 +55,10 @@ defmodule Unicode.Transform.Rule.Definition do
       [
         Comment.comment_from(rule),
         "define(",
-        inspect(rule.variable),
+        inspect("$" <> rule.variable),
         ", ",
         inspect(rule.value),
+        ")",
         "\n"
       ]
     end
@@ -51,10 +67,11 @@ defmodule Unicode.Transform.Rule.Definition do
       [
         Comment.comment_from(rule),
         "define(",
-        inspect(rule.variable),
+        inspect("$" <> rule.variable),
         ", ",
         inspect(rule.value),
-        "\n"
+        ")",
+        "\n",
       ]
     end
   end

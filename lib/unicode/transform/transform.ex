@@ -32,6 +32,7 @@ defmodule Unicode.Transform do
       import unquote(module)
       Module.register_attribute(__MODULE__, :filter, accumulate: false)
       Module.register_attribute(__MODULE__, :rules, accumulate: true)
+      Module.register_attribute(__MODULE__, :variables, accumulate: true)
 
       import Unicode.Regex, only: [compile!: 1]
       require Unicode.Set
@@ -62,9 +63,20 @@ defmodule Unicode.Transform do
     end
   end
 
+  defmacro define(var, value) do
+    quote do
+      Module.put_attribute(__MODULE__, :variables, {:define, unquote(var), unquote(value)})
+    end
+  end
+
   defmacro __before_compile__(_env) do
     caller = __CALLER__.module
     filter = Module.get_attribute(caller, :filter)
+
+    variables =
+      caller
+      |> Module.get_attribute(:variables)
+      |> Unicode.Transform.Utils.make_variable_map()
 
     rules =
       __CALLER__.module
@@ -76,7 +88,7 @@ defmodule Unicode.Transform do
       generate_guard(filter),
       filter_function(filter),
       generate_transform(rules, caller),
-      generate_functions(rules, filter)
+      generate_conversions(rules, filter)
     ]
   end
 
@@ -123,10 +135,10 @@ defmodule Unicode.Transform do
   # Generate the functions which implement the
   # conversion rules
 
-  defp generate_functions(rules, filter) do
+  defp generate_conversions(rules, filter) do
     rules
     |> Enum.filter(&is_list/1)
-    |> Enum.reduce({0, []}, &generate_function(&1, &2, filter))
+    |> Enum.reduce({0, []}, &generate_conversion(&1, &2, filter))
     |> elem(1)
     |> Enum.reverse
   end
@@ -200,14 +212,14 @@ defmodule Unicode.Transform do
     {counter, [funcall | acc]}
   end
 
-  # Generate the functions that do the transformation
+  # Generate the functions that do the conversions
 
-  defp generate_function(replacements, {counter, acc}, _filter) when is_list(replacements) do
+  defp generate_conversion(conversions, {counter, acc}, _filter) when is_list(conversions) do
     counter = counter + 1
     function_name = :"replace_#{counter}"
 
-    replacement_clauses =
-      replacements
+    conversion_clauses =
+      conversions
       |> Enum.map(&generate_replace_clause(&1, function_name))
       |> List.flatten
 
@@ -216,12 +228,19 @@ defmodule Unicode.Transform do
         <<char::utf8>> <> rest -> <<char::utf8>> <> unquote(function_name)(rest)
       end
 
-    primary_function =
+    conversion_function =
       quote do
         defp unquote(function_name)(<<char::utf8, rest::binary>>) when iff(char) do
           case <<char::utf8, rest::binary>> do
-            unquote(replacement_clauses ++ final_clause)
+            unquote(conversion_clauses ++ final_clause)
           end
+        end
+      end
+
+    no_conversion_function =
+      quote do
+        defp unquote(function_name)(<<char::utf8, rest::binary>>) do
+          <<char::utf8>> <> unquote(function_name)(rest)
         end
       end
 
@@ -232,15 +251,10 @@ defmodule Unicode.Transform do
         end
       end
 
-    default_function =
-      quote do
-        defp unquote(function_name)(<<char::utf8, rest::binary>>) do
-          <<char::utf8>> <> unquote(function_name)(rest)
-        end
-      end
-
-    {counter, [empty_function, default_function, primary_function | acc]}
+    {counter, [empty_function, no_conversion_function, conversion_function | acc]}
   end
+
+  # Generate the case clauses, one for each conversion rule
 
   defp generate_replace_clause({:replace, from, to, []}, function_name) do
     quote do
@@ -285,6 +299,10 @@ defmodule Unicode.Transform do
   #   ]
   # ]
 
+  defp group_rules([]) do
+    []
+  end
+
   defp group_rules([{:transform, _} = t1 | rest]) do
    [t1 | group_rules(rest)]
   end
@@ -311,6 +329,7 @@ defmodule Unicode.Transform do
 
   # Derive the name of the module from the filter
   # Doesn't yet handle complex names
+
   defp filter_module(name) do
     Module.concat(__MODULE__, filter_module_name(name))
   end

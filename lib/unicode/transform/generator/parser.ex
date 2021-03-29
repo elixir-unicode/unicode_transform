@@ -2,7 +2,7 @@ defmodule Unicode.Transform.Parser do
   @moduledoc """
 
   """
-  alias Unicode.Transform.Rule.{Comment, Filter, Transform, Conversion}
+  alias Unicode.Transform.Rule.{Comment, Filter, Transform, Conversion, Definition}
   alias Unicode.Transform.Utils
 
   def parse_file(filename) do
@@ -18,12 +18,13 @@ defmodule Unicode.Transform.Parser do
   end
 
   def parse_rule(string) do
-    # IO.puts(string)
+    # IO.inspect string, label: "Parse"
 
     Comment.parse(string) ||
       Filter.parse(string) ||
       Transform.parse(string) ||
       Conversion.parse(string) ||
+      Definition.parse(string) ||
       raise ArgumentError, "Unknown rule #{inspect(string)}"
   end
 end

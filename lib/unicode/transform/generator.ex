@@ -71,17 +71,21 @@ defmodule Unicode.Transform.Generator do
     ]
   end
 
-  def generate_rules(rules) do
+  defp generate_rules(rules) do
     rules
     |> Unicode.Transform.Parser.parse()
-    |> Enum.map(&Unicode.Transform.Rule.to_forward_code/1)
+    |> Enum.map(&generate_rule/1)
   end
 
-  def generate_footer() do
+  defp generate_rule(rule) do
+    Unicode.Transform.Rule.to_forward_code(rule)
+  end
+
+  defp generate_footer() do
     ["end", "\n"]
   end
 
-  def module_name(source, target) do
+  defp module_name(source, target) do
     String.capitalize(source) <> String.capitalize(target)
   end
 end

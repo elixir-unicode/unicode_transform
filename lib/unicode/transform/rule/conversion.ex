@@ -114,7 +114,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   """
 
   @direction_symbols ["→", "←", "↔"]
-  @directions "[#{Enum.join(@direction_symbols)}]"
+  @directions ~r/(?<!\\)[]#{Enum.join(@direction_symbols)}]/u
 
   @fields [:direction, :left, :right, :comment]
   defstruct @fields
@@ -122,7 +122,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   alias Unicode.Transform.Rule.Comment
 
   def parse(rule) when is_binary(rule) do
-    if String.contains?(rule, @direction_symbols) do
+    if Regex.match?(@directions, rule) do
       parse_binary(rule)
     else
       nil
@@ -148,7 +148,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   def parse_rule(rule) when is_binary(rule) do
     rule
     |> String.trim()
-    |> String.split(~r/ #{@directions}/u, include_captures: true)
+    |> String.split(@directions, include_captures: true)
     |> parse_rule()
   end
 
@@ -166,17 +166,17 @@ defmodule Unicode.Transform.Rule.Conversion do
   end
 
   # Forward rule
-  def parse_rule([left, " →", right]) do
+  def parse_rule([left, "→", right]) do
     parse_rule(left, right, :forward)
   end
 
   # Backward rule
-  def parse_rule([right, " ←", left]) do
+  def parse_rule([right, "←", left]) do
     parse_rule(left, right, :backward)
   end
 
   # Both rule
-  def parse_rule([left, " ↔", right]) do
+  def parse_rule([left, "↔", right]) do
     parse_rule(left, right, :both)
   end
 
