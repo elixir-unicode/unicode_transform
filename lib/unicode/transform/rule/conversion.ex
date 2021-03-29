@@ -1,6 +1,6 @@
 defmodule Unicode.Transform.Rule.Conversion do
   @moduledoc """
-  #### 10.3.9 <a name="Conversion_Rules" href="#Conversion_Rules">Conversion Rules</a>
+  #### 10.3.9 [Conversion Rules](https://unicode.org/reports/tr35/tr35-general.html#Conversion_Rules)
 
   Conversion rules can be forward, backward, or double. The complete conversion rule syntax is described below:
 

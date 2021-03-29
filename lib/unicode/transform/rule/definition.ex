@@ -1,6 +1,6 @@
 defmodule Unicode.Transform.Rule.Definition do
   @moduledoc """
-  #### 10.3.7 <a name="Variable_Definition_Rules" href="#Variable_Definition_Rules">Variable Definition Rules</a>
+  #### 10.3.7 [Variable Definition Rules](https://unicode.org/reports/tr35/tr35-general.html#Variable_Definition_Rules)
 
   Each variable definition is of the following form:
 

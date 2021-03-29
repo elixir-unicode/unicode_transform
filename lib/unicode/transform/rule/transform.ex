@@ -1,6 +1,6 @@
 defmodule Unicode.Transform.Rule.Transform do
   @moduledoc """
-  #### 10.3.6 <a name="Transform_Rules" href="#Transform_Rules">Transform Rules</a>
+  #### 10.3.6 [Transform Rules](https://unicode.org/reports/tr35/tr35-general.html#Transform_Rules)
 
   Each transform rule consists of two colons followed by a transform name, which is of the form source-target. For example:
 
@@ -16,7 +16,7 @@ defmodule Unicode.Transform.Rule.Transform do
 
   > **Any-NFC, Any-NFD, Any-NFKD, Any-NFKC** - the normalization forms defined by [[UAX15](https://www.unicode.org/reports/tr41/#UAX15)].
   >
-  > **Any-Lower, Any-Upper, Any-Title** - full case transformations, defined by [[Unicode](tr35.md#Unicode)] Chapter 3.
+  > **Any-Lower, Any-Upper, Any-Title** - full case transformations, defined by [[Unicode](https://unicode.org/reports/tr35/tr35-general.html#Transform_Rules)] Chapter 3.
 
   In addition, the following special cases are defined:
 

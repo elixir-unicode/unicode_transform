@@ -1,6 +1,6 @@
 defmodule Unicode.Transform.Rule.Filter do
   @moduledoc """
-  #### 10.3.8 <a name="Filter_Rules" href="#Filter_Rules">Filter Rules</a>
+  #### 10.3.8 [Filter_Rules](https://unicode.org/reports/tr35/tr35-general.html#Filter_Rules)
 
   A filter rule consists of two colons followed by a UnicodeSet. This filter is global in that only the characters matching the filter will be affected by any transform rules or conversion rules. The inverse filter rule consists of two colons followed by a UnicodeSet in parentheses. This filter is also global for the inverse transform.
 
