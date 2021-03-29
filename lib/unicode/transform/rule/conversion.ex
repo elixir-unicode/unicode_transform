@@ -129,7 +129,7 @@ defmodule Unicode.Transform.Rule.Conversion do
     end
   end
 
-  def parse_binary(rule) do
+  defp parse_binary(rule) do
     [rule, comment] =
       case String.split(rule, ~r/(?<!')#/, parts: 2) do
         [rule] -> [rule, nil]
@@ -145,49 +145,49 @@ defmodule Unicode.Transform.Rule.Conversion do
     struct(__MODULE__, Enum.zip(@fields, parsed) |> Keyword.put(:comment, comment))
   end
 
-  def parse_rule(rule) when is_binary(rule) do
+  defp parse_rule(rule) when is_binary(rule) do
     rule
     |> String.trim()
     |> String.split(@directions, include_captures: true)
     |> parse_rule()
   end
 
-  def parse_rule([rule]) do
+  defp parse_rule([rule]) do
     rule
     |> String.trim()
     |> String.replace_trailing(";", "")
     |> parse_rule()
   end
 
-  def parse_rule([rule, ";", ""]) do
+  defp parse_rule([rule, ";", ""]) do
     rule
     |> String.trim()
     |> parse_rule()
   end
 
   # Forward rule
-  def parse_rule([left, "→", right]) do
+  defp parse_rule([left, "→", right]) do
     parse_rule(left, right, :forward)
   end
 
   # Backward rule
-  def parse_rule([right, "←", left]) do
+  defp parse_rule([right, "←", left]) do
     parse_rule(left, right, :backward)
   end
 
   # Both rule
-  def parse_rule([left, "↔", right]) do
+  defp parse_rule([left, "↔", right]) do
     parse_rule(left, right, :both)
   end
 
-  def parse_rule(left, right, direction) do
+  defp parse_rule(left, right, direction) do
     left = parse_side(left)
     right = parse_side(right)
 
     [direction, left, right]
   end
 
-  def parse_side(side) when is_binary(side) do
+  defp parse_side(side) when is_binary(side) do
     side
     |> String.trim()
     |> split_at_syntax()
@@ -195,108 +195,103 @@ defmodule Unicode.Transform.Rule.Conversion do
     |> trim()
   end
 
-  def parse_side([before_context, "{", replace, "|", revisit, "}", after_context]) do
+  defp parse_side([before_context, "{", replace, "|", revisit, "}", after_context]) do
     [before_context, replace, revisit, after_context]
   end
 
-  def parse_side([before_context, "{", replace, "}", after_context]) do
+  defp parse_side([before_context, "{", replace, "}", after_context]) do
     [before_context, replace, nil, after_context]
   end
 
-  def parse_side([before_context, "{", replace, "|", revisit]) do
+  defp parse_side([before_context, "{", replace, "|", revisit]) do
     [before_context, replace, revisit, nil]
   end
 
-  def parse_side([before_context, "{", replace]) do
+  defp parse_side([before_context, "{", replace]) do
     [before_context, replace, nil, nil]
   end
 
-  def parse_side([replace, "|", revisit, "}", after_context]) do
+  defp parse_side([replace, "|", revisit, "}", after_context]) do
     [nil, replace, revisit, after_context]
   end
 
-  def parse_side([replace, "}", after_context]) do
+  defp parse_side([replace, "}", after_context]) do
     [nil, replace, nil, after_context]
   end
 
-  def parse_side([replace]) do
+  defp parse_side([replace]) do
     [nil, replace, nil, nil]
   end
 
   # Splits on syntax chars except within string
   # between ' (single quote) characters
-  def split_at_syntax(string, acc \\ [""])
+  defp split_at_syntax(string, acc \\ [""])
 
-  def split_at_syntax("", acc) do
+  defp split_at_syntax("", acc) do
     Enum.reverse(acc)
   end
 
-  def split_at_syntax(<<"\\u", hex::binary-4>> <> string, [head | rest]) do
+  defp split_at_syntax(<<"\\u", hex::binary-4>> <> string, [head | rest]) do
     split_at_syntax(string, [head <> "\\u" <> hex | rest])
   end
 
-  def split_at_syntax(<<"\\{">> <> string, [head | rest]) do
-    split_at_syntax(string, [head <> "\\{" | rest])
+  defp split_at_syntax(<<"\\", char::utf8>> <> string, [head | rest]) do
+    split_at_syntax(string, [head <> "\\" <> <<char::utf8>> | rest])
   end
 
-  def split_at_syntax(<<"\\}">> <> string, [head | rest]) do
-    split_at_syntax(string, [head <> "\\}" | rest])
-  end
-
-  def split_at_syntax(<<"\\|">> <> string, [head | rest]) do
-    split_at_syntax(string, [head <> "\\|" | rest])
-  end
-
-  def split_at_syntax(<<"\\'">> <> string, [head | rest]) do
-    split_at_syntax(string, [head <> "\\'" | rest])
-  end
-
-  def split_at_syntax(<<"'">> <> string, [head | rest]) do
+  defp split_at_syntax(<<"'">> <> string, [head | rest]) do
     {quoted_string, remainder} = extract_quoted(string)
     split_at_syntax(remainder, [head <> quoted_string | rest])
   end
 
-  def split_at_syntax(<<"{">> <> string, [head | rest]) do
+  defp split_at_syntax(<<"{">> <> string, [head | rest]) do
     split_at_syntax(string, ["", "{", head | rest])
   end
 
-  def split_at_syntax(<<"}">> <> string, [head | rest]) do
+  defp split_at_syntax(<<"}">> <> string, [head | rest]) do
     split_at_syntax(string, ["", "}", head | rest])
   end
 
-  def split_at_syntax(<<"|">> <> string, [head | rest]) do
+  defp split_at_syntax(<<"|">> <> string, [head | rest]) do
     split_at_syntax(string, ["", "|", head | rest])
   end
 
-  def split_at_syntax(<<char::utf8>> <> string, [head | rest]) do
+  defp split_at_syntax(<<"[">> <> string, [head | rest]) do
+    {class, string} = Unicode.Transform.Utils.extract_character_class(<<"[">> <> string)
+    split_at_syntax(string, [head <> class | rest])
+  end
+
+  defp split_at_syntax(<<char::utf8>> <> string, [head | rest]) do
     split_at_syntax(string, [head <> <<char::utf8>> | rest])
   end
 
-  def extract_quoted(string, acc \\ "")
+  defp extract_quoted(string, acc \\ "")
 
-  def extract_quoted("", acc) do
+  defp extract_quoted("", acc) do
     {acc, ""}
   end
 
-  def extract_quoted(<<"\\'">> <> rest, acc) do
+  defp extract_quoted(<<"\\'">> <> rest, acc) do
     extract_quoted(rest, acc <> "'")
   end
 
-  def extract_quoted(<<"'">> <> rest, acc) do
+  defp extract_quoted(<<"'">> <> rest, acc) do
     {acc, rest}
   end
 
-  def extract_quoted(<<char::utf8>> <> rest, acc) do
+  defp extract_quoted(<<char::utf8>> <> rest, acc) do
     extract_quoted(rest, acc <> <<char::utf8>>)
   end
 
-  def trim(list) do
+  defp trim(list) do
     Enum.map(list, fn
       nil -> nil
+      "" -> nil
       other -> String.trim(other)
     end)
   end
 
+  @doc false
   def code_options(nil, nil),
     do: []
 
@@ -309,6 +304,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   def code_options(before_context, after_context),
     do: [preceeded_by: before_context, followed_by: after_context]
 
+  @doc false
   def code_args(from, nil), do: from
   def code_args(from, extra), do: from <> extra
 
@@ -326,7 +322,7 @@ defmodule Unicode.Transform.Rule.Conversion do
         "replace(",
         wrap(from),
         ", ",
-        wrap(to),
+        wrap(to)
       ]
 
       if options == [] do
@@ -338,6 +334,10 @@ defmodule Unicode.Transform.Rule.Conversion do
 
     def to_backward_code(_rule) do
       []
+    end
+
+    defp wrap(nil) do
+      "\"\""
     end
 
     defp wrap(string) do

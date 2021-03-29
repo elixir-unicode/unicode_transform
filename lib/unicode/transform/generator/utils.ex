@@ -40,7 +40,7 @@ defmodule Unicode.Transform.Utils do
   def make_variable_map(variables) do
     variables
     |> Enum.map(fn {:define, var, value} -> {var, value} end)
-    |> Map.new
+    |> Map.new()
   end
 
   @doc false

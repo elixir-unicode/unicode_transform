@@ -66,7 +66,8 @@ defmodule UnicodeTransform.MixProject do
   def links do
     %{
       "GitHub" => "https://github.com/elixir-unicode/unicode_transform",
-      "Readme" => "https://github.com/elixir-unicode/unicode_transform/blob/v#{@version}/README.md",
+      "Readme" =>
+        "https://github.com/elixir-unicode/unicode_transform/blob/v#{@version}/README.md",
       "Changelog" =>
         "https://github.com/elixir-unicode/unicode_transform/blob/v#{@version}/CHANGELOG.md"
     }

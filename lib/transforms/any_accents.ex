@@ -8,13 +8,12 @@ defmodule Unicode.Transform.AnyAccents do
   # Transform alias: und-t-d0-accents
 
   #
+  #
   transform("NFD")
   # to do: make reversible
   # define special conversion characters.
   # varients of this could use different characters, or set one or the other to null.
-  #
   define("$pre", "←")
-  #
   define("$post", "→")
   # Provide keyboard equivalents for common diacritics used in transliteration
   # COMBINING GRAVE ACCENT
@@ -319,4 +318,5 @@ defmodule Unicode.Transform.AnyAccents do
   # $pre YYY $post ↔ ⁿ ; # SUPERSCRIPT LATIN SMALL LETTER N
   #
   transform("NFC")
+  #
 end

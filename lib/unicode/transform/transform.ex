@@ -17,13 +17,13 @@ defmodule Unicode.Transform do
   @doc """
   Transform a string.
   """
-  @callback transform(String.t) :: String.t
+  @callback transform(String.t()) :: String.t()
 
   @doc """
   Transform a string with a filter
   module provided
   """
-  @callback transform(String.t, module()) :: String.t
+  @callback transform(String.t(), module()) :: String.t()
 
   defmacro __using__(_) do
     module = __MODULE__
@@ -140,7 +140,7 @@ defmodule Unicode.Transform do
     |> Enum.filter(&is_list/1)
     |> Enum.reduce({0, []}, &generate_conversion(&1, &2, filter))
     |> elem(1)
-    |> Enum.reverse
+    |> Enum.reverse()
   end
 
   # Generate the transform/1 function
@@ -152,9 +152,9 @@ defmodule Unicode.Transform do
 
     quote do
       @doc """
-      Transforms a string from #{inspect unquote(from)} to #{inspect unquote(to)}
+      Transforms a string from #{inspect(unquote(from))} to #{inspect(unquote(to))}
       """
-      @spec transform(String.t) :: String.t
+      @spec transform(String.t()) :: String.t()
 
       def transform(string) do
         unquote(pipeline)
@@ -169,9 +169,9 @@ defmodule Unicode.Transform do
 
   defp extract_from_to(caller) do
     caller
-    |> Module.split
-    |> List.last
-    |> Macro.underscore
+    |> Module.split()
+    |> List.last()
+    |> Macro.underscore()
     |> String.split("_")
     |> Enum.map(&String.capitalize/1)
   end
@@ -185,7 +185,12 @@ defmodule Unicode.Transform do
     |> Enum.reduce({0, []}, &generate_function_call(&1, &2, caller))
     |> elem(1)
     |> Enum.reverse()
-    |> List.insert_at(0, quote do string end)
+    |> List.insert_at(
+      0,
+      quote do
+        string
+      end
+    )
     |> Enum.reduce(&Macro.pipe(&2, &1, 0))
   end
 
@@ -221,7 +226,7 @@ defmodule Unicode.Transform do
     conversion_clauses =
       conversions
       |> Enum.map(&generate_replace_clause(&1, function_name))
-      |> List.flatten
+      |> List.flatten()
 
     final_clause =
       quote do
@@ -256,19 +261,40 @@ defmodule Unicode.Transform do
 
   # Generate the case clauses, one for each conversion rule
 
-  defp generate_replace_clause({:replace, from, to, []}, function_name) do
+  defp generate_replace_clause({:replace, from, to, options}, function_name) do
+    preceeded_by = Keyword.get(options, :preceeded_by)
+    followed_by = Keyword.get(options, :followed_by)
+    generate_replace_clause(from, to, preceeded_by, followed_by, function_name)
+  end
+
+  defp generate_replace_clause(from, to, nil, nil, function_name) do
     quote do
       unquote(from) <> rest -> unquote(to) <> unquote(function_name)(rest)
     end
   end
 
-  defp generate_replace_clause({:replace, from, to, options}, function_name) do
-    preceeded_by = Keyword.get(options, :preceeded_by)
-
+  defp generate_replace_clause(from, to, preceeded_by, nil, function_name) do
     quote do
-      <<char::utf8, rest::binary>> when Unicode.Set.match?(char, unquote(preceeded_by))->
+      <<before::utf8, rest::binary>> when Unicode.Set.match?(before, unquote(preceeded_by)) ->
         replaced = String.replace(rest, compile!(unquote(from)), unquote(to))
-        <<char::utf8>> <> unquote(function_name)(replaced)
+        <<before::utf8>> <> unquote(function_name)(replaced)
+    end
+  end
+
+  defp generate_replace_clause(from, to, nil, followed_by, function_name) do
+    quote do
+      unquote(from) <> <<next::utf8, rest::binary>>
+      when Unicode.Set.match?(next, unquote(followed_by)) ->
+        unquote(to) <> unquote(function_name)(<<next::utf8, rest::binary>>)
+    end
+  end
+
+  defp generate_replace_clause(from, to, preceeded_by, followed_by, function_name) do
+    quote do
+      <<before::utf8, unquote(from), next::utf8, rest::binary>>
+      when Unicode.Set.match?(before, unquote(preceeded_by)) and
+             Unicode.Set.match?(next, unquote(followed_by)) ->
+        <<before::utf8>> <> unquote(function_name)(<<unquote(to), next::utf8, rest::binary>>)
     end
   end
 
@@ -303,8 +329,12 @@ defmodule Unicode.Transform do
     []
   end
 
+  defp group_rules([{:replace, _, _, _}] = rule) do
+    rule
+  end
+
   defp group_rules([{:transform, _} = t1 | rest]) do
-   [t1 | group_rules(rest)]
+    [t1 | group_rules(rest)]
   end
 
   defp group_rules([group, {:replace, _, _, _} = r1 | rest]) when is_list(group) do
@@ -336,11 +366,11 @@ defmodule Unicode.Transform do
 
   defp filter_module_name(name) do
     name
-    |> String.downcase
+    |> String.downcase()
     |> String.split("-")
     |> case do
-        [from] -> "Any" <> String.capitalize(from)
-        [from, to] -> String.capitalize(from) <> String.capitalize(to)
-      end
+      [from] -> "Any" <> String.capitalize(from)
+      [from, to] -> String.capitalize(from) <> String.capitalize(to)
+    end
   end
 end

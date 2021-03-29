@@ -10,8 +10,11 @@ defmodule TransformTest do
     end
 
     test "german" do
-      text = "Fach- und Berufsschulunterricht müssen allgemein verfügbar gemacht werden, und der Hochschulunterricht muß allen gleichermaßen entsprechend ihren Fähigkeiten offenstehen."
-      after_transform = "Fach- und Berufsschulunterricht mussen allgemein verfugbar gemacht werden, und der Hochschulunterricht muss allen gleichermassen entsprechend ihren Fahigkeiten offenstehen."
+      text =
+        "Fach- und Berufsschulunterricht müssen allgemein verfügbar gemacht werden, und der Hochschulunterricht muß allen gleichermaßen entsprechend ihren Fähigkeiten offenstehen."
+
+      after_transform =
+        "Fach- und Berufsschulunterricht mussen allgemein verfugbar gemacht werden, und der Hochschulunterricht muss allen gleichermassen entsprechend ihren Fahigkeiten offenstehen."
 
       assert Unicode.Transform.LatinAscii.transform(text) == after_transform
     end

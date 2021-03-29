@@ -13,8 +13,12 @@ defmodule Unicode.Transform.Parser do
   def parse(string) do
     string
     |> String.split("\n")
-    |> Enum.reject(&Regex.match?(~r/^\s*$/u, &1))
+    |> Enum.map(&String.trim_leading/1)
     |> Enum.map(&parse_rule/1)
+  end
+
+  def parse_rule("") do
+    %Unicode.Transform.Rule.Comment{comment: ""}
   end
 
   def parse_rule(string) do
@@ -25,7 +29,6 @@ defmodule Unicode.Transform.Parser do
       Filter.parse(string) ||
       Transform.parse(string) ||
       Conversion.parse(string) ||
-
       raise ArgumentError, "Unknown rule #{inspect(string)}"
   end
 end

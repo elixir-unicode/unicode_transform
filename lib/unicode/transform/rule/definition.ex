@@ -32,11 +32,11 @@ defmodule Unicode.Transform.Rule.Definition do
       parsed =
         @regex
         |> Regex.named_captures(rule)
-        |> unquote_value()
+        |> unescape_value()
+        |> maybe_nilify_comment()
         |> Utils.atomize_keys()
 
       struct(__MODULE__, parsed)
-      |> IO.inspect
     else
       nil
     end
@@ -46,13 +46,21 @@ defmodule Unicode.Transform.Rule.Definition do
     nil
   end
 
-  defp unquote_value(%{"value" => value} = rule) do
+  defp unescape_value(%{"value" => value} = rule) do
     value =
       value
-      |> String.trim
+      |> String.trim()
       |> Utils.unescape_string()
 
     %{rule | "value" => value}
+  end
+
+  defp maybe_nilify_comment(%{"comment" => ""} = rule) do
+    %{rule | "comment" => nil}
+  end
+
+  defp maybe_nilify_comment(%{"comment" => comment} = rule) do
+    %{rule | "comment" => String.trim(comment)}
   end
 
   defimpl Unicode.Transform.Rule do
@@ -76,7 +84,7 @@ defmodule Unicode.Transform.Rule.Definition do
         ", ",
         inspect(rule.value),
         ")",
-        "\n",
+        "\n"
       ]
     end
   end

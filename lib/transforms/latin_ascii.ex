@@ -7,6 +7,7 @@ defmodule Unicode.Transform.LatinAscii do
   # Transform direction: both
   # Transform alias: und-t-d0-ascii und-Latn-t-s0-ascii
 
+  #
   # This handles only Latin, Common, and IDEOGRAPHIC NUMBER ZERO (Han).
   #
   #
@@ -1145,6 +1146,8 @@ defmodule Unicode.Transform.LatinAscii do
   # 1F129;PARENTHESIZED LATIN CAPITAL LETTER Z (compat)
   replace("🄩", "(Z)")
   #
+  #
+  #
   # Roman numerals
   #
   # 2160;ROMAN NUMERAL ONE (compat)
@@ -1764,4 +1767,5 @@ defmodule Unicode.Transform.LatinAscii do
   replace("⩵", "==")
   # 2A76;THREE CONSECUTIVE EQUALS SIGNS (compat)
   replace("⩶", "===")
+  #
 end
