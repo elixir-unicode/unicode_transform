@@ -2,7 +2,28 @@ defmodule Unicode.Transform do
   @moduledoc """
   Implements the Unicode transform rules.
 
+  The rules are implemented by the macros
+  `filter/1`, `transform/1` and `replace/3`.
+
+  Typically transform modules are generated
+  from the CLDR transform specifications using
+  `Unicode.Transform.Generator.generate/1`.
+
+  These macros are then transformed to elixir
+  code by the functions in this module.
+
   """
+
+  @doc """
+  Transform a string.
+  """
+  @callback transform(String.t) :: String.t
+
+  @doc """
+  Transform a string with a filter
+  module provided
+  """
+  @callback transform(String.t, module()) :: String.t
 
   defmacro __using__(_) do
     module = __MODULE__
@@ -14,6 +35,8 @@ defmodule Unicode.Transform do
 
       import Unicode.Regex, only: [compile!: 1]
       require Unicode.Set
+
+      @behaviour Unicode.Transform
 
       @before_compile unquote(module)
     end
@@ -40,18 +63,8 @@ defmodule Unicode.Transform do
   end
 
   defmacro __before_compile__(_env) do
-    filter = Module.get_attribute(__CALLER__.module, :filter)
-
-    guard =
-      if filter do
-        quote do
-          defguard iff(codepoint) when Unicode.Set.match?(codepoint, unquote(filter))
-        end
-      else
-        quote do
-          defguard iff(codepoint) when is_integer(codepoint)
-        end
-      end
+    caller = __CALLER__.module
+    filter = Module.get_attribute(caller, :filter)
 
     rules =
       __CALLER__.module
@@ -59,27 +72,170 @@ defmodule Unicode.Transform do
       |> Enum.reverse()
       |> group_rules()
 
-    {_counter, functions} =
-      rules
-      |> Enum.filter(&is_list/1)
-      |> Enum.reduce({0, []}, &generate_function(&1, &2, filter))
+    [
+      generate_guard(filter),
+      filter_function(filter),
+      generate_transform(rules, caller),
+      generate_functions(rules, filter)
+    ]
+  end
 
-    pipeline =
-      rules
-      |> Enum.reduce({0, []}, &generate_function_call(&1, &2, filter))
-      |> elem(1)
-      |> Enum.reverse()
-      |> List.insert_at(0, quote do string end)
-      |> Enum.reduce(&Macro.pipe(&2, &1, 0))
+  # Guard clause which represents the
+  # filter rule
 
-    transform =
+  defp generate_guard(nil) do
+    quote do
+      defguard iff(codepoint) when is_integer(codepoint)
+    end
+  end
+
+  defp generate_guard(filter) do
+    quote do
+      defguardp iff(codepoint) when Unicode.Set.match?(codepoint, unquote(filter))
+    end
+  end
+
+  # Generates a function for the filter
+  # rule that can be called by other
+  # transforms since the filter rule
+  # is considered global and therefore
+  # when a transform rule is invoked it
+  # needs to conform to this filter too.
+
+  def filter_function(nil) do
+    quote do
+      def filter?(_) do
+        true
+      end
+    end
+  end
+
+  def filter_function(filter) do
+    {filter, _} = Code.eval_quoted(filter)
+
+    quote do
+      def filter?(char) do
+        Unicode.Set.match?(char, unquote(filter))
+      end
+    end
+  end
+
+  # Generate the functions which implement the
+  # conversion rules
+
+  defp generate_functions(rules, filter) do
+    rules
+    |> Enum.filter(&is_list/1)
+    |> Enum.reduce({0, []}, &generate_function(&1, &2, filter))
+    |> elem(1)
+    |> Enum.reverse
+  end
+
+  # Generate the transform/1 function
+  # that is the single public API
+
+  defp generate_transform(rules, caller) do
+    pipeline = generate_pipeline(rules, caller)
+
+    quote do
+      def transform(string, _filter \\ nil) do
+        unquote(pipeline)
+      end
+    end
+  end
+
+  # Generate the pipeline that executes
+  # the transform rules and the conversion rules
+  # in the correct order
+
+  defp generate_pipeline(rules, caller) do
+    rules
+    |> Enum.reduce({0, []}, &generate_function_call(&1, &2, caller))
+    |> elem(1)
+    |> Enum.reverse()
+    |> List.insert_at(0, quote do string end)
+    |> Enum.reduce(&Macro.pipe(&2, &1, 0))
+  end
+
+  # Generate the function calls used in the pipeline
+
+  def generate_function_call({:transform, name}, {counter, acc}, caller) do
+    funcall =
       quote do
-        def transform(string) do
-          unquote(pipeline)
+        unquote(filter_module(name)).transform(unquote(caller))
+      end
+
+    {counter, [funcall | acc]}
+  end
+
+  def generate_function_call(_rule_group, {counter, acc}, _caller) do
+    counter = counter + 1
+    function_name = :"replace_#{counter}"
+
+    funcall =
+      quote do
+        unquote(function_name)()
+      end
+
+    {counter, [funcall | acc]}
+  end
+
+  # Generate the functions that do the transformation
+
+  defp generate_function(replacements, {counter, acc}, _filter) when is_list(replacements) do
+    counter = counter + 1
+    function_name = :"replace_#{counter}"
+
+    replacement_clauses =
+      replacements
+      |> Enum.map(&generate_replace_clause(&1, function_name))
+      |> List.flatten
+
+    final_clause =
+      quote do
+        <<char::utf8>> <> rest -> <<char::utf8>> <> unquote(function_name)(rest)
+      end
+
+    primary_function =
+      quote do
+        defp unquote(function_name)(<<char::utf8, rest::binary>>) when iff(char) do
+          case <<char::utf8, rest::binary>> do
+            unquote(replacement_clauses ++ final_clause)
+          end
         end
       end
 
-    [guard, transform, Enum.reverse(functions)]
+    empty_function =
+      quote do
+        defp unquote(function_name)("") do
+          ""
+        end
+      end
+
+    default_function =
+      quote do
+        defp unquote(function_name)(<<char::utf8, rest::binary>>) do
+          <<char::utf8>> <> unquote(function_name)(rest)
+        end
+      end
+
+    {counter, [empty_function, default_function, primary_function | acc]}
+  end
+
+  defp generate_replace_clause({:replace, from, to, []}, function_name) do
+    quote do
+      unquote(from) <> rest -> unquote(to) <> unquote(function_name)(rest)
+    end
+  end
+
+  defp generate_replace_clause({:replace, from, to, options}, function_name) do
+    preceeded_by = Keyword.get(options, :preceeded_by)
+
+    quote do
+      <<char::utf8, rest::binary>> when Unicode.Set.match?(char, unquote(preceeded_by))->
+        replaced = String.replace(rest, compile!(unquote(from)), unquote(to))
+        <<char::utf8>> <> unquote(function_name)(replaced)
+    end
   end
 
   # Groups clusters of conversion rules together so
@@ -109,107 +265,37 @@ defmodule Unicode.Transform do
   #   ]
   # ]
 
-  def group_rules([{:transform, _} = t1 | rest]) do
+  defp group_rules([{:transform, _} = t1 | rest]) do
    [t1 | group_rules(rest)]
   end
 
-  def group_rules([group, {:replace, _, _, _} = r1 | rest]) when is_list(group) do
+  defp group_rules([group, {:replace, _, _, _} = r1 | rest]) when is_list(group) do
     group_rules([[r1 | group] | rest])
   end
 
-  def group_rules([{:replace, _, _, _} = r1, {:replace, _, _, _} = r2 | rest]) do
+  defp group_rules([{:replace, _, _, _} = r1, {:replace, _, _, _} = r2 | rest]) do
     group_rules([[r2, r1] | rest])
   end
 
-  def group_rules([group, {:transform, _} = t1 | rest]) when is_list(group) do
+  defp group_rules([group, {:transform, _} = t1 | rest]) when is_list(group) do
     [Enum.reverse(group), t1 | group_rules(rest)]
   end
 
-  def group_rules([{:replace, _, _, _} = r1, {:transform, _} = t2 | rest]) do
+  defp group_rules([{:replace, _, _, _} = r1, {:transform, _} = t2 | rest]) do
     [[r1] | group_rules([t2 | rest])]
   end
 
-  def group_rules([group]) when is_list(group) do
+  defp group_rules([group]) when is_list(group) do
     [Enum.reverse(group)]
-  end
-
-  def generate_function_call({:transform, name}, {counter, acc}, filter) do
-    funcall =
-      quote do
-        unquote(filter_module(name)).transform(unquote(filter))
-      end
-
-    {counter, [funcall | acc]}
-  end
-
-  def generate_function_call(_rule_group, {counter, acc}, _filter) do
-    counter = counter + 1
-    function_name = :"replace_#{counter}"
-
-    funcall =
-      quote do
-        unquote(function_name)()
-      end
-
-    {counter, [funcall | acc]}
-  end
-
-  def generate_function(replacements, {counter, acc}, _filter) when is_list(replacements) do
-    counter = counter + 1
-    function_name = :"replace_#{counter}"
-
-    replacement_clauses =
-      replacements
-      |> Enum.map(&generate_replace_clause(&1, function_name))
-      |> List.flatten
-
-    final_clause =
-      quote do
-        <<char::utf8>> <> rest -> <<char::utf8>> <> unquote(function_name)(rest)
-      end
-
-    primary_function =
-      quote do
-        defp unquote(function_name)(<<char::utf8, rest::binary>>) when iff(char) do
-          case <<char::utf8, rest::binary>> do
-            unquote(replacement_clauses ++ final_clause)
-          end
-        end
-      end
-
-    default_function =
-      quote do
-        defp unquote(function_name)("") do
-          ""
-        end
-      end
-
-    {counter, [default_function, primary_function | acc]}
-  end
-
-  def generate_replace_clause({:replace, from, to, []}, function_name) do
-    quote do
-      unquote(from) <> rest -> unquote(to) <> unquote(function_name)(rest)
-    end
-  end
-
-  def generate_replace_clause({:replace, from, to, options}, function_name) do
-    preceeded_by = Keyword.get(options, :preceeded_by)
-
-    quote do
-      <<char::utf8, rest::binary>> when Unicode.Set.match?(char, unquote(preceeded_by))->
-        replaced = String.replace(rest, compile!(unquote(from)), unquote(to))
-        <<char::utf8>> <> unquote(function_name)(replaced)
-    end
   end
 
   # Derive the name of the module from the filter
   # Doesn't yet handle complex names
-  def filter_module(name) do
+  defp filter_module(name) do
     Module.concat(__MODULE__, filter_module_name(name))
   end
 
-  def filter_module_name(name) do
+  defp filter_module_name(name) do
     name
     |> String.downcase
     |> String.split("-")
