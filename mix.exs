@@ -56,7 +56,7 @@ defmodule UnicodeTransform.MixProject do
 
   defp deps do
     [
-      {:unicode_set, "~> 0.12", optional: true},
+      {:unicode_set, "~> 0.12"},
       {:sweet_xml, "~> 0.6", only: [:dev, :test], optional: true},
       {:ex_doc, "~> 0.19", runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false, optional: true}
