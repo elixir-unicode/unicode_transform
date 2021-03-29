@@ -114,7 +114,7 @@ defmodule Unicode.Transform.Rule.Conversion do
   """
 
   @direction_symbols ["→", "←", "↔"]
-  @directions ~r/(?<!\\)[#{Enum.join(@direction_symbols)}]/u
+  @directions ~r/(?<![\\'])[#{Enum.join(@direction_symbols)}]/u
 
   @fields [:direction, :left, :right, :comment]
   defstruct @fields
