@@ -18,7 +18,7 @@ defmodule UnicodeTransform.MixProject do
       package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
       dialyzer: [
-        plt_add_apps: ~w(mix)a,
+        plt_add_apps: ~w(mix sweet_xml unicode_set)a,
         ignore_warnings: ".dialyzer_ignore_warnings"
       ]
     ]
@@ -57,7 +57,9 @@ defmodule UnicodeTransform.MixProject do
   defp deps do
     [
       {:unicode_set, "~> 0.12", optional: true},
-      {:sweet_xml, "~> 0.6", only: [:dev, :test], optional: true}
+      {:sweet_xml, "~> 0.6", only: [:dev, :test], optional: true},
+      {:ex_doc, "~> 0.19", runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false, optional: true}
     ]
   end
 

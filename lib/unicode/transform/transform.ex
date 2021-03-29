@@ -136,12 +136,32 @@ defmodule Unicode.Transform do
 
   defp generate_transform(rules, caller) do
     pipeline = generate_pipeline(rules, caller)
+    [from, to] = extract_from_to(caller)
 
     quote do
-      def transform(string, _filter \\ nil) do
+      @doc """
+      Transforms a string from #{inspect unquote(from)} to #{inspect unquote(to)}
+      """
+      @spec transform(String.t) :: String.t
+
+      def transform(string) do
+        unquote(pipeline)
+      end
+
+      @doc false
+      def transform(string, _filter) do
         unquote(pipeline)
       end
     end
+  end
+
+  defp extract_from_to(caller) do
+    caller
+    |> Module.split
+    |> List.last
+    |> Macro.underscore
+    |> String.split("_")
+    |> Enum.map(&String.capitalize/1)
   end
 
   # Generate the pipeline that executes
