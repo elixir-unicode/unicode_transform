@@ -20,11 +20,12 @@ defmodule Unicode.Transform.Parser do
   def parse_rule(string) do
     # IO.inspect string, label: "Parse"
 
-    Comment.parse(string) ||
+    Definition.parse(string) ||
+      Comment.parse(string) ||
       Filter.parse(string) ||
       Transform.parse(string) ||
       Conversion.parse(string) ||
-      Definition.parse(string) ||
+
       raise ArgumentError, "Unknown rule #{inspect(string)}"
   end
 end

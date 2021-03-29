@@ -42,4 +42,40 @@ defmodule Unicode.Transform.Utils do
     |> Enum.map(fn {:define, var, value} -> {var, value} end)
     |> Map.new
   end
+
+  @doc false
+  def extract_character_class(string, level \\ 0)
+
+  def extract_character_class("" = string, _level) do
+    {string, ""}
+  end
+
+  def extract_character_class(<<"\\[", rest::binary>>, level) do
+    {string, rest} = extract_character_class(rest, level)
+    {"\\[" <> string, rest}
+  end
+
+  def extract_character_class(<<"\\]", rest::binary>>, level) do
+    {string, rest} = extract_character_class(rest, level)
+    {"\\]" <> string, rest}
+  end
+
+  def extract_character_class(<<"[", rest::binary>>, level) do
+    {string, rest} = extract_character_class(rest, level + 1)
+    {"[" <> string, rest}
+  end
+
+  def extract_character_class(<<"]", rest::binary>>, 1) do
+    {"]", rest}
+  end
+
+  def extract_character_class(<<"]", rest::binary>>, level) do
+    {string, rest} = extract_character_class(rest, level - 1)
+    {"]" <> string, rest}
+  end
+
+  def extract_character_class(<<char::binary-1, rest::binary>>, level) do
+    {string, rest} = extract_character_class(rest, level)
+    {char <> string, rest}
+  end
 end

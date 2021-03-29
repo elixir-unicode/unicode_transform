@@ -28,13 +28,18 @@ defmodule Unicode.Transform.Rule.Definition do
   @regex ~r/(?<variable>[a-zA-Z][a-zA-Z0-9]*)\s*=\s*(?<value>[^;]*)\s*;(\s*\#\s*(?<comment>.*))?/u
 
   def parse(<<"$">> <> rule) do
-    parsed =
-      @regex
-      |> Regex.named_captures(rule)
-      |> unquote_value()
-      |> Utils.atomize_keys()
+    if Regex.match?(~r/(?<!\\)=/, rule) do
+      parsed =
+        @regex
+        |> Regex.named_captures(rule)
+        |> unquote_value()
+        |> Utils.atomize_keys()
 
-    struct(__MODULE__, parsed)
+      struct(__MODULE__, parsed)
+      |> IO.inspect
+    else
+      nil
+    end
   end
 
   def parse(_other) do
