@@ -73,7 +73,7 @@ defmodule Unicode.Transform do
     caller = __CALLER__.module
     filter = Module.get_attribute(caller, :filter)
 
-    variables =
+    _variables =
       caller
       |> Module.get_attribute(:variables)
       |> Unicode.Transform.Utils.make_variable_map()

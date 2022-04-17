@@ -25,6 +25,8 @@ defmodule Unicode.Transform.DeAscii do
   replace("$UE", "UE")
   #
   #
-  transform("Any-ASCII")
+  # Generated but not available, use Latin-Ascii instead
+  # transform("Any-ASCII")
+  transform("Latin-ASCII")
   #
 end

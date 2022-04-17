@@ -1,7 +1,7 @@
 defmodule UnicodeTransform.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.3.0"
 
   def project do
     [
@@ -56,7 +56,7 @@ defmodule UnicodeTransform.MixProject do
 
   defp deps do
     [
-      {:unicode_set, "~> 0.12"},
+      {:unicode_set, "~> 1.0"},
       {:sweet_xml, "~> 0.6", only: [:dev, :test], optional: true},
       {:ex_doc, "~> 0.19", runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false, optional: true}
