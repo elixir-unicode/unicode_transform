@@ -11,7 +11,7 @@ For terms of use, see http://www.unicode.org/copyright.html
 		<transform source="Hira" target="Kana" direction="both" alias="Hiragana-Katakana und-Kana-t-und-hira" backwardAlias="Katakana-Hiragana und-Hira-t-und-kana">
 			<tRule>
 # note: a global filter is more efficient, but MUST include all source chars
-:: [[\u0000-\u007E 、。 ゙-゜ ァ-ー ｡-ﾟー[:Hiragana:] [:Katakana:] [:nonspacing mark:]]-[\u309B \u309C]];
+:: [[\u0000-\u007E 、。 ゙-゜ ァ-ー ｡-ﾟー[:Hiragana:] [:Katakana:] [:Nonspacing_Mark:]]-[\u309B \u309C]];
 :: NFKC (NFC);
 # Hiragana-Katakana
 # This is largely a one-to-one mapping, but it has a
@@ -153,30 +153,30 @@ For terms of use, see http://www.unicode.org/copyright.html
 # transformed to Hiragana.
 # {The following mechanically generated from the
 # Unicode 3.0 data:}
-$xa = [ \
-ぁ あ か が さ ざ \
-た だ な は ば ぱ \
-ま ゃ や ら ゎ わ \
+$xa = [
+ぁ あ か が さ ざ
+た だ な は ば ぱ
+ま ゃ や ら ゎ わ
 ];
-$xi = [ \
-ぃ い き ぎ し じ \
-ち ぢ に ひ び ぴ \
-み り ゐ \
+$xi = [
+ぃ い き ぎ し じ
+ち ぢ に ひ び ぴ
+み り ゐ
 ];
-$xu = [ \
-ぅ う く ぐ す ず \
-っ つ づ ぬ ふ ぶ \
-ぷ む ゅ ゆ る ゔ \
+$xu = [
+ぅ う く ぐ す ず
+っ つ づ ぬ ふ ぶ
+ぷ む ゅ ゆ る ゔ
 ];
-$xe = [ \
-ぇ え け げ せ ぜ \
-て で ね へ べ ぺ \
-め れ ゑ \
+$xe = [
+ぇ え け げ せ ぜ
+て で ね へ べ ぺ
+め れ ゑ
 ];
-$xo = [ \
-ぉ お こ ご そ ぞ \
-と ど の ほ ぼ ぽ \
-も ょ よ ろ を \
+$xo = [
+ぉ お こ ご そ ぞ
+と ど の ほ ぼ ぽ
+も ょ よ ろ を
 ];
 あ ← $xa {ー};
 い ← $xi {ー};
@@ -185,7 +185,7 @@ $xo = [ \
 お ← $xo {ー};
 :: NFC (NFKC) ;
 # note: a global filter is more efficient, but MUST include all source chars!!
-:: ([[\u0000-\u007E 、。 ゙-゜ ァ-ー ｡-ﾟー[:Hiragana:] [:Katakana:] [:nonspacing mark:]]-[\u309B \u309C]]);
+:: ([[\u0000-\u007E 、。 ゙-゜ ァ-ー ｡-ﾟー[:Hiragana:] [:Katakana:] [:Nonspacing_Mark:]]-[\u309B \u309C]]);
 # eof
 			</tRule>
 		</transform>

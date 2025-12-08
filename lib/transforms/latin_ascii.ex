@@ -5,7 +5,7 @@ defmodule Unicode.Transform.LatinAscii do
   # Source: Latin
   # Target: ASCII
   # Transform direction: both
-  # Transform alias: und-t-d0-ascii und-Latn-t-s0-ascii
+  # Transform alias: und-t-und-latn-d0-ascii
 
   #
   # This handles only Latin, Common, and IDEOGRAPHIC NUMBER ZERO (Han).
@@ -1391,29 +1391,29 @@ defmodule Unicode.Transform.LatinAscii do
   # Spaces
   #
   # 00A0;NO-BREAK SPACE
-  replace("\u00A0", "")
+  replace("\u00A0", " ")
   # 2002;EN SPACE (compat)
-  replace("\u2002", "")
+  replace("\u2002", " ")
   # 2003;EM SPACE (compat)
-  replace("\u2003", "")
+  replace("\u2003", " ")
   # 2004;THREE-PER-EM SPACE (compat)
-  replace("\u2004", "")
+  replace("\u2004", " ")
   # 2005;FOUR-PER-EM SPACE (compat)
-  replace("\u2005", "")
+  replace("\u2005", " ")
   # 2006;SIX-PER-EM SPACE (compat)
-  replace("\u2006", "")
+  replace("\u2006", " ")
   # 2007;FIGURE SPACE (compat)
-  replace("\u2007", "")
+  replace("\u2007", " ")
   # 2008;PUNCTUATION SPACE (compat)
-  replace("\u2008", "")
+  replace("\u2008", " ")
   # 2009;THIN SPACE (compat)
-  replace("\u2009", "")
+  replace("\u2009", " ")
   # 200A;HAIR SPACE (compat)
-  replace("\u200A", "")
+  replace("\u200A", " ")
   # 205F;MEDIUM MATHEMATICAL SPACE (compat)
-  replace("\u205F", "")
+  replace("\u205F", " ")
   # 3000;IDEOGRAPHIC SPACE (from ‹character-fallback›)
-  replace("\u3000", "")
+  replace("\u3000", " ")
   #
   # Quotes, apostrophes
   #

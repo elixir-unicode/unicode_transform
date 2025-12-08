@@ -26,5 +26,9 @@ defmodule TransformTest do
 
       assert Unicode.Transform.LatinAscii.transform(text) == after_transform
     end
+
+    test "that non-breaking space becomes ASCII space in Latin-ASCII" do
+      assert "There and Back Again" = Unicode.Transform.LatinAscii.transform("There\u00a0and Back\u00a0Again")
+    end
   end
 end

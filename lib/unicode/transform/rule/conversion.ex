@@ -287,6 +287,7 @@ defmodule Unicode.Transform.Rule.Conversion do
     Enum.map(list, fn
       nil -> nil
       "" -> nil
+      " " -> " "
       other -> String.trim(other)
     end)
   end
