@@ -3,50 +3,45 @@ defmodule Unicode.TransformTest do
 
   describe "built-in transforms" do
     test "Any-Upper transforms to uppercase" do
-      assert {:ok, "HELLO WORLD"} = Unicode.Transform.transform("hello world", "Any-Upper")
+      assert {:ok, "HELLO WORLD"} = Unicode.Transform.transform("hello world", to: :upper)
     end
 
     test "Any-Lower transforms to lowercase" do
-      assert {:ok, "hello world"} = Unicode.Transform.transform("HELLO WORLD", "Any-Lower")
+      assert {:ok, "hello world"} = Unicode.Transform.transform("HELLO WORLD", to: :lower)
     end
 
     test "Any-Title transforms to title case" do
-      assert {:ok, "Hello World"} = Unicode.Transform.transform("hello world", "Any-Title")
+      assert {:ok, "Hello World"} = Unicode.Transform.transform("hello world", to: :title)
     end
 
     test "Any-Null is identity" do
-      assert {:ok, "hello"} = Unicode.Transform.transform("hello", "Any-Null")
+      assert {:ok, "hello"} = Unicode.Transform.transform("hello", to: :null)
     end
 
     test "Any-Remove removes all characters" do
-      assert {:ok, ""} = Unicode.Transform.transform("hello", "Any-Remove")
+      assert {:ok, ""} = Unicode.Transform.transform("hello", to: :remove)
     end
 
     test "NFC normalization" do
       input = "A\u0308"
-      assert {:ok, "Ä"} = Unicode.Transform.transform(input, "NFC")
+      assert {:ok, "Ä"} = Unicode.Transform.transform(input, to: :nfc)
     end
 
     test "NFD normalization" do
       input = "Ä"
-      {:ok, result} = Unicode.Transform.transform(input, "NFD")
+      {:ok, result} = Unicode.Transform.transform(input, to: :nfd)
       assert String.normalize(result, :nfd) == result
-    end
-
-    test "shorthand names work" do
-      assert {:ok, "HELLO"} = Unicode.Transform.transform("hello", "Upper")
-      assert {:ok, "hello"} = Unicode.Transform.transform("HELLO", "Lower")
     end
   end
 
-  describe "transform!/3" do
+  describe "transform!/2" do
     test "returns result directly" do
-      assert "A O U ss" = Unicode.Transform.transform!("Ä Ö Ü ß", "Latin-ASCII")
+      assert "A O U ss" = Unicode.Transform.transform!("Ä Ö Ü ß", from: :latin, to: :ascii)
     end
 
     test "raises for unknown transform" do
       assert_raise ArgumentError, fn ->
-        Unicode.Transform.transform!("hello", "NonExistent-Transform-XYZ")
+        Unicode.Transform.transform!("hello", transform: "NonExistent-Transform-XYZ")
       end
     end
   end
@@ -54,7 +49,17 @@ defmodule Unicode.TransformTest do
   describe "error handling" do
     test "returns error for unknown transform" do
       assert {:error, {:unknown_transform, _}} =
-               Unicode.Transform.transform("hello", "NonExistent-Transform-XYZ")
+               Unicode.Transform.transform("hello", transform: "NonExistent-Transform-XYZ")
+    end
+
+    test "returns error when :to is missing" do
+      assert {:error, {:missing_option, :to}} =
+               Unicode.Transform.transform("hello", from: :any)
+    end
+
+    test "returns error for unknown script atom" do
+      assert {:error, {:unknown_script, :nonexistent}} =
+               Unicode.Transform.transform("hello", to: :nonexistent)
     end
   end
 
@@ -166,85 +171,89 @@ defmodule Unicode.TransformTest do
 
   describe "Latin-ASCII transform" do
     test "transforms German special characters" do
-      assert {:ok, "A O U ss"} = Unicode.Transform.transform("Ä Ö Ü ß", "Latin-ASCII")
+      assert {:ok, "A O U ss"} = Unicode.Transform.transform("Ä Ö Ü ß", from: :latin, to: :ascii)
     end
 
     test "transforms French accented text" do
-      assert {:ok, "resume"} = Unicode.Transform.transform("résumé", "Latin-ASCII")
+      assert {:ok, "resume"} = Unicode.Transform.transform("résumé", from: :latin, to: :ascii)
     end
 
     test "transforms ligatures" do
-      assert {:ok, "AE ae OE oe"} = Unicode.Transform.transform("Æ æ Œ œ", "Latin-ASCII")
+      assert {:ok, "AE ae OE oe"} =
+               Unicode.Transform.transform("Æ æ Œ œ", from: :latin, to: :ascii)
     end
 
     test "preserves ASCII text" do
-      assert {:ok, "hello world"} = Unicode.Transform.transform("hello world", "Latin-ASCII")
+      assert {:ok, "hello world"} =
+               Unicode.Transform.transform("hello world", from: :latin, to: :ascii)
     end
 
     test "transforms Icelandic characters" do
-      assert {:ok, "D d TH th"} = Unicode.Transform.transform("Ð ð Þ þ", "Latin-ASCII")
+      assert {:ok, "D d TH th"} = Unicode.Transform.transform("Ð ð Þ þ", from: :latin, to: :ascii)
     end
 
     test "transforms Polish characters" do
-      assert {:ok, "L l"} = Unicode.Transform.transform("Ł ł", "Latin-ASCII")
+      assert {:ok, "L l"} = Unicode.Transform.transform("Ł ł", from: :latin, to: :ascii)
     end
 
     test "transforms empty string" do
-      assert {:ok, ""} = Unicode.Transform.transform("", "Latin-ASCII")
+      assert {:ok, ""} = Unicode.Transform.transform("", from: :latin, to: :ascii)
     end
 
     test "handles already ASCII text" do
-      assert {:ok, "ABCdef123"} = Unicode.Transform.transform("ABCdef123", "Latin-ASCII")
+      assert {:ok, "ABCdef123"} =
+               Unicode.Transform.transform("ABCdef123", from: :latin, to: :ascii)
     end
 
     test "handles mixed content" do
-      assert {:ok, "cafe resume"} = Unicode.Transform.transform("café résumé", "Latin-ASCII")
+      assert {:ok, "cafe resume"} =
+               Unicode.Transform.transform("café résumé", from: :latin, to: :ascii)
     end
   end
 
   describe "de-ASCII transform" do
     test "transforms German umlauts with context-sensitive rules" do
-      assert {:ok, "AE oe ue"} = Unicode.Transform.transform("Ä ö ü", "de-ASCII")
+      assert {:ok, "AE oe ue"} = Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
     end
   end
 
   describe "Hiragana-Katakana transform" do
     test "transforms hiragana to katakana" do
-      {:ok, result} = Unicode.Transform.transform("あいうえお", "Hiragana-Katakana")
+      {:ok, result} = Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
       assert String.to_charlist(result) == [0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30AA]
     end
 
     test "inverse transforms katakana to hiragana" do
-      {:ok, result} = Unicode.Transform.transform("アイウエオ", "Hiragana-Katakana", :reverse)
+      {:ok, result} = Unicode.Transform.transform("アイウエオ", from: :katakana, to: :hiragana)
       assert String.to_charlist(result) == [0x3042, 0x3044, 0x3046, 0x3048, 0x304A]
     end
 
     test "round-trip preserves text" do
       original = "あいうえお"
-      {:ok, katakana} = Unicode.Transform.transform(original, "Hiragana-Katakana")
-      {:ok, back} = Unicode.Transform.transform(katakana, "Hiragana-Katakana", :reverse)
+      {:ok, katakana} = Unicode.Transform.transform(original, from: :hiragana, to: :katakana)
+      {:ok, back} = Unicode.Transform.transform(katakana, from: :katakana, to: :hiragana)
       assert String.to_charlist(back) == String.to_charlist(original)
     end
   end
 
   describe "Greek-Latin transform" do
     test "transforms basic Greek letters" do
-      {:ok, result} = Unicode.Transform.transform("αβγδ", "Greek-Latin")
+      {:ok, result} = Unicode.Transform.transform("αβγδ", from: :greek, to: :latin)
       assert result == "abgd"
     end
 
     test "transforms uppercase Greek" do
-      {:ok, result} = Unicode.Transform.transform("ΑΒΓΔ", "Greek-Latin")
+      {:ok, result} = Unicode.Transform.transform("ΑΒΓΔ", from: :greek, to: :latin)
       assert result == "ABGD"
     end
 
     test "transforms eta to e with macron" do
-      {:ok, result} = Unicode.Transform.transform("η", "Greek-Latin")
+      {:ok, result} = Unicode.Transform.transform("η", from: :greek, to: :latin)
       assert String.to_charlist(result) == [0x0113]
     end
 
     test "transforms full Greek word" do
-      {:ok, result} = Unicode.Transform.transform("Ελληνικά", "Greek-Latin")
+      {:ok, result} = Unicode.Transform.transform("Ελληνικά", from: :greek, to: :latin)
       expected_codepoints = [69, 108, 108, 275, 110, 105, 107, 225]
       assert String.to_charlist(result) == expected_codepoints
     end
@@ -252,7 +261,7 @@ defmodule Unicode.TransformTest do
 
   describe "Any-Publishing transform" do
     test "transforms straight quotes to curly quotes" do
-      {:ok, result} = Unicode.Transform.transform("Hello \"World\"", "Any-Publishing")
+      {:ok, result} = Unicode.Transform.transform("Hello \"World\"", to: :publishing)
       assert String.contains?(result, "\u201C") or String.contains?(result, "\u201D")
     end
   end
@@ -269,12 +278,12 @@ defmodule Unicode.TransformTest do
 
   describe "Cyrillic-Latin transform" do
     test "transforms basic Cyrillic" do
-      {:ok, result} = Unicode.Transform.transform("абвг", "Cyrillic-Latin")
+      {:ok, result} = Unicode.Transform.transform("абвг", from: :cyrillic, to: :latin)
       assert result == "abvg"
     end
 
     test "reverse transforms Latin to Cyrillic" do
-      {:ok, result} = Unicode.Transform.transform("hello", "Latin-Cyrillic")
+      {:ok, result} = Unicode.Transform.transform("hello", from: :latin, to: :cyrillic)
       assert is_binary(result)
       assert String.length(result) > 0
     end
@@ -282,7 +291,7 @@ defmodule Unicode.TransformTest do
 
   describe "Arabic-Latin transform" do
     test "transforms basic Arabic" do
-      {:ok, result} = Unicode.Transform.transform("عربي", "Arabic-Latin")
+      {:ok, result} = Unicode.Transform.transform("عربي", from: :arabic, to: :latin)
       assert is_binary(result)
       assert String.length(result) > 0
     end
@@ -290,7 +299,7 @@ defmodule Unicode.TransformTest do
 
   describe "Devanagari-Latin transform" do
     test "transforms Devanagari text" do
-      {:ok, result} = Unicode.Transform.transform("नमस्ते", "Devanagari-Latin")
+      {:ok, result} = Unicode.Transform.transform("नमस्ते", from: :devanagari, to: :latin)
       assert is_binary(result)
       assert result != "नमस्ते"
     end
@@ -298,31 +307,31 @@ defmodule Unicode.TransformTest do
 
   describe "Bengali transforms" do
     test "Bengali-Latin" do
-      {:ok, result} = Unicode.Transform.transform("বাংলা", "Bengali-Latin")
+      {:ok, result} = Unicode.Transform.transform("বাংলা", from: :bengali, to: :latin)
       assert is_binary(result)
       assert result != "বাংলা"
     end
 
     test "Bengali-Devanagari" do
-      {:ok, result} = Unicode.Transform.transform("বাংলা", "Bengali-Devanagari")
+      {:ok, result} = Unicode.Transform.transform("বাংলা", from: :bengali, to: :devanagari)
       assert is_binary(result)
       assert result != "বাংলা"
     end
 
     test "Bengali-Gujarati" do
-      {:ok, result} = Unicode.Transform.transform("বাংলা", "Bengali-Gujarati")
+      {:ok, result} = Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarati)
       assert is_binary(result)
       assert result != "বাংলা"
     end
 
     test "Bengali-Tamil" do
-      {:ok, result} = Unicode.Transform.transform("বাংলা", "Bengali-Tamil")
+      {:ok, result} = Unicode.Transform.transform("বাংলা", from: :bengali, to: :tamil)
       assert is_binary(result)
       assert result != "বাংলা"
     end
 
     test "Bengali-Telugu" do
-      {:ok, result} = Unicode.Transform.transform("বাংলা", "Bengali-Telugu")
+      {:ok, result} = Unicode.Transform.transform("বাংলা", from: :bengali, to: :telugu)
       assert is_binary(result)
       assert result != "বাংলা"
     end
@@ -330,43 +339,43 @@ defmodule Unicode.TransformTest do
 
   describe "Devanagari cross-script transforms" do
     test "Devanagari-Bengali" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Bengali")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :bengali)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Gujarati" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Gujarati")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :gujarati)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Kannada" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Kannada")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :kannada)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Malayalam" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Malayalam")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :malayalam)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Oriya" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Oriya")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :oriya)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Tamil" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Tamil")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :tamil)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
 
     test "Devanagari-Telugu" do
-      {:ok, result} = Unicode.Transform.transform("हिन्दी", "Devanagari-Telugu")
+      {:ok, result} = Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :telugu)
       assert is_binary(result)
       assert result != "हिन्दी"
     end
@@ -374,7 +383,7 @@ defmodule Unicode.TransformTest do
 
   describe "Thai-Latin transform" do
     test "transforms basic Thai" do
-      {:ok, result} = Unicode.Transform.transform("ไทย", "Thai-Latin")
+      {:ok, result} = Unicode.Transform.transform("ไทย", from: :thai, to: :latin)
       assert is_binary(result)
       assert result != "ไทย"
       # Should not contain regex metacharacters
@@ -385,7 +394,7 @@ defmodule Unicode.TransformTest do
 
   describe "Hebrew-Latin transform" do
     test "transforms basic Hebrew" do
-      {:ok, result} = Unicode.Transform.transform("שלום", "Hebrew-Latin")
+      {:ok, result} = Unicode.Transform.transform("שלום", from: :hebrew, to: :latin)
       assert is_binary(result)
       assert result != "שלום"
     end
@@ -393,12 +402,12 @@ defmodule Unicode.TransformTest do
 
   describe "Hangul-Latin transform" do
     test "transforms Korean text" do
-      {:ok, result} = Unicode.Transform.transform("한글", "Hangul-Latin")
+      {:ok, result} = Unicode.Transform.transform("한글", from: :hangul, to: :latin)
       assert result == "hangeul"
     end
 
     test "transforms Korean greeting" do
-      {:ok, result} = Unicode.Transform.transform("가", "Hangul-Latin")
+      {:ok, result} = Unicode.Transform.transform("가", from: :hangul, to: :latin)
       assert is_binary(result)
       assert result != "가"
     end
@@ -406,40 +415,42 @@ defmodule Unicode.TransformTest do
 
   describe "Katakana-Latin transform" do
     test "transforms basic Katakana" do
-      {:ok, result} = Unicode.Transform.transform("アイウ", "Katakana-Latin")
+      {:ok, result} = Unicode.Transform.transform("アイウ", from: :katakana, to: :latin)
       assert result == "aiu"
     end
   end
 
   describe "Armenian-Latin-BGN transform" do
     test "transforms Armenian text" do
-      {:ok, result} = Unicode.Transform.transform("Հայաստան", "Armenian-Latin-BGN")
+      {:ok, result} = Unicode.Transform.transform("Հայաստան", transform: "Armenian-Latin-BGN")
       assert result == "Hayastan"
     end
   end
 
   describe "Georgian transforms" do
     test "Georgian-Latin" do
-      {:ok, result} = Unicode.Transform.transform("საქართველო", "Georgian-Latin")
+      {:ok, result} = Unicode.Transform.transform("საქართველო", from: :georgian, to: :latin)
       assert result == "sakartvelo"
     end
 
     test "Georgian-Latin-BGN" do
-      {:ok, result} = Unicode.Transform.transform("საქართველო", "Georgian-Latin-BGN")
+      {:ok, result} = Unicode.Transform.transform("საქართველო", transform: "Georgian-Latin-BGN")
       assert result == "sakartvelo"
     end
   end
 
   describe "Fullwidth-Halfwidth transform" do
     test "transforms fullwidth to halfwidth" do
-      {:ok, result} = Unicode.Transform.transform("\uFF21\uFF22", "Fullwidth-Halfwidth")
+      {:ok, result} =
+        Unicode.Transform.transform("\uFF21\uFF22", from: :fullwidth, to: :halfwidth)
+
       assert result == "AB"
     end
   end
 
   describe "CanadianAboriginal-Latin transform" do
     test "transforms Canadian Aboriginal syllabics" do
-      {:ok, result} = Unicode.Transform.transform("ᐃ", "CanadianAboriginal-Latin")
+      {:ok, result} = Unicode.Transform.transform("ᐃ", from: :canadian_aboriginal, to: :latin)
       assert is_binary(result)
       assert result != "ᐃ"
     end
@@ -447,7 +458,7 @@ defmodule Unicode.TransformTest do
 
   describe "Gujarati-Devanagari transform" do
     test "transforms Gujarati to Devanagari" do
-      {:ok, result} = Unicode.Transform.transform("ગુજરાતી", "Gujarati-Devanagari")
+      {:ok, result} = Unicode.Transform.transform("ગુજરાતી", from: :gujarati, to: :devanagari)
       assert is_binary(result)
       assert result != "ગુજરાતી"
     end
@@ -455,7 +466,7 @@ defmodule Unicode.TransformTest do
 
   describe "Latin-Katakana transform" do
     test "transforms Latin to Katakana" do
-      {:ok, result} = Unicode.Transform.transform("tokyo", "Latin-Katakana")
+      {:ok, result} = Unicode.Transform.transform("tokyo", from: :latin, to: :katakana)
       assert is_binary(result)
       assert result != "tokyo"
     end
@@ -463,7 +474,7 @@ defmodule Unicode.TransformTest do
 
   describe "Latin-Hangul transform" do
     test "transforms Latin to Hangul" do
-      {:ok, result} = Unicode.Transform.transform("hangul", "Latin-Hangul")
+      {:ok, result} = Unicode.Transform.transform("hangul", from: :latin, to: :hangul)
       assert is_binary(result)
       assert result != "hangul"
     end
@@ -513,6 +524,28 @@ defmodule Unicode.TransformTest do
 
     test "handles replacement without backreferences" do
       assert "hello" = Pattern.apply_backreferences("hello", [])
+    end
+  end
+
+  describe "transform with :transform and :direction options" do
+    test "uses transform ID directly" do
+      {:ok, result} = Unicode.Transform.transform("Ä Ö Ü ß", transform: "Latin-ASCII")
+      assert result == "A O U ss"
+    end
+
+    test "uses :direction option with transform ID" do
+      {:ok, katakana} =
+        Unicode.Transform.transform("あいうえお", transform: "Hiragana-Katakana")
+
+      {:ok, back} =
+        Unicode.Transform.transform(katakana, transform: "Hiragana-Katakana", direction: :reverse)
+
+      assert String.to_charlist(back) == String.to_charlist("あいうえお")
+    end
+
+    test "defaults direction to :forward" do
+      {:ok, result} = Unicode.Transform.transform("абвг", transform: "Cyrillic-Latin")
+      assert result == "abvg"
     end
   end
 

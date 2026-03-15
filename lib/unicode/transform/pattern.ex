@@ -3,12 +3,19 @@ defmodule Unicode.Transform.Pattern do
   Compiles CLDR transform rule patterns into Elixir regexes.
 
   Transform patterns can contain:
-  * Literal characters
-  * Unicode set notation: `[:Mn:]`, `[[:Latin:][0-9]]`
-  * Quantifiers: `+`, `*`, `?`
-  * Capture groups: `(...)` for backreferences
-  * Escaped characters: `\\:`, `\\u0041`
-  * Quoted literals: `'text'`
+
+  * Literal characters.
+
+  * Unicode set notation: `[:Mn:]`, `[[:Latin:][0-9]]`.
+
+  * Quantifiers: `+`, `*`, `?`.
+
+  * Capture groups: `(...)` for backreferences.
+
+  * Escaped characters: `\\:`, `\\u0041`.
+
+  * Quoted literals: `'text'`.
+
   """
 
   @doc """
@@ -16,11 +23,12 @@ defmodule Unicode.Transform.Pattern do
 
   ### Arguments
 
-  * `pattern` — the pattern string from a CLDR rule
+  * `pattern` — the pattern string from a CLDR rule.
 
   ### Returns
 
   `{:ok, regex}` or `{:error, reason}`.
+
   """
   @spec compile(String.t()) :: {:ok, Regex.t()} | {:error, term()}
   def compile(pattern) do
@@ -37,11 +45,12 @@ defmodule Unicode.Transform.Pattern do
 
   ### Arguments
 
-  * `pattern` — the pattern string
+  * `pattern` — the pattern string.
 
   ### Returns
 
   A regex source string.
+
   """
   @spec to_regex_source(String.t()) :: String.t()
   def to_regex_source(pattern) do
@@ -154,12 +163,14 @@ defmodule Unicode.Transform.Pattern do
 
   ### Arguments
 
-  * `replacement` — the replacement string (may contain `$1`, `$2`, etc.)
-  * `captures` — list of captured groups from the match
+  * `replacement` — the replacement string (may contain `$1`, `$2`, etc.).
+
+  * `captures` — list of captured groups from the match.
 
   ### Returns
 
   The replacement string with backreferences resolved.
+
   """
   @spec apply_backreferences(String.t(), [String.t()]) :: String.t()
   def apply_backreferences(replacement, captures) do

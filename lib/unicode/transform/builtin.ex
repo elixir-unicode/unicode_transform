@@ -5,10 +5,14 @@ defmodule Unicode.Transform.Builtin do
   These transforms are not defined by rules but by operations
   in the Unicode Standard:
 
-  * `Any-NFC`, `Any-NFD`, `Any-NFKC`, `Any-NFKD` — normalization forms
-  * `Any-Lower`, `Any-Upper`, `Any-Title` — case transformations
-  * `Any-Null` — identity (no effect)
-  * `Any-Remove` — removes all characters
+  * `Any-NFC`, `Any-NFD`, `Any-NFKC`, `Any-NFKD` — normalization forms.
+
+  * `Any-Lower`, `Any-Upper`, `Any-Title` — case transformations.
+
+  * `Any-Null` — identity (no effect).
+
+  * `Any-Remove` — removes all characters.
+
   """
 
   @builtin_transforms %{
@@ -39,11 +43,12 @@ defmodule Unicode.Transform.Builtin do
 
   ### Arguments
 
-  * `name` — the transform name string
+  * `name` — the transform name string.
 
   ### Returns
 
   `true` if the transform is built-in, `false` otherwise.
+
   """
   @spec builtin?(String.t()) :: boolean()
   def builtin?(name) do
@@ -55,8 +60,9 @@ defmodule Unicode.Transform.Builtin do
 
   ### Arguments
 
-  * `string` — the input string
-  * `name` — the transform name
+  * `string` — the input string.
+
+  * `name` — the transform name.
 
   ### Returns
 
@@ -69,6 +75,7 @@ defmodule Unicode.Transform.Builtin do
 
       iex> Unicode.Transform.Builtin.apply("hello", "Upper")
       "HELLO"
+
   """
   @spec apply(String.t(), String.t()) :: String.t()
   def apply(string, name) do
@@ -91,11 +98,12 @@ defmodule Unicode.Transform.Builtin do
 
   ### Arguments
 
-  * `name` — the transform name
+  * `name` — the transform name.
 
   ### Returns
 
   The inverse transform name, or `nil` if no inverse exists.
+
   """
   @spec inverse(String.t()) :: String.t() | nil
   def inverse(name) do

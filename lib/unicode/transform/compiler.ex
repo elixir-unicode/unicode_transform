@@ -6,10 +6,15 @@ defmodule Unicode.Transform.Compiler do
   and produces a `CompiledTransform` that can be executed by the engine.
 
   Compilation involves:
-  * Filtering rules by direction (forward vs inverse)
-  * Resolving variable definitions
-  * Grouping conversion rules into passes (split by transform rules)
-  * Compiling patterns for efficient matching
+
+  * Filtering rules by direction (forward vs inverse).
+
+  * Resolving variable definitions.
+
+  * Grouping conversion rules into passes (split by transform rules).
+
+  * Compiling patterns for efficient matching.
+
   """
 
   alias Unicode.Transform.Rule.{Conversion, Definition, Filter, Transform}
@@ -47,13 +52,16 @@ defmodule Unicode.Transform.Compiler do
 
   ### Arguments
 
-  * `rules` — list of parsed rule structs
-  * `direction` — `:forward` or `:reverse`
-  * `resolve_transform` — function to resolve transform names
+  * `rules` — list of parsed rule structs.
+
+  * `direction` — `:forward` or `:reverse`.
+
+  * `resolve_transform` — function to resolve transform names.
 
   ### Returns
 
   A `CompiledTransform` struct.
+
   """
   @spec compile([struct()], :forward | :reverse, function()) :: CompiledTransform.t()
   def compile(rules, direction, resolve_transform \\ fn _, _ -> nil end) do
@@ -81,12 +89,14 @@ defmodule Unicode.Transform.Compiler do
 
   ### Arguments
 
-  * `name` — the built-in transform name
-  * `direction` — `:forward` or `:reverse`
+  * `name` — the built-in transform name.
+
+  * `direction` — `:forward` or `:reverse`.
 
   ### Returns
 
   A `CompiledTransform` struct with a single builtin pass.
+
   """
   @spec compile_builtin(String.t(), :forward | :reverse) :: CompiledTransform.t()
   def compile_builtin(name, direction) do

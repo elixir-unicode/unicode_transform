@@ -5,11 +5,16 @@ defmodule Unicode.Transform.Parser do
   The parser handles the five rule types defined by the
   [CLDR specification](https://unicode.org/reports/tr35/tr35-general.html#Rule_Syntax):
 
-  * Comment rules — lines starting with `#`
-  * Filter rules — `:: [unicode_set] ;`
-  * Transform rules — `:: transform_name ;`
-  * Variable definition rules — `$var = value ;`
-  * Conversion rules — with `→`, `←`, or `↔` operators
+  * Comment rules — lines starting with `#`.
+
+  * Filter rules — `:: [unicode_set] ;`.
+
+  * Transform rules — `:: transform_name ;`.
+
+  * Variable definition rules — `$var = value ;`.
+
+  * Conversion rules — with `→`, `←`, or `↔` operators.
+
   """
 
   alias Unicode.Transform.Rule.{Comment, Conversion, Definition, Filter, Transform}
@@ -22,11 +27,12 @@ defmodule Unicode.Transform.Parser do
 
   ### Arguments
 
-  * `rule_text` — the raw rule text from a CLDR transform XML file
+  * `rule_text` — the raw rule text from a CLDR transform XML file.
 
   ### Returns
 
   A list of rule structs.
+
   """
   @spec parse(String.t()) :: [struct()]
   def parse(rule_text) do
@@ -41,11 +47,12 @@ defmodule Unicode.Transform.Parser do
 
   ### Arguments
 
-  * `rule_string` — a single rule line
+  * `rule_string` — a single rule line.
 
   ### Returns
 
   A rule struct or `nil` for empty/unparseable lines.
+
   """
   @spec parse_rule(String.t()) :: struct() | nil
   def parse_rule(rule_string) do

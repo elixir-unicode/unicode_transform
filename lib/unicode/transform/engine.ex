@@ -5,14 +5,19 @@ defmodule Unicode.Transform.Engine do
   The engine implements a cursor-based rewriting algorithm following
   the ICU transliterator design:
 
-  1. For each pass of conversion rules, walk the string from left to right
-  2. At each cursor position, try each rule in order
-  3. When a rule matches, replace the matched text and advance the cursor
-  4. If no rule matches, advance the cursor by one codepoint
-  5. Transform rules are applied to the entire string between passes
+  1. For each pass of conversion rules, walk the string from left to right.
+
+  2. At each cursor position, try each rule in order.
+
+  3. When a rule matches, replace the matched text and advance the cursor.
+
+  4. If no rule matches, advance the cursor by one codepoint.
+
+  5. Transform rules are applied to the entire string between passes.
 
   The engine operates at the codepoint level (not grapheme level) because
   transforms need to process combining marks separately from base characters.
+
   """
 
   alias Unicode.Transform.Compiler.CompiledTransform
@@ -26,12 +31,14 @@ defmodule Unicode.Transform.Engine do
 
   ### Arguments
 
-  * `string` — the input string
-  * `compiled` — a `CompiledTransform` struct
+  * `string` — the input string.
+
+  * `compiled` — a `CompiledTransform` struct.
 
   ### Returns
 
   The transformed string.
+
   """
   @spec execute(String.t(), CompiledTransform.t()) :: String.t()
   def execute(string, %CompiledTransform{passes: passes, filter: filter}) do
@@ -45,7 +52,7 @@ defmodule Unicode.Transform.Engine do
   end
 
   defp execute_pass(string, {:transform, name}, _filter) do
-    case Unicode.Transform.transform(string, name) do
+    case Unicode.Transform.do_transform(string, name, :forward) do
       {:ok, result} -> result
       {:error, _} -> string
     end

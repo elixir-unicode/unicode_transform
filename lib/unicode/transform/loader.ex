@@ -16,17 +16,24 @@ defmodule Unicode.Transform.Loader do
 
   ### Arguments
 
-  * `file_path` — path to the XML file
+  * `file_path` — path to the XML file.
 
   ### Returns
 
   A map with the following keys:
-  * `:source` — source script/locale
-  * `:target` — target script/locale
-  * `:direction` — `"forward"`, `"backward"`, or `"both"`
-  * `:alias` — transform alias string
-  * `:backward_alias` — backward transform alias string
-  * `:rules` — the raw rule text string
+
+  * `:source` — source script/locale.
+
+  * `:target` — target script/locale.
+
+  * `:direction` — `"forward"`, `"backward"`, or `"both"`.
+
+  * `:alias` — transform alias string.
+
+  * `:backward_alias` — backward transform alias string.
+
+  * `:rules` — the raw rule text string.
+
   """
   @spec load_file(Path.t()) :: map()
   def load_file(file_path) do
@@ -49,6 +56,7 @@ defmodule Unicode.Transform.Loader do
   ### Returns
 
   The path to the transforms directory.
+
   """
   @spec transforms_dir() :: Path.t()
   def transforms_dir do
@@ -61,6 +69,7 @@ defmodule Unicode.Transform.Loader do
   ### Returns
 
   A list of file paths to transform XML files.
+
   """
   @spec list_transforms() :: [Path.t()]
   def list_transforms do
@@ -74,20 +83,28 @@ defmodule Unicode.Transform.Loader do
   Finds the XML file path and direction for a given transform ID.
 
   Resolves transform names by checking:
-  1. Exact filename match (e.g., `"Latin-ASCII"` → `"transforms/Latin-ASCII.xml"`)
-  2. Forward alias match from XML metadata
-  3. Backward alias match from XML metadata
-  4. Reverse direction lookup (e.g., `"ConjoiningJamo-Latin"` found via `"Latin-ConjoiningJamo.xml"` with `direction="both"`)
+
+  1. Exact filename match (e.g., `"Latin-ASCII"` → `"transforms/Latin-ASCII.xml"`).
+
+  2. Forward alias match from XML metadata.
+
+  3. Backward alias match from XML metadata.
+
+  4. Reverse direction lookup (e.g., `"ConjoiningJamo-Latin"` found via
+     `"Latin-ConjoiningJamo.xml"` with `direction="both"`).
 
   ### Arguments
 
-  * `transform_id` — the transform name to resolve
+  * `transform_id` — the transform name to resolve.
 
   ### Returns
 
-  * `{file_path, :forward}` — use the file's rules in forward direction
-  * `{file_path, :backward}` — use the file's rules in backward/reverse direction
-  * `nil` — no matching transform found
+  * `{file_path, :forward}` — use the file's rules in forward direction.
+
+  * `{file_path, :backward}` — use the file's rules in backward/reverse direction.
+
+  * `nil` — no matching transform found.
+
   """
   @spec find_transform(String.t()) :: {Path.t(), :forward | :backward} | nil
   def find_transform(transform_id) do
@@ -108,12 +125,14 @@ defmodule Unicode.Transform.Loader do
 
   ### Arguments
 
-  * `source` — the source script name
-  * `target` — the target script name
+  * `source` — the source script name.
+
+  * `target` — the target script name.
 
   ### Returns
 
   A string like `"Latin-ASCII"` or `"Greek-Latin"`.
+
   """
   @spec transform_id(String.t(), String.t()) :: String.t()
   def transform_id(source, target) do
@@ -125,11 +144,12 @@ defmodule Unicode.Transform.Loader do
 
   ### Arguments
 
-  * `file_path` — the path to the XML file
+  * `file_path` — the path to the XML file.
 
   ### Returns
 
   A string transform ID derived from the filename.
+
   """
   @spec transform_id_from_file(Path.t()) :: String.t()
   def transform_id_from_file(file_path) do

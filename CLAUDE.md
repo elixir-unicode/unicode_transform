@@ -20,11 +20,18 @@ Collation is an Elixir implementation of the Unicode Collation Algorithm, based 
 
 ## Function documentation
 
-All public functions ahould have a standard template format:
+All public functions should have a standard template format:
 
-* A short description of the functions purpose
-* A section with heading ### Arguments in which each argument is named and described in bullet list
-* A section with heading ### Options is the last function argument is a keyword list. Each option to be named and described
-* A section with heading ### Returns that describes the alternative return values from the function
-* A section with heading ### Examples that includes one or two doctest examples
-* A blank line before the closing `"""`
+* A short description of the function's purpose.
+
+* A section with heading `### Arguments` in which each argument is named and described in a bullet list.
+
+* A section with heading `### Options` if the last function argument is a keyword list. Each option to be named and described.
+
+* A section with heading `### Returns` that describes the alternative return values from the function.
+
+* A section with heading `### Examples` that includes one or two doctest examples.
+
+* A blank line before the closing `"""`.
+
+All bulleted list items in docstrings must end with a period and have a blank line between each list item.

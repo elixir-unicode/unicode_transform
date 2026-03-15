@@ -24,23 +24,23 @@ Convert text from non-Latin scripts to Latin characters:
 
 ```elixir
 # Greek to Latin
-iex> Unicode.Transform.transform("Ελληνικά", "Greek-Latin")
+iex> Unicode.Transform.transform("Ελληνικά", from: :greek, to: :latin)
 {:ok, "Ellēniká"}
 
 # Cyrillic to Latin
-iex> Unicode.Transform.transform("Москва", "Cyrillic-Latin")
+iex> Unicode.Transform.transform("Москва", from: :cyrillic, to: :latin)
 {:ok, "Moskva"}
 
 # Korean to Latin
-iex> Unicode.Transform.transform("한글", "Hangul-Latin")
+iex> Unicode.Transform.transform("한글", from: :hangul, to: :latin)
 {:ok, "hangeul"}
 
 # Thai to Latin
-iex> Unicode.Transform.transform("กรุงเทพ", "Thai-Latin")
+iex> Unicode.Transform.transform("กรุงเทพ", from: :thai, to: :latin)
 {:ok, "krungtheph"}
 
 # Arabic to Latin
-iex> Unicode.Transform.transform("عربي", "Arabic-Latin")
+iex> Unicode.Transform.transform("عربي", from: :arabic, to: :latin)
 {:ok, "ʿrby"}
 ```
 
@@ -49,10 +49,10 @@ iex> Unicode.Transform.transform("عربي", "Arabic-Latin")
 Remove diacritics and convert to plain ASCII:
 
 ```elixir
-iex> Unicode.Transform.transform("Ä Ö Ü ß", "Latin-ASCII")
+iex> Unicode.Transform.transform("Ä Ö Ü ß", from: :latin, to: :ascii)
 {:ok, "A O U ss"}
 
-iex> Unicode.Transform.transform("café résumé", "Latin-ASCII")
+iex> Unicode.Transform.transform("café résumé", from: :latin, to: :ascii)
 {:ok, "cafe resume"}
 ```
 
@@ -61,7 +61,7 @@ iex> Unicode.Transform.transform("café résumé", "Latin-ASCII")
 Uses context-sensitive rules (e.g., uppercase Ä becomes AE, lowercase ä becomes ae):
 
 ```elixir
-iex> Unicode.Transform.transform("Ä ö ü", "de-ASCII")
+iex> Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
 {:ok, "AE oe ue"}
 ```
 
@@ -70,20 +70,20 @@ iex> Unicode.Transform.transform("Ä ö ü", "de-ASCII")
 Convert between Indic scripts without going through Latin:
 
 ```elixir
-iex> Unicode.Transform.transform("हिन्दी", "Devanagari-Bengali")
+iex> Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :bengali)
 {:ok, "হিন্দী"}
 
-iex> Unicode.Transform.transform("বাংলা", "Bengali-Gujarati")
-{:ok, "બાંલા"}
+iex> Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarati)
+{:ok, "બাંলা"}
 ```
 
 ### Japanese script conversion
 
 ```elixir
-iex> Unicode.Transform.transform("あいうえお", "Hiragana-Katakana")
+iex> Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
 {:ok, "アイウエオ"}
 
-iex> Unicode.Transform.transform("tokyo", "Latin-Katakana")
+iex> Unicode.Transform.transform("tokyo", from: :latin, to: :katakana)
 {:ok, "トキョ"}
 ```
 
@@ -92,32 +92,38 @@ iex> Unicode.Transform.transform("tokyo", "Latin-Katakana")
 Built-in transforms for Unicode normalization forms and case mapping:
 
 ```elixir
-iex> Unicode.Transform.transform("hello world", "Any-Upper")
+iex> Unicode.Transform.transform("hello world", to: :upper)
 {:ok, "HELLO WORLD"}
 
-iex> Unicode.Transform.transform("hello world", "Any-Title")
+iex> Unicode.Transform.transform("hello world", to: :title)
 {:ok, "Hello World"}
 
-iex> Unicode.Transform.transform("A\u0308", "NFC")
+iex> Unicode.Transform.transform("A\u0308", to: :nfc)
 {:ok, "Ä"}
-```
-
-### Reverse direction
-
-Many transforms support an inverse direction:
-
-```elixir
-iex> Unicode.Transform.transform("アイウエオ", "Hiragana-Katakana", :reverse)
-{:ok, "あいうえお"}
 ```
 
 ### Bang variant
 
-`transform!/3` returns the result directly or raises on error:
+`transform!/2` returns the result directly or raises on error:
 
 ```elixir
-iex> Unicode.Transform.transform!("Ä Ö Ü ß", "Latin-ASCII")
+iex> Unicode.Transform.transform!("Ä Ö Ü ß", from: :latin, to: :ascii)
 "A O U ss"
+```
+
+### Direct transform IDs
+
+For transforms that don't have a convenient atom mapping (BGN romanizations, locale-specific transforms), use the `:transform` option with a string transform ID. Optionally specify `:direction` (defaults to `:forward`):
+
+```elixir
+iex> Unicode.Transform.transform("Հayaստan", transform: "Armenian-Latin-BGN")
+{:ok, "Hayastan"}
+
+iex> Unicode.Transform.transform("あいうえお", transform: "Hiragana-Katakana")
+{:ok, "アイウエオ"}
+
+iex> Unicode.Transform.transform("アイウエオ", transform: "Hiragana-Katakana", direction: :reverse)
+{:ok, "あいうえお"}
 ```
 
 ### Listing available transforms
@@ -129,7 +135,7 @@ iex> Unicode.Transform.available_transforms() |> Enum.take(5)
 
 ## How transform resolution works
 
-When you call `Unicode.Transform.transform/3`, the library resolves the transform name, compiles its rules, and executes them against the input string.
+When you call `Unicode.Transform.transform/2`, the library resolves the transform name, compiles its rules, and executes them against the input string.
 
 ### Resolution
 
@@ -182,7 +188,7 @@ For example, `Hangul-Latin` contains these rules:
 When executed, the engine:
 
 1. Applies the filter (restricts processing to Korean characters)
-2. Executes `NFKD` — a built-in that decomposes Hangul syllables (한 → 한)
+2. Executes `NFKD` — a built-in that decomposes Hangul syllables (한 → 한)
 3. Resolves `ConjoiningJamo-Latin` — finds `Latin-ConjoiningJamo.xml` via its backward alias, compiles its 121 conversion rules in reverse, and executes them against the decomposed jamo
 4. Executes `NFC` — a built-in that recomposes to canonical form
 
