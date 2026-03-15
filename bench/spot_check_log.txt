@@ -300,4 +300,14 @@ Each check has a 30 second delay. Estimated time: 100 minutes
 [139/200] Simplified-Traditional ... MATCH
 [140/200] ru-ja ... MATCH
 [141/200] Bengali-Devanagari ... MATCH
-[142/200] Telugu-ur ... 
+[142/200] Telugu-ur ... ERROR: {:remote_error, {:http_error, "timeout"}}
+[143/200] Ukrainian-Latin-BGN ... MISMATCH
+  Local:  "café résumé Ä Ö Ü ß Æ S Ð þ A ñ"
+  Remote: "Error: Unquoted - in \"Ukrainian-Latin-BGN\"; Invalid ID Ukrainian-Latin-BGN"
+[144/200] ky-ar ... MISMATCH
+  Local:  "\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ö ü ß \x{623} \x{623} \x{630} þ B \x{646}"
+  Remote: "\u200E\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ö ü ß \x{623} \x{623} \x{630} þ B \x{646}\u200E"
+[145/200] InterIndic-Kannada ... MATCH
+[146/200] Ethiopic-Latin-ALALOC ... MISMATCH
+  Local:  "\x{2BC}$\x{12A2}$\x{1270} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{1233}\x{1265}\x{12D5}$\x{1330} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{122B}\x{12D5}\x{1265} $\x{12A0}$\x{12F0} $\x{1223}\x{120D}\x{1235}$\x{1230} $\x{1233}\x{12F5}\x{1235}"
+  Remote: "Error: Unquoted - in \"Ethiopic-Latin-ALALOC\"; Invalid ID Ethiopic-Latin-ALALOC"
