@@ -144,7 +144,7 @@ defmodule Unicode.Transform.Builtin do
     |> String.split(~r/(\s+)/u, include_captures: true)
     |> Enum.map(fn word ->
       case String.next_grapheme(word) do
-        {first, rest} -> String.upcase(first) <> String.downcase(rest)
+        {first, rest} -> String.capitalize(first) <> String.downcase(rest)
         nil -> ""
       end
     end)

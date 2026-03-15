@@ -379,6 +379,12 @@ defmodule Unicode.Transform.Compiler do
     quoted <> unescape_string(remainder)
   end
 
+  # Unquoted spaces in CLDR replacement text are syntactic separators,
+  # not literal characters. Literal spaces use '\ ' or "' '".
+  defp unescape_string(<<" ", rest::binary>>) do
+    unescape_string(rest)
+  end
+
   defp unescape_string(<<char::utf8, rest::binary>>) do
     <<char::utf8>> <> unescape_string(rest)
   end

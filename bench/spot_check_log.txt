@@ -209,3 +209,95 @@ Each check has a 30 second delay. Estimated time: 100 minutes
 [98/200] ro-fa ... MISMATCH
   Local:  "\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ö ü ß \x{627} \x{627} \x{630} þ B \x{646}"
   Remote: "\u200E\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ö ü ß \x{627} \x{627} \x{630} þ B \x{646}\u200E"
+[99/200] Latin-Armenian ... MATCH
+[100/200] Oriya-Gurmukhi ... MATCH
+[101/200] Russian-Latin-BGN ... MISMATCH
+  Local:  "café résumé Ä Ö Ü ß Æ S Ð þ A ñ"
+  Remote: "Error: Unquoted - in \"Russian-Latin-BGN\"; Invalid ID Russian-Latin-BGN"
+[102/200] ug-ug_FONIPA ... MATCH
+[103/200] hy-ar ... MISMATCH
+  Local:  "\x{647}\x{627}\x{64A}\x{627}\x{631}\x{627}\x{646} \x{644}\x{627}\x{62F}\x{64A}\x{644}\x{627}\x{648}\x{633}"
+  Remote: "\u200E\x{647}\x{627}\x{64A}\x{627}\x{631}\x{627}\x{646} \x{644}\x{627}\x{62F}\x{64A}\x{644}\x{627}\x{648}\x{633}\u200E"
+[104/200] es-ja ... MISMATCH
+  Local:  "  "
+  Remote: "\x{30A8}\x{30B9}\x{30D1}\x{30CB}\x{30E7}\x{30EB}\x{30C6}\x{30B9}\x{30C8}\x{272}"
+[105/200] Ethiopic-Ethiopic-Gurage ... MISMATCH
+  Local:  "\x{12A2}\x{1275}\x{12EE}\x{1335}\x{12EB} \x{12A3}\x{12F2}\x{1235}"
+  Remote: "Error: Unquoted - in \"Ethiopic-Ethiopic-Gurage\"; Invalid ID Ethiopic-Ethiopic-Gurage"
+[106/200] chr-chr_FONIPA ... MISMATCH
+  Local:  "CAFÉ RÉSUMÉ Ä Ö Ü SS Æ R Ð Þ A Ñ"
+  Remote: "café résumé Ä Ö Ü ß Æ S Ð þ A ñ"
+[107/200] si-ar ... MISMATCH
+  Local:  "\x{633}\x{64A}\x{646}\x{652}\x{63A}\x{647}\x{644}"
+  Remote: "\u200E\x{633}\x{64A}\x{646}\x{652}\x{63A}\x{647}\x{644}\u200E"
+[108/200] Ethiopic-Latin-TekieAlibekit ... MISMATCH
+  Local:  "$\x{12A0}\x{1208}\x{134D} $\x{1223}\x{120D}\x{1235}$\x{1270} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{1233}\x{1265}\x{12D5}$\x{1330} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{122B}\x{12D5}\x{1265} $\x{12A0}\x{1208}\x{134D} $\x{122B}\x{12D5}\x{1265}$\x{12F0} $\x{1223}\x{120D}\x{1235}$\x{1230} $\x{1233}\x{12F5}\x{1235}"
+  Remote: "Error: Unquoted - in \"Ethiopic-Latin-TekieAlibekit\"; Invalid ID Ethiopic-Latin-TekieAlibekit"
+[109/200] Gurmukhi-Kannada ... MATCH
+[110/200] blt-fonipa-t-blt ... MISMATCH
+  Local:  "café résumé Ä Ö Ü ß Æ S Ð þ A ñ"
+  Remote: "Error: Unquoted - in \"blt-fonipa-t-blt\"; Invalid ID blt-fonipa-t-blt"
+[111/200] Tamil-Gujarati ... MATCH
+[112/200] Latin-Ethiopic ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} ß Æ S Ð þ A n\x{303}"
+  Remote: "c\x{12A7}\x{134D}é \x{122D}é\x{1231}\x{121D}é Ä Ö Ü ß Æ S Ð þ A ñ"
+[113/200] byn-Ethi-t-byn-latn-m0-xaleget ... MISMATCH
+  Local:  "\x{1265}\x{120A}\x{1295} \x{124B}\x{1295}\x{124B}"
+  Remote: "Error: Unquoted - in \"byn-Ethi-t-byn-latn-m0-xaleget\"; Invalid ID byn-Ethi-t-byn-latn-m0-xaleget"
+[114/200] hy-hy_FONIPA ... MATCH
+[115/200] am-Ethi-t-am-brai ... MISMATCH
+  Local:  "\x{12A2}\x{1275}\x{12EE}\x{1335}\x{12EB}"
+  Remote: "Error: Unquoted - in \"am-Ethi-t-am-brai\"; Invalid ID am-Ethi-t-am-brai"
+[116/200] Tamil-ur ... MISMATCH
+  Local:  "\x{62A}\x{645}\x{6CC}\x{691} \x{6CC}\x{691}\x{648}\x{62A}\x{62A}\x{648}"
+  Remote: "\u200E\x{62A}\x{645}\x{64A}\x{631} \x{64A}\x{631}\x{648}\x{62A}\x{62A}\x{648}\u200E"
+[117/200] Devanagari-Malayalam ... MATCH
+[118/200] Thai-ThaiLogical ... MATCH
+[119/200] Gujarati-Gurmukhi ... MATCH
+[120/200] ta-ta_FONIPA ... MATCH
+[121/200] Han-Spacedhan ... MISMATCH
+  Local:  "\x{6F22}\x{5B57}\x{FF83}\x{FF7D}\x{FF84}"
+  Remote: "\x{6F22} \x{5B57} \x{30C6}\x{30B9}\x{30C8}"
+[122/200] Gujarati-Arabic ... MISMATCH
+  Local:  "\x{62C}\x{648}\x{62C}\x{631}\x{627}\x{62A}\x{64A} \x{644}\x{643}\x{647}\x{627}\x{646}"
+  Remote: "\u200E\x{62C}\x{648}\x{62C}\x{631}\x{627}\x{62A}\x{64A} \x{644}\x{643}\x{647}\x{627}\x{646}\u200E"
+[123/200] ch-chr ... MISMATCH
+  Local:  "\x{13AC}\x{13EA}\x{301}\x{300}\x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}\x{300}\x{13A0}\x{300}\x{13A3}\x{300}\x{13A4}\x{300}\x{300}\x{13A5}\x{300}\x{300}\x{13D7}\x{300}\x{300}\x{300}\x{13C2}"
+  Remote: "\x{13AC}\x{13EA}\x{301} \x{13B4}\x{301}\x{13D1}\x{13BA}\x{301} \x{13A0} \x{13A3} \x{13A4}  \x{13A5}  \x{13D7}   \x{13C2}"
+[124/200] es-am ... MISMATCH
+  Local:  "  "
+  Remote: "\x{12A4}\x{1235}\x{1353}\x{129E}\x{120D}\x{1274}\x{1235}\x{1276}\x{129D}"
+[125/200] Oriya-Devanagari ... MATCH
+[126/200] Gujarati-ur ... MISMATCH
+  Local:  "\x{6AF}\x{648}\x{62C}\x{631}\x{627}\x{62A}\x{6CC} \x{644}\x{6A9} \x{6BE}\x{627}\x{646}"
+  Remote: "\u200E\x{62C}\x{648}\x{62C}\x{631}\x{627}\x{62A}\x{64A} \x{644}\x{643}\x{647}\x{627}\x{646}\u200E"
+[127/200] Oriya-Latin ... MISMATCH
+  Local:  "M\x{1E5B}i lkh"
+  Remote: "M\x{1E5B}i&apos; lkh"
+[128/200] Telugu-Malayalam ... MATCH
+[129/200] Ethiopic-Latin-Xaleget ... MISMATCH
+  Local:  "$\x{12A2}$\x{1270} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{1233}\x{1265}\x{12D5}$\x{1330} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{122B}\x{12D5}\x{1265} $\x{12A0}$\x{12F0} $\x{1223}\x{120D}\x{1235}$\x{1230} $\x{1233}\x{12F5}\x{1235}"
+  Remote: "Error: Unquoted - in \"Ethiopic-Latin-Xaleget\"; Invalid ID Ethiopic-Latin-Xaleget"
+[130/200] xh-am ... MISMATCH
+  Local:  "\x{132B}\x{134C}\x{301}\x{122C}\x{301}\x{1231}\x{121C}\x{301}\x{12A0}\x{308}\x{12A6}\x{308}\x{12A1}\x{308}ß\x{12A7}S\x{12DD}þB\x{1295}"
+  Remote: "\x{132B}\x{134C} \x{122C}\x{1231}\x{121C} ä ö ü ß \x{12A7} S \x{12DD} þ B \x{1295}"
+[131/200] Hiragana-Katakana ... MATCH
+[132/200] hy_AREVMDA-chr ... MISMATCH
+  Local:  "\x{13DD}\x{13EA}\x{301}\x{300}\x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}\x{300}\x{13A0}\x{300}\x{13A3}\x{300}\x{13A4}\x{300}\x{300}\x{13A5}\x{300}\x{300}\x{13D7}\x{300}\x{300}\x{300}\x{13C2}"
+  Remote: "\x{13DD}\x{13EA}\x{301} \x{13B4}\x{301}\x{13D1}\x{13BA}\x{301} \x{13A0} \x{13A3} \x{13A4}  \x{13A5}  \x{13D7}   \x{13C2}"
+[133/200] es_FONIPA-es_419_FONIPA ... MATCH
+[134/200] Sinhala-Latin ... MISMATCH
+  Local:  "si\x{1E45}hala bhshva"
+  Remote: "Error: Unquoted - in \"Sinhala-Latin\"; Illegal ID Sinhala-Latin"
+[135/200] Persian-Latin-BGN ... MISMATCH
+  Local:  "café résumé Ä Ö Ü ß Æ S Ð þ A ñ"
+  Remote: "Error: Unquoted - in \"Persian-Latin-BGN\"; Invalid ID Persian-Latin-BGN"
+[136/200] es_419-zh ... MISMATCH
+  Local:  "           "
+  Remote: "\x{5361}\x{8D39}\x{96F7}\x{82CF}\x{6885}äö\x{4E4C}ßæS\x{5FB7}þB\x{272}"
+[137/200] Cyrillic-Latin ... MATCH
+[138/200] Devanagari-Gurmukhi ... MATCH
+[139/200] Simplified-Traditional ... MATCH
+[140/200] ru-ja ... MATCH
+[141/200] Bengali-Devanagari ... MATCH
+[142/200] Telugu-ur ... 

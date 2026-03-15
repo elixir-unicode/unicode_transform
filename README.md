@@ -194,7 +194,7 @@ The engine uses a cursor-based rewriting algorithm following the [ICU transliter
 4. If no rule matches, advance the cursor by one codepoint
 5. Transform rule passes invoke the named sub-transform on the entire intermediate string
 
-Compiled transforms are cached in ETS so repeated calls avoid recompilation.
+Compiled transforms are cached in `:persistent_term` so repeated calls avoid recompilation.
 
 ### Transitive rule resolution
 
@@ -203,8 +203,8 @@ Transform rules within a rule set can reference other transforms, forming chains
 For example, `Hangul-Latin` contains these rules:
 
 ```
-:: ['ᄀ-하-ᅵᆨ-ᇂ...'] ;   # filter to Korean characters
-:: NFKD ;                  # decompose Hangul syllables to jamo
+:: ['ᄀ-하-ᅵᆨ-ᇂ...'] ;      # filter to Korean characters
+:: NFKD ;                   # decompose Hangul syllables to jamo
 :: ConjoiningJamo-Latin ;   # transliterate jamo to Latin
 :: NFC ;                    # recompose
 ```
