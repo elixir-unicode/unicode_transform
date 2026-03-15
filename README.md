@@ -63,6 +63,12 @@ Uses context-sensitive rules (e.g., uppercase Ä becomes AE, lowercase ä become
 ```elixir
 iex> Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
 {:ok, "AE oe ue"}
+
+iex> Unicode.Transform.transform("Ä ö ü", from: :de, to: :ASCII)
+{:ok, "AE oe ue"}
+
+iex> Unicode.Transform.transform("Ä ö ü", from: "de", to: "ASCII")
+{:ok, "AE oe ue"}
 ```
 
 ### Cross-script Indic transliteration
@@ -81,6 +87,10 @@ iex> Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarat
 
 ```elixir
 iex> Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
+{:ok, "アイウエオ"}
+
+# Options accept strings too (case-insensitive)
+iex> Unicode.Transform.transform("あいうえお", from: "Hiragana", to: "Katakana")
 {:ok, "アイウエオ"}
 
 iex> Unicode.Transform.transform("tokyo", from: :latin, to: :katakana)
@@ -109,6 +119,20 @@ iex> Unicode.Transform.transform("A\u0308", to: :nfc)
 ```elixir
 iex> Unicode.Transform.transform!("Ä Ö Ü ß", from: :latin, to: :ascii)
 "A O U ss"
+```
+
+### Automatic script detection
+
+Use `from: :detect` to automatically detect the scripts in the input and chain a transform for each one:
+
+```elixir
+# Mixed Greek and Cyrillic — both transliterated to Latin
+iex> Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
+{:ok, "abgd mir"}
+
+# Korean and Cyrillic in one string
+iex> Unicode.Transform.transform("한글 Москва", from: :detect, to: :latin)
+{:ok, "hangeul Moskva"}
 ```
 
 ### Direct transform IDs

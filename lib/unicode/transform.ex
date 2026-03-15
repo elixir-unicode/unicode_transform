@@ -81,6 +81,13 @@ defmodule Unicode.Transform do
     any: "Any"
   }
 
+  # Reverse lookup: downcased canonical name -> canonical name
+  # e.g., "arabic" => "Arabic", "nfc" => "NFC", "canadianaboriginal" => "CanadianAboriginal"
+  @string_to_canonical_name @script_names
+                            |> Map.values()
+                            |> Enum.map(fn name -> {String.downcase(name), name} end)
+                            |> Map.new()
+
   @type transform_option ::
           {:from, atom() | String.t()}
           | {:to, atom() | String.t()}
@@ -106,11 +113,14 @@ defmodule Unicode.Transform do
 
   Either `:from`/`:to` or `:transform` must be provided:
 
-  * `:to` — the target script as an atom (e.g., `:latin`, `:ascii`,
-    `:upper`, `:nfc`). Required unless `:transform` is given.
+  * `:to` — the target script as an atom or string (e.g., `:latin`,
+    `"ASCII"`, `:upper`, `:nfc`). Required unless `:transform` is given.
+    Resolution is case-insensitive.
 
-  * `:from` — the source script as an atom (default: `:any`).
-    E.g., `:greek`, `:cyrillic`.
+  * `:from` — the source script as an atom or string (default: `:any`).
+    E.g., `:greek`, `"Cyrillic"`. Resolution is case-insensitive.
+    Use `:detect` to automatically detect scripts in the input
+    and chain a transform for each detected script.
 
   * `:transform` — a string transform ID (e.g., `"de-ASCII"`,
     `"Armenian-Latin-BGN"`). Mutually exclusive with `:from`/`:to`.
@@ -145,6 +155,9 @@ defmodule Unicode.Transform do
     case resolve_options(options) do
       {:ok, transform_id, direction} ->
         do_transform(string, transform_id, direction)
+
+      {:detect, to} ->
+        transform_detected_scripts(string, to)
 
       {:error, _} = error ->
         error
@@ -210,6 +223,49 @@ defmodule Unicode.Transform do
     end
   end
 
+  # Scripts that should be skipped when detecting — they don't represent
+  # a meaningful source script for transliteration.
+  @skip_scripts [:common, :inherited, :unknown]
+
+  # Detect scripts in the string and chain transforms for each one.
+  defp transform_detected_scripts(string, to) do
+    to_name = resolve_to_name(to)
+
+    case to_name do
+      {:error, _} = error ->
+        error
+
+      name ->
+        scripts =
+          Unicode.script_dominance(string)
+          |> Enum.reject(fn {script, _} -> script in @skip_scripts end)
+          |> Enum.map(fn {script, _} -> script end)
+
+        Enum.reduce_while(scripts, {:ok, string}, fn script, {:ok, acc} ->
+          from_name = script_name(script)
+
+          if from_name do
+            transform_id = "#{from_name}-#{name}"
+
+            case do_transform(acc, transform_id, :forward) do
+              {:ok, result} -> {:cont, {:ok, result}}
+              {:error, _} = error -> {:halt, error}
+            end
+          else
+            {:cont, {:ok, acc}}
+          end
+        end)
+    end
+  end
+
+  defp resolve_to_name(to) when is_atom(to) do
+    script_name(to) || to |> Atom.to_string() |> capitalize_name()
+  end
+
+  defp resolve_to_name(to) when is_binary(to) do
+    canonical_string_name(to)
+  end
+
   # Resolve keyword options to a {transform_id, direction} tuple.
   defp resolve_options(options) do
     transform = Keyword.get(options, :transform)
@@ -225,99 +281,94 @@ defmodule Unicode.Transform do
 
       true ->
         from = Keyword.get(options, :from, :any)
-        resolve_from_to(from, to)
+
+        if from == :detect do
+          {:detect, to}
+        else
+          resolve_from_to(from, to)
+        end
     end
-  end
-
-  defp resolve_from_to(from, to) when is_atom(from) and is_atom(to) do
-    case resolve_atom_options(from, to) do
-      {:ok, id} -> {:ok, id, :forward}
-      error -> error
-    end
-  end
-
-  defp resolve_from_to(from, to) when is_atom(from) and is_binary(to) do
-    from_name = script_name(from)
-
-    if from_name do
-      {:ok, "#{from_name}-#{to}", :forward}
-    else
-      {:error, {:unknown_script, from}}
-    end
-  end
-
-  defp resolve_from_to(from, to) when is_binary(from) and is_atom(to) do
-    to_name = script_name(to)
-
-    if to_name do
-      {:ok, "#{from}-#{to_name}", :forward}
-    else
-      {:error, {:unknown_script, to}}
-    end
-  end
-
-  defp resolve_from_to(from, to) when is_binary(from) and is_binary(to) do
-    {:ok, "#{from}-#{to}", :forward}
   end
 
   defp resolve_from_to(from, to) do
-    {:error, {:invalid_options, [from: from, to: to]}}
+    from_name = normalize_option_name(from)
+    to_name = normalize_option_name(to)
+
+    case {from_name, to_name} do
+      {nil, _} -> {:error, {:invalid_option, {:from, from}}}
+      {_, nil} -> {:error, {:invalid_option, {:to, to}}}
+      {"Any", to_n} -> resolve_any_to(to_n)
+      {from_n, to_n} -> resolve_transform_id(from_n, to_n)
+    end
   end
 
-  defp resolve_atom_options(:any, to) do
-    to_name = script_name(to)
-
+  # Resolve "Any-X" transforms, checking builtins first.
+  defp resolve_any_to(to_name) do
     cond do
-      is_nil(to_name) ->
-        {:error, {:unknown_script, to}}
-
-      # Try "Any-X" first (for built-ins like Any-Upper, Any-NFC)
       Builtin.builtin?("Any-#{to_name}") ->
-        {:ok, "Any-#{to_name}"}
+        {:ok, "Any-#{to_name}", :forward}
 
-      # Then try bare name (for NFC, NFD, Upper, Lower, etc.)
       Builtin.builtin?(to_name) ->
-        {:ok, to_name}
+        {:ok, to_name, :forward}
 
-      # Otherwise construct "Any-X" as the transform ID
       true ->
-        {:ok, "Any-#{to_name}"}
+        {:ok, "Any-#{to_name}", :forward}
     end
   end
 
-  defp resolve_atom_options(from, to) do
-    from_name = script_name(from)
-    to_name = script_name(to)
+  # Try "From-To" as a forward transform, then "To-From" as a reverse transform.
+  defp resolve_transform_id(from_name, to_name) do
+    forward_id = "#{from_name}-#{to_name}"
 
-    cond do
-      is_nil(from_name) -> {:error, {:unknown_script, from}}
-      is_nil(to_name) -> {:error, {:unknown_script, to}}
-      true -> {:ok, "#{from_name}-#{to_name}"}
+    if Builtin.builtin?(forward_id) || Loader.find_transform(forward_id) do
+      {:ok, forward_id, :forward}
+    else
+      reverse_id = "#{to_name}-#{from_name}"
+
+      if Loader.find_transform(reverse_id) do
+        {:ok, reverse_id, :reverse}
+      else
+        # Fall back to forward_id and let do_transform produce the error
+        {:ok, forward_id, :forward}
+      end
     end
   end
+
+  # Normalize an option value (atom or string) to its canonical string form.
+  # Returns nil for unsupported types.
+  defp normalize_option_name(value) when is_atom(value) do
+    script_name(value) || value |> Atom.to_string() |> capitalize_name()
+  end
+
+  defp normalize_option_name(value) when is_binary(value) do
+    canonical_string_name(value) |> capitalize_name()
+  end
+
+  defp normalize_option_name(_), do: nil
+
+  # Capitalize the first letter of a name, preserving the rest.
+  defp capitalize_name(<<first::utf8, rest::binary>>) do
+    String.upcase(<<first::utf8>>) <> rest
+  end
+
+  defp capitalize_name(name), do: name
 
   defp script_name(atom) when is_atom(atom) do
     Map.get(@script_names, atom)
   end
 
-  # Get or compile a transform
+  # Resolve a string to its canonical form if it matches a known script name
+  # (case-insensitive). Otherwise, return the string as-is.
+  defp canonical_string_name(name) when is_binary(name) do
+    Map.get(@string_to_canonical_name, String.downcase(name), name)
+  end
+
+  # Get or compile a transform, using the Cache GenServer to
+  # serialize compilation and persistent_term for storage.
   defp get_compiled_transform(transform_id, direction) do
-    cache_key = {transform_id, direction}
-
-    case lookup_cache(cache_key) do
-      {:ok, compiled} ->
-        {:ok, compiled}
-
-      :miss ->
-        case compile_transform(transform_id, direction) do
-          {:ok, compiled} ->
-            store_cache(cache_key, compiled)
-            {:ok, compiled}
-
-          error ->
-            error
-        end
-    end
+    Unicode.Transform.Cache.get_or_compile(transform_id, direction, fn ->
+      compile_transform(transform_id, direction)
+    end)
   end
 
   defp compile_transform(transform_id, direction) do
@@ -364,34 +415,4 @@ defmodule Unicode.Transform do
     end
   end
 
-  # Simple ETS-based cache for compiled transforms
-  @cache_table :unicode_transform_cache
-
-  defp ensure_cache_table do
-    case :ets.whereis(@cache_table) do
-      :undefined ->
-        :ets.new(@cache_table, [:named_table, :set, :public, read_concurrency: true])
-
-      _ref ->
-        :ok
-    end
-  end
-
-  defp lookup_cache(key) do
-    ensure_cache_table()
-
-    case :ets.lookup(@cache_table, key) do
-      [{^key, compiled}] -> {:ok, compiled}
-      [] -> :miss
-    end
-  rescue
-    ArgumentError -> :miss
-  end
-
-  defp store_cache(key, value) do
-    ensure_cache_table()
-    :ets.insert(@cache_table, {key, value})
-  rescue
-    ArgumentError -> :ok
-  end
 end

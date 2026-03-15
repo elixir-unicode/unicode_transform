@@ -33,3 +33,179 @@ Each check has a 30 second delay. Estimated time: 100 minutes
 [18/200] Latin-Gurmukhi ... MISMATCH
   Local:  "\x{A1A}\x{A2B}\x{A3C}\x{A47}\x{301} \x{A30}\x{A47}\x{301}\x{A38}\x{A41}\x{A2E}\x{A47}\x{301} \x{A05}\x{308} \x{A13}\x{308} \x{A09}\x{308} Я ж S р ю B \x{A1E}\x{A4D}"
   Remote: "\x{A1A}\x{A2B}\x{A3C}\x{A47}\x{301} \x{A30}\x{A47}\x{301}\x{A38}\x{A41}\x{A2E}\x{A47}\x{301} \x{A05}\x{308} \x{A13}\x{308} \x{A09}\x{308} Я Ж S Р ю A \x{A1E}\x{A4D}"
+[19/200] ia-ia_FONIPA ... MATCH
+[20/200] Kannada-Latin ... MATCH
+[21/200] nl-Title ... MISMATCH
+  Local:  "Cafй Rйsumй Д Ц Ь SS Ж R Р Ю A С"
+  Remote: "Cafй Rйsumй Д Ц Ь Ss Ж R Р Ю A С"
+[22/200] fa-fa_FONIPA ... MISMATCH
+  Local:  "f\x{252}\x{2D0}\x{27E}si\x{2D0}jnu\x{2D0}\x{283}t\x{252}\x{2D0}\x{27E}"
+  Remote: "f\x{252}\x{2D0}\x{27E}si\x{2D0} nu\x{2D0}\x{283}t\x{252}\x{2D0}\x{27E}"
+[23/200] und-Ethi-t-und-latn-m0-ies-jes-1964-geminate ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn-m0-ies-jes-1964-geminate\"; Invalid ID und-Ethi-t-und-latn-m0-ies-jes-1964-geminate"
+[24/200] ug-Latin ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "cafй rйsumй Д Ц Ь Я Ж S Р ю A с"
+[25/200] kk-ar ... MISMATCH
+  Local:  "\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю B \x{646}"
+  Remote: "\u200E\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю B \x{646}\u200E"
+[26/200] Gurmukhi-Oriya ... MATCH
+[27/200] cs-cs_FONIPA ... MISMATCH
+  Local:  "t \x{361} \x{283}\x{25B}ski\x{2D0} jaz\x{26A}k"
+  Remote: "t\x{361}\x{283}\x{25B}ski\x{2D0} jaz\x{26A}k"
+[28/200] am-fa ... MISMATCH
+  Local:  "\x{6CC}\x{62A}\x{648}\x{6CC}\x{648}\x{67E}\x{648}\x{6CC}\x{627}"
+  Remote: "\u200E\x{627}\x{6CC}\x{62A}\x{648}\x{6CC}\x{648}\x{67E}\x{648}\x{6CC}\x{627}\u200E"
+[29/200] cs_FONIPA-ja ... MATCH
+[30/200] Latin-Telugu ... MISMATCH
+  Local:  "\x{C1A}\x{C2B}\x{C46}\x{301} \x{C30}\x{C46}\x{301}\x{C38}\x{C41}\x{C2E}\x{C46}\x{301} \x{C05}\x{308} \x{C12}\x{308} \x{C09}\x{308} Я ж S р ю B \x{C1E}\x{C4D}"
+  Remote: "\x{C1A}\x{C2B}\x{C46}\x{301} \x{C30}\x{C46}\x{301}\x{C38}\x{C41}\x{C2E}\x{C46}\x{301} \x{C05}\x{308} \x{C12}\x{308} \x{C09}\x{308} Я Ж S Р ю A \x{C1E}\x{C4D}"
+[31/200] ia-chr ... MISMATCH
+  Local:  "\x{13A7}\x{13EA}\x{301}\x{300}\x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}\x{300}\x{13A0}\x{300}\x{13A3}\x{300}\x{13A4}\x{300}\x{300}\x{13A5}\x{300}\x{300}\x{13D7}\x{300}\x{300}\x{300}\x{13C2}"
+  Remote: "\x{13A7}\x{13EA}\x{301} \x{13B4}\x{301}\x{13D1}\x{13BA}\x{301} \x{13A0} \x{13A3} \x{13A4}  \x{13A5}  \x{13D7}   \x{13C2}"
+[32/200] Oriya-Arabic ... MISMATCH
+  Local:  "\x{627} \x{648}\x{62F}\x{64A}\x{627} \x{653} \x{644}\x{64A}\x{643}\x{647}\x{627}"
+  Remote: "\u200E\x{627}\x{648}\x{62F}\x{64A}\x{622} \x{644}\x{64A}\x{643}\x{647}\x{627}\u200E"
+[33/200] Oriya-InterIndic ... MATCH
+[34/200] tr-Upper ... MATCH
+[35/200] Korean-Latin-BGN ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"Korean-Latin-BGN\"; Invalid ID Korean-Latin-BGN"
+[36/200] sat-chr ... MISMATCH
+  Local:  "\x{13DD}\x{13EA}\x{301}\x{300}\x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}\x{300}\x{300}\x{300}\x{300}\x{300}\x{300}\x{300}\x{300}\x{300}\x{300}\x{13C2}"
+  Remote: "\x{13DD}\x{13EA}\x{301} \x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}          \x{13C2}"
+[37/200] Georgian-Latin-BGN ... MISMATCH
+  Local:  "sakartvelo kalaki"
+  Remote: "Error: Unquoted - in \"Georgian-Latin-BGN\"; Invalid ID Georgian-Latin-BGN"
+[38/200] Jamo-Latin ... MATCH
+[39/200] Bengali-Gurmukhi ... MATCH
+[40/200] pl-ar ... MISMATCH
+  Local:  "\x{62A}  \x{633}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю \x{623} \x{646}"
+  Remote: "\u200E\x{62A}\x{633}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю \x{623} \x{646}\u200E"
+[41/200] Tamil-InterIndic ... MATCH
+[42/200] si-si_FONIPA ... MISMATCH
+  Local:  "siKh\x{259}l"
+  Remote: "siKh\x{259}l\x{259}"
+[43/200] ch-ch_FONIPA ... MATCH
+[44/200] Mongolian-Latin-BGN ... MISMATCH
+  Local:  "cafй rйsumй Д Ц Ь Я Ж S Р ю A с"
+  Remote: "Error: Unquoted - in \"Mongolian-Latin-BGN\"; Invalid ID Mongolian-Latin-BGN"
+[45/200] si-si_Latn ... MISMATCH
+  Local:  "si\x{1E41}hal"
+  Remote: "si\x{1E41}hala"
+[46/200] la-la_FONIPA ... MATCH
+[47/200] it-ja ... MISMATCH
+  Local:  "cafй rйsumй д ц ь Я ж S р ю B с"
+  Remote: "\x{30AB}\x{30D5}\x{30A7}\x{30FB}\x{30EC}\x{30BA}\x{30E1}\x{30FB}\x{30A2}\x{30FB}\x{30AA}\x{30FB}\x{30A6}\x{30FB}Я\x{30FB}ж\x{30FB}S\x{30FB}р\x{30FB}ю\x{30FB}B\x{30FB}\x{30F3}"
+[48/200] Kannada-Bengali ... MATCH
+[49/200] es_FONIPA-ja ... MISMATCH
+  Local:  "c\x{30A2}\x{30D5}й \x{30EB}й\x{30B9}\x{30E0}й Д Ц Ь Я Ж S Р ю A с"
+  Remote: "c\x{30A2}\x{30D5}й \x{30EB}й\x{30B9}\x{30F3}й Д Ц Ь Я Ж S Р ю A с"
+[50/200] yo-yo_BJ ... MATCH
+[51/200] Gurmukhi-Devanagari ... MATCH
+[52/200] InterIndic-Devanagari ... MATCH
+[53/200] Telugu-Oriya ... MATCH
+[54/200] Tamil-Gurmukhi ... MATCH
+[55/200] ky-fa ... MISMATCH
+  Local:  "\x{686}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}"
+  Remote: "\u200E\x{686}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}\u200E"
+[56/200] az-Upper ... MATCH
+[57/200] am-Ethi-t-d0-morse ... MISMATCH
+  Local:  "$\x{12A0} $\x{1223}\x{120D}\x{1235}$\x{1270} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{1233}\x{1265}\x{12D5}$\x{1330} $\x{1233}\x{12F5}\x{1235}$\x{12E8} $\x{122B}\x{1265}\x{12D5}"
+  Remote: "Error: Unquoted - in \"am-Ethi-t-d0-morse\"; Invalid ID am-Ethi-t-d0-morse"
+[58/200] pl-chr ... MISMATCH
+  Local:  "\x{13D8}\x{300}\x{300}\x{13CC}\x{13EA}\x{301}\x{300}\x{13B4}\x{301}\x{13D1}\x{13BA}\x{301}\x{300}\x{13A0}\x{300}\x{13A3}\x{300}\x{13A4}\x{300}\x{300}\x{13A5}\x{300}\x{300}\x{13D7}\x{300}\x{300}\x{13EB}\x{300}\x{13C2}"
+  Remote: "\x{13E3}\x{13EA}\x{301} \x{13B4}\x{301}\x{13D1}\x{13BA}\x{301} \x{13A0} \x{13A3} \x{13A4}  \x{13A5}  \x{13D7}  \x{13EB} \x{13C2}"
+[59/200] Turkmen-Latin-BGN ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"Turkmen-Latin-BGN\"; Invalid ID Turkmen-Latin-BGN"
+[60/200] pl-fa ... MISMATCH
+  Local:  "\x{62A}  \x{633}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю \x{627}\x{648} \x{646}"
+  Remote: "\u200E\x{62A}\x{633}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю \x{627}\x{648} \x{646}\u200E"
+[61/200] Gujarati-Oriya ... MATCH
+[62/200] cs-ko ... MISMATCH
+  Local:  "\x{D2B8}\x{361}\x{C170}\x{C2A4}\x{D0A4}\x{C57C}\x{C9C0}\x{D06C}"
+  Remote: "\x{CCB4}\x{C2A4}\x{D0A4}\x{C57C}\x{C9C0}\x{D06C}"
+[63/200] Kannada-Tamil ... MATCH
+[64/200] Syriac-Latin ... MATCH
+[65/200] und-Ethi-t-und-latn-m0-ies-jes-1964 ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn-m0-ies-jes-1964\"; Invalid ID und-Ethi-t-und-latn-m0-ies-jes-1964"
+[66/200] Georgian-Latin-BGN_1981 ... MISMATCH
+  Local:  "sak\x{2019}art\x{2019}velo k\x{2019}alak\x{2019}i"
+  Remote: "Error: Unquoted - in \"Georgian-Latin-BGN_1981\"; Invalid ID Georgian-Latin-BGN_1981"
+[67/200] Latin-Bopomofo ... MISMATCH
+  Local:  "\x{3118}\x{311A}\x{2D9}\x{3108}\x{311C}\x{2D9}&P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}-N\x{3128}\x{2D9}\x{3107}\x{311C}\x{2D9}\x{3116}\x{2D9}\x{3118}P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}(\x{301}) \x{3116}\x{311C}\x{2D9}&P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}-N\x{3128}\x{2D9}\x{3107}\x{311C}\x{2D9}\x{3116}\x{2D9}\x{3118}P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}(\x{301})\x{3119}\x{3128}\x{2D9}\x{3107}\x{311C}\x{2D9}&P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}-N\x{3128}\x{2D9}\x{3107}\x{311C}\x{2D9}\x{3116}\x{2D9}\x{3118}P\x{3127}\x{2D9}\x{310B}\x{2D9}\x{3127}\x{3123}\x{2D9}(\x{301}) Д Ц Ь Я Ж S Р ю A с"
+  Remote: "\x{3118}\x{311A}\x{2D9}\x{3108}\x{311C}\x{2CA} \x{3116}\x{311C}\x{2CA}\x{3119}\x{3128}\x{2D9}\x{3107}\x{311C}\x{2CA} Д Ц Ь Я Ж S Р ю A с"
+[68/200] si-fa ... MISMATCH
+  Local:  "\x{633}\x{6CC}\x{646}\x{6AF}\x{647}\x{644}"
+  Remote: "\u200E\x{633}\x{6CC}\x{646}\x{6AF}\x{647}\x{644}\x{647}\u200E"
+[69/200] hy_AREVMDA-ar ... MISMATCH
+  Local:  "\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю B \x{646}"
+  Remote: "\u200E\x{62A}\x{652}\x{634}\x{627}\x{641}\x{64A} \x{631}\x{64A}\x{633}\x{648}\x{645}\x{64A} \x{623} ц ь Я \x{623} \x{623} \x{630} ю B \x{646}\u200E"
+[70/200] ro-am ... MISMATCH
+  Local:  "\x{12AB}\x{134C}\x{301}\x{122C}\x{301}\x{1231}\x{121C}\x{301}\x{12A0}\x{308}\x{12A6}\x{308}\x{12A1}\x{308}Я\x{12A7}S\x{12DD}юB\x{1295}"
+  Remote: "\x{12AB}\x{134C} \x{122C}\x{1231}\x{121C} д ц ь Я \x{12A7} S \x{12DD} ю B \x{1295}"
+[71/200] InterIndic-Telugu ... MATCH
+[72/200] Latin-Gujarati ... MISMATCH
+  Local:  "\x{A9A}\x{AAB}\x{ABC}\x{AC7}\x{301} \x{AB0}\x{AC7}\x{301}\x{AB8}\x{AC1}\x{AAE}\x{AC7}\x{301} \x{A85}\x{308} \x{A93}\x{308} \x{A89}\x{308} Я ж S р ю B \x{A9E}\x{ACD}"
+  Remote: "\x{A9A}\x{AAB}\x{ABC}\x{AC7}\x{301} \x{AB0}\x{AC7}\x{301}\x{AB8}\x{AC1}\x{AAE}\x{AC7}\x{301} \x{A85}\x{308} \x{A93}\x{308} \x{A89}\x{308} Я Ж S Р ю A \x{A9E}\x{ACD}"
+[73/200] lt-Lower ... MATCH
+[74/200] Fullwidth-Halfwidth ... MATCH
+[75/200] ro-ro_FONIPA ... MATCH
+[76/200] es_419-am ... MISMATCH
+  Local:  ""
+  Remote: "\x{12AB}\x{134C}\x{122C}\x{1231}\x{121C}дц\x{12A1}Я\x{12A7}S\x{12DD}юB\x{129D}"
+[77/200] rm_SURSILV-rm_FONIPA_SURSILV ... MATCH
+[78/200] az-Lower ... MATCH
+[79/200] Myanmar-Latin ... MISMATCH
+  Local:  "\x{1019}\x{103C}\x{1014}\x{103A}\x{1019}\x{102C} \x{1005}\x{102C}"
+  Remote: "myanmar hcar"
+[80/200] Han-Latin ... MISMATCH
+  Local:  "hаnzм\x{FF83}\x{FF7D}\x{FF84}"
+  Remote: "hаn zм \x{30C6}\x{30B9}\x{30C8}"
+[81/200] und-Ethi-t-und-latn-m0-sera ... MISMATCH
+  Local:  "cafй rйsumй Д Ц Ь Я Ж S Р ю A с"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn-m0-sera\"; Invalid ID und-Ethi-t-und-latn-m0-sera"
+[82/200] ha-ha_NE ... MATCH
+[83/200] Greek-Latin ... MATCH
+[84/200] Latin-Katakana ... MISMATCH
+  Local:  "\x{30AB}\x{30D5}\x{30A7}\x{301} \x{30EC}\x{301}\x{30B9}\x{30E1}\x{301} \x{30A2}\x{308} \x{30AA}\x{308} \x{30A6}\x{308} \x{30C3}\x{30B9} \x{30A8} S \x{30C7} \x{30C6}\x{30FC} B \x{30F3}\x{303}"
+  Remote: "\x{30AB}\x{30D5}\x{30A7}\x{301} \x{30EC}\x{301}\x{30B9}\x{30E1}\x{301} \x{30A2}\x{308} \x{30AA}\x{308} \x{30A6}\x{308} \x{30C3}\x{30B9} \x{30A8} S \x{30C7} \x{30C6}\x{30FC} A \x{30F3}\x{303}"
+[85/200] es-chr ... MISMATCH
+  Local:  "\x{300}\x{300}"
+  Remote: "\x{13A1}\x{13CD}\x{13C6}\x{13C3}\x{13B5}\x{13D6}\x{13CD}\x{13D9}\x{13C2}"
+[86/200] Any-Publishing ... MATCH
+[87/200] Armenian-Latin-BGN ... MISMATCH
+  Local:  "Hayastan yerkir"
+  Remote: "Error: Unquoted - in \"Armenian-Latin-BGN\"; Invalid ID Armenian-Latin-BGN"
+[88/200] my-my_FONIPA ... MATCH
+[89/200] und-Ethi-t-und-latn-m0-lambdin ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn-m0-lambdin\"; Invalid ID und-Ethi-t-und-latn-m0-lambdin"
+[90/200] Bulgarian-Latin-BGN ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"Bulgarian-Latin-BGN\"; Invalid ID Bulgarian-Latin-BGN"
+[91/200] Japn-Latn ... MISMATCH
+  Local:  "cafй rйsumй Д Ц Ь Я Ж S Р ю A с"
+  Remote: "Error: Unquoted - in \"Japn-Latn\"; Illegal ID Japn-Latn"
+[92/200] ch-am ... MISMATCH
+  Local:  "\x{12A8}\x{134C}\x{301}\x{122C}\x{301}\x{1231}\x{121C}\x{301}\x{12A0}\x{308}\x{12A6}\x{308}\x{12A1}\x{308}Я\x{12A7}S\x{12DD}юB\x{129D}"
+  Remote: "\x{12A8}\x{134C} \x{122C}\x{1231}\x{121C} д ц ь Я \x{12A7} S \x{12DD} ю B \x{129D}"
+[93/200] und-Ethi-t-und-latn ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} Я Ж S Р ю A n\x{303}"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn\"; Invalid ID und-Ethi-t-und-latn"
+[94/200] Malayalam-Arabic ... MISMATCH
+  Local:  "\x{645}\x{644}\x{64A}\x{627}\x{631}\x{646} \x{64A}\x{631}\x{648}\x{62A}\x{62A}"
+  Remote: "\u200E\x{645}\x{644}\x{64A}\x{627}\x{631}\x{646} \x{64A}\x{631}\x{648}\x{62A}\x{62A}\u200E"
+[95/200] ch-fa ... MISMATCH
+  Local:  "\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}"
+  Remote: "\u200E\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}\u200E"
+[96/200] am-chr ... MATCH
+[97/200] dsb-dsb_FONIPA ... MISMATCH
+  Local:  "t \x{361} safй rйsumй д ц ь Я ж S р ю v с"
+  Remote: "t\x{361}safй rйsumй д ц ь Я ж S р ю v с"
+[98/200] ro-fa ... MISMATCH
+  Local:  "\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}"
+  Remote: "\u200E\x{6A9}\x{627}\x{641}\x{647} \x{631}\x{6CC}\x{633}\x{648}\x{645}\x{647} \x{622} ц ь Я \x{627} \x{627} \x{630} ю B \x{646}\u200E"

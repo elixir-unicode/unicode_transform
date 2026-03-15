@@ -57,9 +57,9 @@ defmodule Unicode.TransformTest do
                Unicode.Transform.transform("hello", from: :any)
     end
 
-    test "returns error for unknown script atom" do
-      assert {:error, {:unknown_script, :nonexistent}} =
-               Unicode.Transform.transform("hello", to: :nonexistent)
+    test "returns error for unknown transform from atoms" do
+      assert {:error, {:unknown_transform, _}} =
+               Unicode.Transform.transform("hello", from: :nonexistent, to: :also_nonexistent)
     end
   end
 
@@ -546,6 +546,93 @@ defmodule Unicode.TransformTest do
     test "defaults direction to :forward" do
       {:ok, result} = Unicode.Transform.transform("абвг", transform: "Cyrillic-Latin")
       assert result == "abvg"
+    end
+  end
+
+  describe "string :from/:to options" do
+    test "accepts string :to" do
+      assert {:ok, "HELLO"} = Unicode.Transform.transform("hello", to: "Upper")
+    end
+
+    test "accepts string :from and :to" do
+      assert {:ok, "abgd"} = Unicode.Transform.transform("αβγδ", from: "Greek", to: "Latin")
+    end
+
+    test "accepts string :from with atom :to" do
+      assert {:ok, "abgd"} = Unicode.Transform.transform("αβγδ", from: "Greek", to: :latin)
+    end
+
+    test "accepts atom :from with string :to" do
+      assert {:ok, "A O U ss"} = Unicode.Transform.transform("Ä Ö Ü ß", from: :latin, to: "ASCII")
+    end
+
+    test "case-insensitive string :to" do
+      assert {:ok, "HELLO"} = Unicode.Transform.transform("hello", to: "upper")
+    end
+
+    test "case-insensitive string :from and :to" do
+      assert {:ok, "abgd"} = Unicode.Transform.transform("αβγδ", from: "greek", to: "latin")
+    end
+
+    test "case-insensitive :transform option" do
+      assert {:ok, "A O U ss"} = Unicode.Transform.transform("Ä Ö Ü ß", transform: "latin-ascii")
+    end
+
+    test "passes through unknown string names unchanged" do
+      assert {:ok, "AE oe ue"} = Unicode.Transform.transform("Ä ö ü", from: "de", to: "ASCII")
+    end
+
+    test "resolves transform from non-script atoms" do
+      assert {:ok, "AE oe ue"} = Unicode.Transform.transform("Ä ö ü", from: :de, to: :ascii)
+    end
+  end
+
+  describe "from: :detect" do
+    test "detects Greek and transforms to Latin" do
+      {:ok, result} = Unicode.Transform.transform("αβγδ", from: :detect, to: :latin)
+      assert result == "abgd"
+    end
+
+    test "detects multiple scripts and chains transforms" do
+      {:ok, result} = Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
+      assert is_binary(result)
+      # Greek should be transliterated
+      refute String.contains?(result, "α")
+      # Cyrillic should be transliterated
+      refute String.contains?(result, "м")
+    end
+
+    test "works with string :to" do
+      {:ok, result} = Unicode.Transform.transform("αβγδ", from: :detect, to: "Latin")
+      assert result == "abgd"
+    end
+
+    test "returns error when detected script has no transform to target" do
+      assert {:error, {:unknown_transform, _}} =
+               Unicode.Transform.transform("αβγδ", from: :detect, to: :nonexistent)
+    end
+  end
+
+  describe "reverse transform ID resolution" do
+    test "resolves reverse when forward ID doesn't exist" do
+      # Latin-ConjoiningJamo.xml exists with direction="both", so
+      # ConjoiningJamo-Latin should resolve as the reverse of Latin-ConjoiningJamo
+      {:ok, result} = Unicode.Transform.transform("ᄀ", from: :jamo, to: :latin)
+      assert is_binary(result)
+    end
+
+    test "resolves forward ID with string options" do
+      {:ok, result} = Unicode.Transform.transform("αβγδ", from: "greek", to: "latin")
+      assert result == "abgd"
+    end
+
+    test "resolves reverse with string options when forward doesn't exist" do
+      # "CanadianAboriginal-Latin" is the backward alias of Latin-CanadianAboriginal
+      {:ok, result} =
+        Unicode.Transform.transform("ᐃ", from: "CanadianAboriginal", to: "Latin")
+
+      assert is_binary(result)
+      assert result != "ᐃ"
     end
   end
 

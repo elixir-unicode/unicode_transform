@@ -157,16 +157,18 @@ defmodule Unicode.Transform.Loader do
     |> Path.basename(".xml")
   end
 
-  # Get or build the alias index as a persistent_term map
-  defp ensure_alias_index do
-    try do
-      :persistent_term.get(@alias_index_key)
-    rescue
-      ArgumentError -> build_alias_index()
-    end
-  end
+  @doc """
+  Builds the alias index from all transform XML files and stores
+  it in a `persistent_term`. Called at application startup to
+  avoid lazy initialization on the first transform call.
 
-  defp build_alias_index do
+  ### Returns
+
+  The alias index map.
+
+  """
+  @spec build_alias_index() :: map()
+  def build_alias_index do
     index =
       list_transforms()
       |> Enum.reduce(%{}, fn file_path, acc ->
@@ -175,6 +177,15 @@ defmodule Unicode.Transform.Loader do
 
     :persistent_term.put(@alias_index_key, index)
     index
+  end
+
+  # Get or build the alias index as a persistent_term map
+  defp ensure_alias_index do
+    try do
+      :persistent_term.get(@alias_index_key)
+    rescue
+      ArgumentError -> build_alias_index()
+    end
   end
 
   defp index_transform_file(index, file_path) do
