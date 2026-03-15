@@ -1,0 +1,35 @@
+Starting 200 spot checks against ICU demo site
+Each check has a 30 second delay. Estimated time: 100 minutes
+
+[1/200] Devanagari-Kannada ... MATCH
+[2/200] Kazakh-Latin-BGN ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} ί Ζ S Π ώ A n\x{303}"
+  Remote: "Error: Unquoted - in \"Kazakh-Latin-BGN\"; Invalid ID Kazakh-Latin-BGN"
+[3/200] und-Ethi-t-und-latn-m0-aethiopi-geminate ... MISMATCH
+  Local:  "cafe\x{301} re\x{301}sume\x{301} A\x{308} O\x{308} U\x{308} ί Ζ S Π ώ A n\x{303}"
+  Remote: "Error: Unquoted - in \"und-Ethi-t-und-latn-m0-aethiopi-geminate\"; Invalid ID und-Ethi-t-und-latn-m0-aethiopi-geminate"
+[4/200] Malayalam-Gurmukhi ... MATCH
+[5/200] sk-ja ... MISMATCH
+  Local:  "\x{30C8}\x{30FB}\x{30B5}\x{30D5}\x{30A7}\x{30FC}\x{30FB}\x{30EC}\x{30FC}\x{30B9}\x{30E1}\x{30FC}\x{30FB}\x{30A2}\x{30FB}φ\x{30FB}ό\x{30FB}ί\x{30FB}ζ\x{30FB}S\x{30FB}π\x{30FB}ώ\x{30FB}B\x{30FB}ρ"
+  Remote: "\x{30C1}\x{30E3}\x{30D5}\x{30A7}\x{30FC}\x{30FB}\x{30EC}\x{30FC}\x{30B9}\x{30E1}\x{30FC}\x{30FB}\x{30A2}\x{30FB}φ\x{30FB}ό\x{30FB}ί\x{30FB}ζ\x{30FB}S\x{30FB}π\x{30FB}ώ\x{30FB}B\x{30FB}ρ"
+[6/200] pl-pl_FONIPA ... MISMATCH
+  Local:  "t \x{361} safι rιsumι δ φ ό ί ζ S π ώ w ρ"
+  Remote: "t\x{361}safι rιsumι δ φ ό ί ζ S π ώ w ρ"
+[7/200] tlh-am ... MISMATCH
+  Local:  "\x{127B}\x{134C}\x{301}\x{122C}\x{301}\x{1231}\x{121C}\x{301}A\x{308}O\x{308}U\x{308}ίΖSΠώA\x{1295}"
+  Remote: "\x{127B}\x{134C} \x{122C}\x{1231}\x{121C} Δ Φ ά ί Ζ S Π ώ A \x{1295}"
+[8/200] Georgian-Latin ... MATCH
+[9/200] Bengali-Kannada ... MATCH
+[10/200] Kannada-Oriya ... MATCH
+[11/200] Devanagari-Bengali ... MATCH
+[12/200] cs_FONIPA-ko ... MISMATCH
+  Local:  "\x{D0C0}\x{D504}\x{C5D0}\x{301}\x{B974}\x{C5D0}\x{301}\x{C218}\x{BBC0}\x{C5D0}\x{301}\x{C544}\x{308}\x{C624}\x{308}\x{C6B0}\x{308}ίζSπώB\x{B290}\x{303}"
+  Remote: "\x{D0C0}\x{D504}\x{C5D0}\x{301}\x{B974}\x{C5D0}\x{301}\x{C218}\x{BBC0}\x{C5D0}\x{301}\x{C544}\x{308}\x{C624}\x{308}\x{C6B0}\x{308}ίΖSΠώA\x{B290}\x{303}"
+[13/200] Gurmukhi-Malayalam ... MATCH
+[14/200] Malayalam-Latin ... MATCH
+[15/200] InterIndic-Tamil ... MATCH
+[16/200] Oriya-Kannada ... MATCH
+[17/200] Gurmukhi-Tamil ... MATCH
+[18/200] Latin-Gurmukhi ... MISMATCH
+  Local:  "\x{A1A}\x{A2B}\x{A3C}\x{A47}\x{301} \x{A30}\x{A47}\x{301}\x{A38}\x{A41}\x{A2E}\x{A47}\x{301} \x{A05}\x{308} \x{A13}\x{308} \x{A09}\x{308} ί ζ S π ώ B \x{A1E}\x{A4D}"
+  Remote: "\x{A1A}\x{A2B}\x{A3C}\x{A47}\x{301} \x{A30}\x{A47}\x{301}\x{A38}\x{A41}\x{A2E}\x{A47}\x{301} \x{A05}\x{308} \x{A13}\x{308} \x{A09}\x{308} ί Ζ S Π ώ A \x{A1E}\x{A4D}"

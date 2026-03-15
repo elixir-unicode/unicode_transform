@@ -195,3 +195,28 @@ When executed, the engine:
 Similarly, `Thai-Latin` chains through five sub-transforms: `NFD → Thai-ThaiSemi → Any-BreakInternal → Thai-ThaiLogical → ThaiLogical-Latin → NFC`. Each sub-transform is independently resolved, compiled, cached, and executed.
 
 This design means adding a new transform that builds on existing ones requires only writing the rule file — no code changes are needed.
+
+## Performance
+
+Benchmarks were run on a representative set of transforms across three input lengths. Results show mean execution time per call.
+
+| Transform | 10 chars | 50 chars | 100 chars |
+|---|---|---|---|
+| Any-Upper | 0.005 ms | 0.006 ms | 0.009 ms |
+| NFC | 0.013 ms | 0.041 ms | 0.075 ms |
+| Hiragana-Katakana | 0.54 ms | 3.19 ms | 6.41 ms |
+| Thai-Latin | 0.82 ms | 3.59 ms | 7.06 ms |
+| Greek-Latin | 1.64 ms | 10.65 ms | 21.21 ms |
+| Cyrillic-Latin | 1.71 ms | 10.79 ms | 21.30 ms |
+| Arabic-Latin | 1.89 ms | 9.23 ms | 18.30 ms |
+| Hangul-Latin | 3.52 ms | 23.58 ms | 65.20 ms |
+| Devanagari-Bengali | 4.02 ms | 20.03 ms | 39.46 ms |
+| Latin-ASCII | 25.20 ms | 122.47 ms | 242.26 ms |
+
+Built-in transforms (`Any-Upper`, `NFC`) delegate to Elixir's `String` module and are sub-millisecond. Rule-based transforms scale roughly linearly with input length. `Latin-ASCII` is the slowest due to its 588 conversion rules — each cursor position must try every rule until one matches.
+
+To run benchmarks locally:
+
+```bash
+mix run bench/benchmark.exs
+```
