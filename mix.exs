@@ -79,7 +79,7 @@ defmodule UnicodeTransform.MixProject do
       {:unicode_set, "~> 1.6"},
       {:sweet_xml, "~> 0.7", runtime: false},
       {:ex_doc, "~> 0.24", only: [:dev, :release], runtime: false, optional: true},
-      {:dialyxir, "~> 1.1", only: [:dev], runtime: false, optional: true},
+      {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false, optional: true},
       {:req, "~> 0.5", only: :dev, runtime: false},
       {:benchee, "~> 1.0", only: :dev, runtime: false},
       {:elixir_make, "~> 0.9", runtime: false, optional: true},

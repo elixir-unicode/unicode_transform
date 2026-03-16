@@ -92,8 +92,8 @@ jobs:
     # Step: Check that the checked in code has already been formatted.
     # This step fails if something was found unformatted.
     # Customize this step as desired.
-    # - name: Check Formatting
-    #   run: mix format --check-formatted
+    - name: Check Formatting
+      run: mixformat --check-formatted
 
     # Step: Execute the tests without the NIF
     - name: Run tests without NIF
@@ -104,4 +104,7 @@ jobs:
       env:
         CLDR_TRANSFORM_NIF: true
       run: mix test
-
+      
+    # Step: Run dialyzer
+    - name: Run dialyzer
+      run: mix dialyzer
