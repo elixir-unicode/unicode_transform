@@ -175,9 +175,12 @@ defmodule SpotCheck do
   end
 
   defp fetch_remote(transform_id, input) do
+    # Convert CLDR names to BCP47 codes for the ICU demo site
+    demo_id = Unicode.Transform.to_bcp47_transform_id(transform_id)
+
     try do
       resp = Req.get!(@demo_url,
-        params: [a: transform_id, b: input],
+        params: [a: demo_id, b: input],
         receive_timeout: 15_000,
         retry: false
       )
@@ -307,19 +310,23 @@ defmodule SpotCheck do
     |> String.trim_trailing(rlm)
   end
 
-  # Transform IDs the ICU demo rejects with "Illegal ID" or "Invalid ID".
-  # These use CLDR-extended names the demo doesn't recognize.
+  # Transform IDs the ICU demo rejects even after BCP47 conversion.
   @icu_demo_rejected MapSet.new(~w(
-    Hant-Latin Japn-Latn Sinhala-Latin Lao-Latin
-    mn-mn_Latn-MNS ru_Latn-ru-BGN gz-Ethi-t-und-sarb
+    Japn-Latn mn-mn_Latn-MNS ru_Latn-ru-BGN gz-Ethi-t-und-sarb
   ))
 
   # Returns true if the ICU demo site is known to support this transform ID.
-  # The demo doesn't support hyphenated BGN-style names, BCP-47 style IDs,
-  # or certain CLDR-extended script names.
+  # The demo doesn't support hyphenated BGN-style names, BCP-47 style IDs
+  # with "-t-", or certain CLDR-extended script names.
+  # Note: CLDR names are converted to BCP47 codes before sending to the demo,
+  # so "Hant-Latin" becomes "Hant-Latn" (supported), "Sinhala-Latin" becomes
+  # "Sinh-Latn" (supported), etc.
   def icu_demo_supported?(transform_id) do
+    # Convert to BCP47 to check the demo-facing ID
+    demo_id = Unicode.Transform.to_bcp47_transform_id(transform_id)
+
     cond do
-      MapSet.member?(@icu_demo_rejected, transform_id) -> false
+      MapSet.member?(@icu_demo_rejected, demo_id) -> false
 
       # BCP-47 style IDs with "-t-" are not supported
       String.contains?(transform_id, "-t-") -> false

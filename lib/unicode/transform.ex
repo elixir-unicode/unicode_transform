@@ -24,7 +24,7 @@ defmodule Unicode.Transform do
   alias Unicode.Transform.{Builtin, Compiler, Engine, Loader, Parser}
 
   @script_names %{
-    # Scripts
+    # Scripts (full names)
     arabic: "Arabic",
     armenian: "Armenian",
     bengali: "Bengali",
@@ -59,6 +59,38 @@ defmodule Unicode.Transform do
     thaana: "Thaana",
     thai: "Thai",
 
+    # BCP47 (ISO 15924) script code atoms
+    arab: "Arabic",
+    armn: "Armenian",
+    beng: "Bengali",
+    bopo: "Bopomofo",
+    cans: "CanadianAboriginal",
+    cyrl: "Cyrillic",
+    deva: "Devanagari",
+    ethi: "Ethiopic",
+    geor: "Georgian",
+    grek: "Greek",
+    gujr: "Gujarati",
+    guru: "Gurmukhi",
+    hani: "Han",
+    hang: "Hangul",
+    hebr: "Hebrew",
+    hira: "Hiragana",
+    jpan: "Jpan",
+    khmr: "Khmer",
+    knda: "Kannada",
+    laoo: "Lao",
+    latn: "Latin",
+    mlym: "Malayalam",
+    mymr: "Myanmar",
+    orya: "Oriya",
+    sinh: "Sinhala",
+    syrc: "Syriac",
+    taml: "Tamil",
+    telu: "Telugu",
+    thaa: "Thaana",
+    hans: "Hans",
+
     # Targets
     ascii: "ASCII",
     fullwidth: "Fullwidth",
@@ -80,6 +112,47 @@ defmodule Unicode.Transform do
     # Special
     any: "Any"
   }
+
+  # BCP47 (ISO 15924) script code string -> CLDR full name.
+  # Used to resolve transform IDs like "Grek-Latn" to "Greek-Latin".
+  @bcp47_to_cldr %{
+    "Arab" => "Arabic",
+    "Armn" => "Armenian",
+    "Beng" => "Bengali",
+    "Bopo" => "Bopomofo",
+    "Cans" => "CanadianAboriginal",
+    "Cyrl" => "Cyrillic",
+    "Deva" => "Devanagari",
+    "Ethi" => "Ethiopic",
+    "Geor" => "Georgian",
+    "Grek" => "Greek",
+    "Gujr" => "Gujarati",
+    "Guru" => "Gurmukhi",
+    "Hani" => "Han",
+    "Hang" => "Hangul",
+    "Hebr" => "Hebrew",
+    "Hira" => "Hiragana",
+    "Khmr" => "Khmer",
+    "Knda" => "Kannada",
+    "Laoo" => "Lao",
+    "Latn" => "Latin",
+    "Mlym" => "Malayalam",
+    "Mymr" => "Myanmar",
+    "Orya" => "Oriya",
+    "Sarb" => "Sarb",
+    "Sinh" => "Sinhala",
+    "Syrc" => "Syriac",
+    "Taml" => "Tamil",
+    "Telu" => "Telugu",
+    "Thaa" => "Thaana",
+    "Thai" => "Thai"
+  }
+
+  # CLDR full name -> BCP47 (ISO 15924) script code.
+  # Used to convert transform IDs for the ICU demo site.
+  @cldr_to_bcp47 @bcp47_to_cldr
+                 |> Enum.map(fn {k, v} -> {v, k} end)
+                 |> Map.new()
 
   # Reverse lookup: downcased canonical name -> canonical name
   # e.g., "arabic" => "Arabic", "nfc" => "NFC", "canadianaboriginal" => "CanadianAboriginal"
@@ -205,6 +278,130 @@ defmodule Unicode.Transform do
   def available_transforms do
     Loader.list_transforms()
     |> Enum.map(&Loader.transform_id_from_file/1)
+  end
+
+  @doc """
+  Converts a BCP47 (ISO 15924) script code to its CLDR full name.
+
+  ### Arguments
+
+  * `code` — a BCP47 script code string (e.g., `"Latn"`, `"Grek"`).
+
+  ### Returns
+
+  The CLDR full name string if found, or `nil`.
+
+  ### Examples
+
+      iex> Unicode.Transform.bcp47_to_cldr("Latn")
+      "Latin"
+
+      iex> Unicode.Transform.bcp47_to_cldr("Grek")
+      "Greek"
+
+      iex> Unicode.Transform.bcp47_to_cldr("Unknown")
+      nil
+
+  """
+  @spec bcp47_to_cldr(String.t()) :: String.t() | nil
+  def bcp47_to_cldr(code) when is_binary(code) do
+    Map.get(@bcp47_to_cldr, code)
+  end
+
+  @doc """
+  Converts a CLDR full script name to its BCP47 (ISO 15924) code.
+
+  ### Arguments
+
+  * `name` — a CLDR script name string (e.g., `"Latin"`, `"Greek"`).
+
+  ### Returns
+
+  The BCP47 code string if found, or `nil`.
+
+  ### Examples
+
+      iex> Unicode.Transform.cldr_to_bcp47("Latin")
+      "Latn"
+
+      iex> Unicode.Transform.cldr_to_bcp47("Greek")
+      "Grek"
+
+      iex> Unicode.Transform.cldr_to_bcp47("Unknown")
+      nil
+
+  """
+  @spec cldr_to_bcp47(String.t()) :: String.t() | nil
+  def cldr_to_bcp47(name) when is_binary(name) do
+    Map.get(@cldr_to_bcp47, name)
+  end
+
+  @doc """
+  Converts a transform ID from BCP47 script codes to CLDR names.
+
+  Replaces each segment of the transform ID that is a known BCP47
+  script code with its CLDR full name.
+
+  ### Arguments
+
+  * `transform_id` — a transform ID string that may contain BCP47 codes.
+
+  ### Returns
+
+  The transform ID with BCP47 codes replaced by CLDR names.
+
+  ### Examples
+
+      iex> Unicode.Transform.resolve_bcp47_transform_id("Grek-Latn")
+      "Greek-Latin"
+
+      iex> Unicode.Transform.resolve_bcp47_transform_id("Cyrl-Latn")
+      "Cyrillic-Latin"
+
+      iex> Unicode.Transform.resolve_bcp47_transform_id("Latin-ASCII")
+      "Latin-ASCII"
+
+  """
+  @spec resolve_bcp47_transform_id(String.t()) :: String.t()
+  def resolve_bcp47_transform_id(transform_id) when is_binary(transform_id) do
+    transform_id
+    |> String.split("-", parts: 2)
+    |> Enum.map(fn segment -> Map.get(@bcp47_to_cldr, segment, segment) end)
+    |> Enum.join("-")
+  end
+
+  @doc """
+  Converts a transform ID from CLDR names to BCP47 script codes.
+
+  Replaces each segment of the transform ID that is a known CLDR
+  script name with its BCP47 code.
+
+  ### Arguments
+
+  * `transform_id` — a transform ID string that may contain CLDR names.
+
+  ### Returns
+
+  The transform ID with CLDR names replaced by BCP47 codes.
+
+  ### Examples
+
+      iex> Unicode.Transform.to_bcp47_transform_id("Greek-Latin")
+      "Grek-Latn"
+
+      iex> Unicode.Transform.to_bcp47_transform_id("Latin-ASCII")
+      "Latn-ASCII"
+
+      iex> Unicode.Transform.to_bcp47_transform_id("de-ASCII")
+      "de-ASCII"
+
+  """
+  @spec to_bcp47_transform_id(String.t()) :: String.t()
+  def to_bcp47_transform_id(transform_id) when is_binary(transform_id) do
+    transform_id
+    |> String.split("-", parts: 2)
+    |> Enum.map(fn segment -> Map.get(@cldr_to_bcp47, segment, segment) end)
+    |> Enum.join("-")
   end
 
   # Internal transform function used by the engine for transitive

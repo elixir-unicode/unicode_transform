@@ -92,6 +92,9 @@ defmodule Unicode.Transform.Loader do
   4. Reverse direction lookup (e.g., `"ConjoiningJamo-Latin"` found via
      `"Latin-ConjoiningJamo.xml"` with `direction="both"`).
 
+  5. BCP47 (ISO 15924) script code resolution (e.g., `"Grek-Latn"` →
+     `"Greek-Latin"`).
+
   ### Arguments
 
   * `transform_id` — the transform name to resolve.
@@ -112,7 +115,23 @@ defmodule Unicode.Transform.Loader do
     case Map.get(index, transform_id) do
       nil ->
         # Try case-insensitive
-        Map.get(index, String.downcase(transform_id))
+        case Map.get(index, String.downcase(transform_id)) do
+          nil ->
+            # Try resolving BCP47 script codes to CLDR names
+            resolved = Unicode.Transform.resolve_bcp47_transform_id(transform_id)
+
+            if resolved != transform_id do
+              case Map.get(index, resolved) do
+                nil -> Map.get(index, String.downcase(resolved))
+                result -> result
+              end
+            else
+              nil
+            end
+
+          result ->
+            result
+        end
 
       result ->
         result

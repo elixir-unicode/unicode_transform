@@ -694,4 +694,60 @@ defmodule Unicode.TransformTest do
       assert regex_source == "\\."
     end
   end
+
+  describe "BCP47 script code support" do
+    test "transform with BCP47 codes via :transform option" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ", transform: "Grek-Latn")
+      assert result == "abgd"
+    end
+
+    test "transform with BCP47 codes via :from/:to atoms" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ", from: :grek, to: :latn)
+      assert result == "abgd"
+    end
+
+    test "Cyrl-Latn resolves to Cyrillic-Latin" do
+      assert {:ok, _result} = Unicode.Transform.transform("абвг", transform: "Cyrl-Latn")
+    end
+
+    test "Deva-Latn resolves to Devanagari-Latin" do
+      assert {:ok, _result} = Unicode.Transform.transform("नमस्ते", transform: "Deva-Latn")
+    end
+
+    test "bcp47_to_cldr converts codes correctly" do
+      assert Unicode.Transform.bcp47_to_cldr("Latn") == "Latin"
+      assert Unicode.Transform.bcp47_to_cldr("Grek") == "Greek"
+      assert Unicode.Transform.bcp47_to_cldr("Cyrl") == "Cyrillic"
+      assert Unicode.Transform.bcp47_to_cldr("Arab") == "Arabic"
+      assert Unicode.Transform.bcp47_to_cldr("Unknown") == nil
+    end
+
+    test "cldr_to_bcp47 converts names correctly" do
+      assert Unicode.Transform.cldr_to_bcp47("Latin") == "Latn"
+      assert Unicode.Transform.cldr_to_bcp47("Greek") == "Grek"
+      assert Unicode.Transform.cldr_to_bcp47("Cyrillic") == "Cyrl"
+      assert Unicode.Transform.cldr_to_bcp47("Unknown") == nil
+    end
+
+    test "resolve_bcp47_transform_id converts BCP47 to CLDR" do
+      assert Unicode.Transform.resolve_bcp47_transform_id("Grek-Latn") == "Greek-Latin"
+      assert Unicode.Transform.resolve_bcp47_transform_id("Cyrl-Latn") == "Cyrillic-Latin"
+      assert Unicode.Transform.resolve_bcp47_transform_id("Deva-Beng") == "Devanagari-Bengali"
+    end
+
+    test "resolve_bcp47_transform_id passes through unknown segments" do
+      assert Unicode.Transform.resolve_bcp47_transform_id("Latin-ASCII") == "Latin-ASCII"
+      assert Unicode.Transform.resolve_bcp47_transform_id("de-ASCII") == "de-ASCII"
+    end
+
+    test "to_bcp47_transform_id converts CLDR to BCP47" do
+      assert Unicode.Transform.to_bcp47_transform_id("Greek-Latin") == "Grek-Latn"
+      assert Unicode.Transform.to_bcp47_transform_id("Cyrillic-Latin") == "Cyrl-Latn"
+      assert Unicode.Transform.to_bcp47_transform_id("Latin-ASCII") == "Latn-ASCII"
+    end
+
+    test "to_bcp47_transform_id passes through unknown segments" do
+      assert Unicode.Transform.to_bcp47_transform_id("de-ASCII") == "de-ASCII"
+    end
+  end
 end
