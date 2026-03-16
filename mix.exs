@@ -26,10 +26,18 @@ defmodule UnicodeTransform.MixProject do
     ]
   end
 
-  @nif_enabled System.get_env("UNICODE_TRANSFORM_NIF") == "true"
+  @doc false
+  def nif_enabled? do
+    String.downcase(System.get_env("CLDR_TRANSFORM_NIF", "false")) == "true" or
+      Application.get_env(:ex_cldr_transform, :nif, false) == true
+  end
 
   defp maybe_elixir_make do
-    if @nif_enabled, do: [:elixir_make], else: []
+    if nif_enabled?() do
+      [:elixir_make]
+    else
+      []
+    end
   end
 
   defp description do
