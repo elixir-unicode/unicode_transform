@@ -21,7 +21,10 @@ defmodule Unicode.Transform.Compiler do
   alias Unicode.Transform.Builtin
 
   defmodule CompiledTransform do
-    @moduledoc false
+    @moduledoc """
+    A struct that holds a compiled transform rule.
+
+    """
     defstruct [:passes, :filter, :inverse_filter]
 
     @type t :: %__MODULE__{
@@ -60,7 +63,7 @@ defmodule Unicode.Transform.Compiler do
 
   ### Returns
 
-  A `CompiledTransform` struct.
+  A CompiledTransform struct.
 
   """
   @spec compile([struct()], :forward | :reverse, function()) :: CompiledTransform.t()
@@ -95,7 +98,7 @@ defmodule Unicode.Transform.Compiler do
 
   ### Returns
 
-  A `CompiledTransform` struct with a single builtin pass.
+  A CompiledTransform struct with a single builtin pass.
 
   """
   @spec compile_builtin(String.t(), :forward | :reverse) :: CompiledTransform.t()

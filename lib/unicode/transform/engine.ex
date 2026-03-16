@@ -33,7 +33,7 @@ defmodule Unicode.Transform.Engine do
 
   * `string` — the input string.
 
-  * `compiled` — a `CompiledTransform` struct.
+  * `compiled` — a compiled transform struct.
 
   ### Returns
 

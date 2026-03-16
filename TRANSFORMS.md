@@ -45,7 +45,7 @@ iex> Unicode.Transform.transform("αβγδ", from: :grek, to: :latn)
 {:ok, "abgd"}
 ```
 
-## Script detection
+## Automatic Script detection
 
 Use `from: :detect` to automatically detect scripts in the input:
 
@@ -53,6 +53,10 @@ Use `from: :detect` to automatically detect scripts in the input:
 iex> Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
 {:ok, "abgd mir"}
 ```
+
+When `from: :detect` is set, the string is analzed to identify the script
+or scripts used within it. A transform is applied for each script
+identified in the string.
 
 ## Programmatic listing
 
@@ -355,6 +359,8 @@ iex> Unicode.Transform.transform("Москва", transform: "Russian-Latin-BGN")
 
 ## UNGEGN romanization
 
+Uses the United Nations Group of Experts on Geographical Names(United Nations Group of Experts on Geographical Names)[https://en.wikipedia.org/wiki/United_Nations_Group_of_Experts_on_Geographical_Names] Romanization rules.
+
 | Transform ID | Description |
 |---|---|
 | `Greek_Latin_UNGEGN` | Greek to Latin (UNGEGN standard) |
@@ -421,7 +427,7 @@ iex> Unicode.Transform.transform("İSTANBUL", transform: "tr-Lower")
 
 ## Phonetic (IPA/FONIPA) transforms
 
-Transforms to and from the International Phonetic Alphabet.
+Transforms to and from the [International Phonetic Alphabet](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet#:~:text=The%20International%20Phonetic%20Alphabet%20(IPA,for%20the%20sounds%20of%20speech.).
 
 | Transform ID | Description |
 |---|---|
@@ -459,7 +465,7 @@ Transforms to and from the International Phonetic Alphabet.
 
 ### IPA-based cross-language transforms
 
-These use IPA as a pivot to approximate transliteration between languages.
+These use [IPA](https://en.wikipedia.org/wiki/IPA_Extensions) as a pivot to approximate transliteration between languages.
 
 | Transform ID | Description |
 |---|---|

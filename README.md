@@ -228,7 +228,7 @@ automatically; otherwise the pure-Elixir engine is used as a seamless fallback.
 
 ### Setup
 
-1. Install ICU system libraries (`libicu` on Linux, `icucore` on macOS).
+1. Install ICU system libraries (`libicu` on Linux). For MacOS, `icucore` is used and is part of the base operating system.
 2. Add the `elixir_make` dependency (already included as optional).
 3. Compile with the NIF enabled:
 
@@ -244,7 +244,7 @@ config :unicode_transform, :nif, true
 
 ### Selecting a backend
 
-The `:backend` option controls which engine executes the transform:
+The `:backend` option controls which engine executes the transform at runtime:
 
 ```elixir
 # Use the NIF (ICU) backend explicitly
@@ -423,6 +423,8 @@ backend across a range of scripts and input lengths. Benchmarked on Apple M1.
 - **Hangul-Latin** is fast in both backends because the Elixir engine uses
   built-in NFKD decomposition to split syllables before applying a small
   jamo-to-Latin rule set.
+
+- Note that the ICU library uses UTF-16 internally so there is a cost of converting from Elixir's UTF-8 to ICU's UTF-16 and back again in each NIF call. That overhead if baked into the performance results above.
 
 ### Latin-ASCII: fast-path vs engine vs NIF
 

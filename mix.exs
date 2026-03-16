@@ -61,7 +61,8 @@ defmodule UnicodeTransform.MixProject do
         "mix.exs",
         "README*",
         "CHANGELOG*",
-        "LICENSE*"
+        "LICENSE*",
+        "TRANSFORMS.md"
       ]
     ]
   end
@@ -106,6 +107,7 @@ defmodule UnicodeTransform.MixProject do
         "LICENSE.md",
         "CHANGELOG.md"
       ],
+      formatters: ["html", "markdown"],
       skip_undefined_reference_warnings_on: ["changelog", "CHANGELOG.md"]
     ]
   end

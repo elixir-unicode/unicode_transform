@@ -1,5 +1,21 @@
 # Changelog
 
+## Unicode Transform 1.0.0
+
+This is the changelog for Unicode Transform 1.0.0 released on March 17th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
+
+### Breaking Changes
+
+* This release is a complete re-implementation of the [CLDR Transform](https://unicode.org/reports/tr35/tr35-general.html#Transforms) specification. It implements the full suite of transformations. See `Cldr.Transform.transform/2` for the primary public API.
+
+* The library has now moved on from a proof-of-concept that code-generated one transform module at compile time to a full runtime implementation of the Unicode CLDR Transform specification with currently 394 transforms, a unified API, optional ICU NIF backend, OTP supervision, caching, CI, and comprehensive property-based testing.
+
+* The transformations are those available in CLDR version 48 which is the current version as of March 17th, 2026.
+
+* Consult the [README](README.md) for information on how to install and use the library.
+
+* See [TRANSFORMS](TRANSFORMS.md) for a complete listing of all available transforms.
+
 ## Unicode Transform 0.4.0
 
 This is the changelog for Unicode Transform 0.4.0 released on 8th December, 2025.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
