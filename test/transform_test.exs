@@ -715,39 +715,43 @@ defmodule Unicode.TransformTest do
     end
 
     test "bcp47_script_to_unicode converts codes correctly" do
-      assert Unicode.Transform.bcp47_script_to_unicode("Latn") == "Latin"
-      assert Unicode.Transform.bcp47_script_to_unicode("Grek") == "Greek"
-      assert Unicode.Transform.bcp47_script_to_unicode("Cyrl") == "Cyrillic"
-      assert Unicode.Transform.bcp47_script_to_unicode("Arab") == "Arabic"
-      assert Unicode.Transform.bcp47_script_to_unicode("Unknown") == nil
+      assert Unicode.Transform.Resolve.bcp47_script_to_unicode("Latn") == "Latin"
+      assert Unicode.Transform.Resolve.bcp47_script_to_unicode("Grek") == "Greek"
+      assert Unicode.Transform.Resolve.bcp47_script_to_unicode("Cyrl") == "Cyrillic"
+      assert Unicode.Transform.Resolve.bcp47_script_to_unicode("Arab") == "Arabic"
+      assert Unicode.Transform.Resolve.bcp47_script_to_unicode("Unknown") == nil
     end
 
     test "unicode_script_to_bcp47 converts names correctly" do
-      assert Unicode.Transform.unicode_script_to_bcp47("Latin") == "Latn"
-      assert Unicode.Transform.unicode_script_to_bcp47("Greek") == "Grek"
-      assert Unicode.Transform.unicode_script_to_bcp47("Cyrillic") == "Cyrl"
-      assert Unicode.Transform.unicode_script_to_bcp47("Unknown") == nil
+      assert Unicode.Transform.Resolve.unicode_script_to_bcp47("Latin") == "Latn"
+      assert Unicode.Transform.Resolve.unicode_script_to_bcp47("Greek") == "Grek"
+      assert Unicode.Transform.Resolve.unicode_script_to_bcp47("Cyrillic") == "Cyrl"
+      assert Unicode.Transform.Resolve.unicode_script_to_bcp47("Unknown") == nil
     end
 
     test "resolve_bcp47_transform_id converts BCP47 to CLDR" do
-      assert Unicode.Transform.resolve_bcp47_transform_id("Grek-Latn") == "Greek-Latin"
-      assert Unicode.Transform.resolve_bcp47_transform_id("Cyrl-Latn") == "Cyrillic-Latin"
-      assert Unicode.Transform.resolve_bcp47_transform_id("Deva-Beng") == "Devanagari-Bengali"
+      assert Unicode.Transform.Resolve.resolve_bcp47_transform_id("Grek-Latn") == "Greek-Latin"
+
+      assert Unicode.Transform.Resolve.resolve_bcp47_transform_id("Cyrl-Latn") ==
+               "Cyrillic-Latin"
+
+      assert Unicode.Transform.Resolve.resolve_bcp47_transform_id("Deva-Beng") ==
+               "Devanagari-Bengali"
     end
 
     test "resolve_bcp47_transform_id passes through unknown segments" do
-      assert Unicode.Transform.resolve_bcp47_transform_id("Latin-ASCII") == "Latin-ASCII"
-      assert Unicode.Transform.resolve_bcp47_transform_id("de-ASCII") == "de-ASCII"
+      assert Unicode.Transform.Resolve.resolve_bcp47_transform_id("Latin-ASCII") == "Latin-ASCII"
+      assert Unicode.Transform.Resolve.resolve_bcp47_transform_id("de-ASCII") == "de-ASCII"
     end
 
     test "to_bcp47_transform_id converts CLDR to BCP47" do
-      assert Unicode.Transform.to_bcp47_transform_id("Greek-Latin") == "Grek-Latn"
-      assert Unicode.Transform.to_bcp47_transform_id("Cyrillic-Latin") == "Cyrl-Latn"
-      assert Unicode.Transform.to_bcp47_transform_id("Latin-ASCII") == "Latn-ASCII"
+      assert Unicode.Transform.Resolve.to_bcp47_transform_id("Greek-Latin") == "Grek-Latn"
+      assert Unicode.Transform.Resolve.to_bcp47_transform_id("Cyrillic-Latin") == "Cyrl-Latn"
+      assert Unicode.Transform.Resolve.to_bcp47_transform_id("Latin-ASCII") == "Latn-ASCII"
     end
 
     test "to_bcp47_transform_id passes through unknown segments" do
-      assert Unicode.Transform.to_bcp47_transform_id("de-ASCII") == "de-ASCII"
+      assert Unicode.Transform.Resolve.to_bcp47_transform_id("de-ASCII") == "de-ASCII"
     end
   end
 

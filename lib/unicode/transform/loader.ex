@@ -118,7 +118,7 @@ defmodule Unicode.Transform.Loader do
         case Map.get(index, String.downcase(transform_id)) do
           nil ->
             # Try resolving BCP47 script codes to Unicode names
-            resolved = Unicode.Transform.resolve_bcp47_transform_id(transform_id)
+            resolved = Unicode.Transform.Resolve.resolve_bcp47_transform_id(transform_id)
 
             if resolved != transform_id do
               case Map.get(index, resolved) do
