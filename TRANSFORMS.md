@@ -8,29 +8,40 @@ There are three ways to invoke a transform:
 
 ```elixir
 # 1. :from / :to atoms (most convenient)
-Unicode.Transform.transform("Москва", from: :cyrillic, to: :latin)
+iex> Unicode.Transform.transform("Москва", from: :cyrillic, to: :latin)
+{:ok, "Moskva"}
 
 # 2. :transform string (for transforms without atom mappings)
-Unicode.Transform.transform("text", transform: "Armenian-Latin-BGN")
+iex> Unicode.Transform.transform("Հayaստan", transform: "Armenian-Latin-BGN")
+{:ok, "Hayastan"}
 
 # 3. :transform with :direction (for reverse transforms)
-Unicode.Transform.transform("text", transform: "Hiragana-Katakana", direction: :reverse)
+iex> Unicode.Transform.transform("アイウエオ", transform: "Hiragana-Katakana", direction: :reverse)
+{:ok, "あいうえお"}
 ```
 
 The `:from` option defaults to `:any` when omitted:
 
 ```elixir
 # These are equivalent:
-Unicode.Transform.transform("hello", to: :upper)
-Unicode.Transform.transform("hello", from: :any, to: :upper)
+iex> Unicode.Transform.transform("hello", to: :upper)
+{:ok, "HELLO"}
+
+iex> Unicode.Transform.transform("hello", from: :any, to: :upper)
+{:ok, "HELLO"}
 ```
 
 Both atoms and strings are accepted for `:from` and `:to`:
 
 ```elixir
-Unicode.Transform.transform("text", from: :greek, to: :latin)
-Unicode.Transform.transform("text", from: "Greek", to: "Latin")
-Unicode.Transform.transform("text", from: :grek, to: :latn)
+iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin)
+{:ok, "abgd"}
+
+iex> Unicode.Transform.transform("αβγδ", from: "Greek", to: "Latin")
+{:ok, "abgd"}
+
+iex> Unicode.Transform.transform("αβγδ", from: :grek, to: :latn)
+{:ok, "abgd"}
 ```
 
 ## Script detection
@@ -38,7 +49,7 @@ Unicode.Transform.transform("text", from: :grek, to: :latn)
 Use `from: :detect` to automatically detect scripts in the input:
 
 ```elixir
-Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
+iex> Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
 {:ok, "abgd mir"}
 ```
 
@@ -47,7 +58,8 @@ Unicode.Transform.transform("αβγδ мир", from: :detect, to: :latin)
 To list all available transforms at runtime:
 
 ```elixir
-Unicode.Transform.available_transforms()
+iex> Unicode.Transform.available_transforms() |> Enum.take(5)
+["Amharic-Latin-BGN", "Any-Accents", "Any-Publishing", "Arabic-Latin-BGN", "Arabic-Latin"]
 ```
 
 This returns a sorted list of all transform IDs the library can resolve.
@@ -174,7 +186,7 @@ Bidirectional transforms can be used in reverse with `from: :latin, to: <script>
 | `:latin` | `:ascii` | `Latin-ASCII` |
 
 ```elixir
-Unicode.Transform.transform("café résumé", from: :latin, to: :ascii)
+iex> Unicode.Transform.transform("café résumé", from: :latin, to: :ascii)
 {:ok, "cafe resume"}
 ```
 
@@ -188,7 +200,8 @@ This transform has a dedicated fast-path module for maximum performance.
 | `Halfwidth-Fullwidth` | Convert halfwidth characters to fullwidth (reverse) |
 
 ```elixir
-Unicode.Transform.transform("Ｈｅｌｌｏ", transform: "Fullwidth-Halfwidth")
+iex> Unicode.Transform.transform("Ｈｅｌｌｏ", transform: "Fullwidth-Halfwidth")
+{:ok, "Hello"}
 ```
 
 ## Japanese script conversion
@@ -198,7 +211,7 @@ Unicode.Transform.transform("Ｈｅｌｌｏ", transform: "Fullwidth-Halfwidth")
 | `:hiragana` | `:katakana` | `Hiragana-Katakana` | Yes |
 
 ```elixir
-Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
+iex> Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
 {:ok, "アイウエオ"}
 ```
 
@@ -212,7 +225,8 @@ Unicode.Transform.transform("あいうえお", from: :hiragana, to: :katakana)
 | `Simplified-Traditional` | Simplified Chinese to Traditional Chinese |
 
 ```elixir
-Unicode.Transform.transform("中国", transform: "Han-Latin")
+iex> Unicode.Transform.transform("中国", transform: "Han-Latin")
+{:ok, "zhōng guó"}
 ```
 
 ## Indic cross-script transforms
@@ -228,10 +242,10 @@ Bengali, Devanagari, Gujarati, Gurmukhi, Kannada, Malayalam, Oriya, Tamil, Telug
 Each Indic script can be transformed to every other Indic script. For example:
 
 ```elixir
-Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :bengali)
+iex> Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :bengali)
 {:ok, "হিন্দী"}
 
-Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarati)
+iex> Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarati)
 {:ok, "બાંલા"}
 ```
 
@@ -334,7 +348,8 @@ These follow the [BGN/PCGN romanization](https://en.wikipedia.org/wiki/BGN/PCGN_
 | `Uzbek-Latin-BGN` | Uzbek to Latin |
 
 ```elixir
-Unicode.Transform.transform("Москва", transform: "Russian-Latin-BGN")
+iex> Unicode.Transform.transform("Москва", transform: "Russian-Latin-BGN")
+{:ok, "Moskva"}
 ```
 
 ## UNGEGN romanization
@@ -352,11 +367,11 @@ Unicode.Transform.transform("Москва", transform: "Russian-Latin-BGN")
 | `:de` | `:ASCII` | `de-ASCII` | Context-sensitive German umlaut conversion |
 
 ```elixir
-Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
+iex> Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
 {:ok, "AE oe ue"}
 
 # Also available via :from/:to
-Unicode.Transform.transform("Ä ö ü", from: :de, to: :ASCII)
+iex> Unicode.Transform.transform("Ä ö ü", from: "de", to: "ASCII")
 {:ok, "AE oe ue"}
 ```
 
@@ -381,7 +396,8 @@ These apply language-specific casing rules (e.g., Turkish dotted/dotless I, Lith
 | `tr-Upper` | Turkish uppercase |
 
 ```elixir
-Unicode.Transform.transform("İSTANBUL", transform: "tr-Lower")
+iex> Unicode.Transform.transform("İSTANBUL", transform: "tr-Lower")
+{:ok, "istanbul"}
 ```
 
 ## Ethiopic transforms
@@ -599,13 +615,3 @@ These transform between specific language pairs, often using phonetic approximat
 | `yo-yo_BJ` | Yoruba to Yoruba (Benin variant) |
 | `mn-mn_Latn-MNS` | Mongolian to Mongolian Latin (MNS) |
 | `zh_Latn_PINYIN-ru` | Pinyin to Russian |
-
-## Programmatic listing
-
-To list all available transforms at runtime:
-
-```elixir
-Unicode.Transform.available_transforms()
-```
-
-This returns a sorted list of all transform IDs the library can resolve.
