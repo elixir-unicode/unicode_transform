@@ -1,201 +1,101 @@
 transform,input,local_output,remote_output,status
-Devanagari-Kannada,हिन्दी नमस्ते,ಹಿನ್ದೀ ನಮಸ್ತೇ,ಹಿನ್ದೀ ನಮಸ್ತೇ,match
-Kazakh-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Kazakh-Latin-BGN""; Invalid ID Kazakh-Latin-BGN",mismatch
-und-Ethi-t-und-latn-m0-aethiopi-geminate,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn-m0-aethiopi-geminate""; Invalid ID und-Ethi-t-und-latn-m0-aethiopi-geminate",mismatch
-Malayalam-Gurmukhi,മലയാളം എഴുത്ത്,ਮਲਯਾਲੰ ਏਲ਼ੁਤ੍ਤ੍,ਮਲਯਾਲੰ ਏਲ਼ੁਤ੍ਤ੍,match
-sk-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ト・サフェー・レースメー・ア・ö・ü・ß・æ・œ・ð・þ・ł・ñ,チャフェー・レースメー・ア・ö・ü・ß・æ・œ・ð・þ・ł・ñ,mismatch
-pl-pl_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,t ͡ safé résumé ä ö ü ß æ œ ð þ w ñ,t͡safé résumé ä ö ü ß æ œ ð þ w ñ,mismatch
-tlh-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ቻፌ́ሬ́ሱሜ́ÄÖÜßÆœÐþŁን,ቻፌ ሬሱሜ Ä Ö Ü ß Æ œ Ð þ Ł ን,mismatch
-Georgian-Latin,საქართველო ქალაქი,sakartvelo kalaki,sakartvelo kalaki,match
-Bengali-Kannada,বাংলা লেখা,ಬಾಂಲಾ ಲೇಖಾ,ಬಾಂಲಾ ಲೇಖಾ,match
-Kannada-Oriya,ಕನ್ನಡ ಬರಹ,କନ୍ନଡ ବରହ,କନ୍ନଡ ବରହ,match
-Devanagari-Bengali,हिन्दी नमस्ते,হিন্দী নমস্তে,হিন্দী নমস্তে,match
-cs_FONIPA-ko,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,타프에́르에́수므에́아̈오̈우̈ßæœðþł느̃,타프에́르에́수므에́아̈오̈우̈ßÆœÐþŁ느̃,mismatch
-Gurmukhi-Malayalam,ਪੰਜਾਬੀ ਲਿਖਤ,പജാബീ ലിഖത,പജാബീ ലിഖത,match
-Malayalam-Latin,മലയാളം എഴുത്ത്,malayāḷaṁ eḻutt,malayāḷaṁ eḻutt,match
-InterIndic-Tamil,हिन्दी,हिन्दी,हिन्दी,match
-Oriya-Kannada,ଓଡ଼ିଆ ଲେଖା,ಓಡ಼ಿಆ ಲೇಖಾ,ಓಡ಼ಿಆ ಲೇಖಾ,match
-Gurmukhi-Tamil,ਪੰਜਾਬੀ ਲਿਖਤ,பஜாபீ லிகத,பஜாபீ லிகத,match
-Latin-Gurmukhi,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß æ œ ð þ ł ਞ੍,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß Æ œ Ð þ Ł ਞ੍,mismatch
-ia-ia_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafé ɾésumé ä ö ü ß æ œ ð þ ł ñ,kafé ɾésumé ä ö ü ß æ œ ð þ ł ñ,match
-Kannada-Latin,ಕನ್ನಡ ಬರಹ,kannaḍa baraha,kannaḍa baraha,match
-nl-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,Café Résumé Ä Ö Ü Ss Æ Œ Ð Þ Ł Ñ,mismatch
-fa-fa_FONIPA,فارسی نوشتار,fɒːɾsiːjnuːʃtɒːɾ,fɒːɾsiː nuːʃtɒːɾ,mismatch
-und-Ethi-t-und-latn-m0-ies-jes-1964-geminate,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn-m0-ies-jes-1964-geminate""; Invalid ID und-Ethi-t-und-latn-m0-ies-jes-1964-geminate",mismatch
-ug-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-kk-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,mismatch
-Gurmukhi-Oriya,ਪੰਜਾਬੀ ਲਿਖਤ,ପଜାବୀ ଲିଖତ,ପଜାବୀ ଲିଖତ,match
-cs-cs_FONIPA,český jazyk,t ͡ ʃɛskiː jazɪk,t͡ʃɛskiː jazɪk,mismatch
-am-fa,ኢትዮጵያ,یتویوپویا,‎ایتویوپویا‎,mismatch
-cs_FONIPA-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,チャフé・ルéスムé・Ä・Ö・Ü・ß・Æ・œ・Ð・þ・Ł・ñ,チャフé・ルéスムé・Ä・Ö・Ü・ß・Æ・œ・Ð・þ・Ł・ñ,match
-Latin-Telugu,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,చఫె́ రె́సుమె́ అ̈ ఒ̈ ఉ̈ ß æ œ ð þ ł ఞ్,చఫె́ రె́సుమె́ అ̈ ఒ̈ ఉ̈ ß Æ œ Ð þ Ł ఞ్,mismatch
-ia-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎧᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᎧᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
-Oriya-Arabic,ଓଡ଼ିଆ ଲେଖା,ا وديا ٓ ليكها,‎اوديآ ليكها‎,mismatch
-Oriya-InterIndic,ଓଡ଼ିଆ ଲେଖା, , ,match
-tr-Upper,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,match
-Korean-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Korean-Latin-BGN""; Invalid ID Korean-Latin-BGN",mismatch
-sat-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀̀̀̀̀̀̀̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́          Ꮒ,mismatch
-Georgian-Latin-BGN,საქართველო ქალაქი,sakartvelo kalaki,"Error: Unquoted - in ""Georgian-Latin-BGN""; Invalid ID Georgian-Latin-BGN",mismatch
-Jamo-Latin,ㅎㅏㄴㄱㅡㄹ,ㅎㅏㄴㄱㅡㄹ,ㅎㅏㄴㄱㅡㄹ,match
-Bengali-Gurmukhi,বাংলা লেখা,ਬਾਂਲਾ ਲੇਖਾ,ਬਾਂਲਾ ਲੇਖਾ,match
-pl-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ت  سافي ريسومي أ ö ü ß أ أ ذ þ أ ن,‎تسافي ريسومي أ ö ü ß أ أ ذ þ أ ن‎,mismatch
-Tamil-InterIndic,தமிழ் எழுத்து, , ,match
-si-si_FONIPA,සිංහල,siŋhəl,siŋhələ,mismatch
-ch-ch_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kæfé ɾésumé ä ö ü ß æ œ ð þ ł ɲ,kæfé ɾésumé ä ö ü ß æ œ ð þ ł ɲ,match
-Mongolian-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Mongolian-Latin-BGN""; Invalid ID Mongolian-Latin-BGN",mismatch
-si-si_Latn,සිංහල,siṁhal,siṁhala,mismatch
-la-la_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafɛ rɛsʊmɛ ä ö ü ß aj oj ð þ ł ñ,kafɛ rɛsʊmɛ ä ö ü ß aj oj ð þ ł ñ,match
-it-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé ä ö ü ß æ œ ð þ ł ñ,カフェ・レズメ・ア・オ・ウ・ß・æ・œ・ð・þ・ł・ン,mismatch
-Kannada-Bengali,ಕನ್ನಡ ಬರಹ,কন্নড বরহ,কন্নড বরহ,match
-es_FONIPA-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cアフé ルéスムé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cアフé ルéスンé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-yo-yo_BJ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-Gurmukhi-Devanagari,ਪੰਜਾਬੀ ਲਿਖਤ,पजाबी लिखत,पजाबी लिखत,match
-InterIndic-Devanagari,हिन्दी,हिन्दी,हिन्दी,match
-Telugu-Oriya,తెలుగు రాత,ତେଲୁଗୁ ରାତ,ତେଲୁଗୁ ରାତ,match
-Tamil-Gurmukhi,தமிழ் எழுத்து,ਤਮਿਲ਼੍ ਏਲ਼ੁਤ੍ਤੁ,ਤਮਿਲ਼੍ ਏਲ਼ੁਤ੍ਤੁ,match
-ky-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎چافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-az-Upper,Azərbaycan dili,AZƏRBAYCAN DİLİ,AZƏRBAYCAN DİLİ,match
-am-Ethi-t-d0-morse,ኢትዮጵያ,$አ $ሣልስ$ተ $ሳድስ$የ $ሳብዕ$ጰ $ሳድስ$የ $ራብዕ,"Error: Unquoted - in ""am-Ethi-t-d0-morse""; Invalid ID am-Ethi-t-d0-morse",mismatch
-pl-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Ꮨ̀̀ᏌᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀Ꮻ̀Ꮒ,ᏣᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ  Ꮻ Ꮒ,mismatch
-Turkmen-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Turkmen-Latin-BGN""; Invalid ID Turkmen-Latin-BGN",mismatch
-pl-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ت  سافه ریسومه آ ö ü ß ا ا ذ þ او ن,‎تسافه ریسومه آ ö ü ß ا ا ذ þ او ن‎,mismatch
-Gujarati-Oriya,ગુજરાતી લખાણ,ଗୁଜରାତୀ ଲଖାଣ,ଗୁଜରାତୀ ଲଖାଣ,match
-cs-ko,český jazyk,트͡셰스키야지크,체스키야지크,mismatch
-Kannada-Tamil,ಕನ್ನಡ ಬರಹ,கந்நட பரஹ,கந்நட பரஹ,match
-Syriac-Latin,ܣܘܪܝܝܐ,swryyʾ,swryyʾ,match
-und-Ethi-t-und-latn-m0-ies-jes-1964,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn-m0-ies-jes-1964""; Invalid ID und-Ethi-t-und-latn-m0-ies-jes-1964",mismatch
-Georgian-Latin-BGN_1981,საქართველო ქალაქი,sak’art’velo k’alak’i,"Error: Unquoted - in ""Georgian-Latin-BGN_1981""; Invalid ID Georgian-Latin-BGN_1981",mismatch
-Latin-Bopomofo,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜ˙&Pㄧ˙ㄋ˙ㄧㄣ˙-Nㄨ˙ㄇㄜ˙ㄖ˙ㄘPㄧ˙ㄋ˙ㄧㄣ˙(́) ㄖㄜ˙&Pㄧ˙ㄋ˙ㄧㄣ˙-Nㄨ˙ㄇㄜ˙ㄖ˙ㄘPㄧ˙ㄋ˙ㄧㄣ˙(́)ㄙㄨ˙ㄇㄜ˙&Pㄧ˙ㄋ˙ㄧㄣ˙-Nㄨ˙ㄇㄜ˙ㄖ˙ㄘPㄧ˙ㄋ˙ㄧㄣ˙(́) Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜˊ ㄖㄜˊㄙㄨ˙ㄇㄜˊ Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-si-fa,සිංහල,سینگهل,‎سینگهله‎,mismatch
-hy_AREVMDA-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,mismatch
-ro-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ካፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþłን,ካፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
-InterIndic-Telugu,हिन्दी,हिन्दी,हिन्दी,match
-Latin-Gujarati,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ચફ઼ે́ રે́સુમે́ અ̈ ઓ̈ ઉ̈ ß æ œ ð þ ł ઞ્,ચફ઼ે́ રે́સુમે́ અ̈ ઓ̈ ઉ̈ ß Æ œ Ð þ Ł ઞ્,mismatch
-lt-Lower,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé ä ö ü ß æ œ ð þ ł ñ,café résumé ä ö ü ß æ œ ð þ ł ñ,match
-Fullwidth-Halfwidth,ＡＢＣＤＥ,ABCDE,ABCDE,match
-ro-ro_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafé résumé ä ö ü ß æ œ ð þ ł ñ,kafé résumé ä ö ü ß æ œ ð þ ł ñ,match
-es_419-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,,ካፌሬሱሜäöኡßኧœዝþłኝ,mismatch
-rm_SURSILV-rm_FONIPA_SURSILV,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafe resume ä ö ü ß æ œ ð þ ł ñ,kafe resume ä ö ü ß æ œ ð þ ł ñ,match
-az-Lower,Azərbaycan dili,azərbaycan dili,azərbaycan dili,match
-Myanmar-Latin,မြန်မာ စာ,မြန်မာ စာ,myanmar hcar,mismatch
-Han-Latin,漢字テスト,hànzìﾃｽﾄ,hàn zì テスト,mismatch
-und-Ethi-t-und-latn-m0-sera,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn-m0-sera""; Invalid ID und-Ethi-t-und-latn-m0-sera",mismatch
-ha-ha_NE,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-Greek-Latin,αβγδεζηθικλμ,abgdezēthiklm,abgdezēthiklm,match
-Latin-Katakana,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,カフェ́ レ́スメ́ ア̈ オ̈ ウ̈ ッス エ œ デ テー ł ン̃,カフェ́ レ́スメ́ ア̈ オ̈ ウ̈ ッス エ œ デ テー Ł ン̃,mismatch
-es-chr,español texto ñ,̀̀,ᎡᏍᏆᏃᎵᏖᏍᏙᏂ,mismatch
-Any-Publishing,café résumé ABC 123,café résumé ABC 123,café résumé ABC 123,match
-Armenian-Latin-BGN,Հայաստան երկիր,Hayastan yerkir,"Error: Unquoted - in ""Armenian-Latin-BGN""; Invalid ID Armenian-Latin-BGN",mismatch
-my-my_FONIPA,မြန်မာ ဘာသာ,mjàɴ.mà .bà.θà,mjàɴ.mà .bà.θà,match
-und-Ethi-t-und-latn-m0-lambdin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn-m0-lambdin""; Invalid ID und-Ethi-t-und-latn-m0-lambdin",mismatch
-Bulgarian-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Bulgarian-Latin-BGN""; Invalid ID Bulgarian-Latin-BGN",mismatch
-Japn-Latn,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Japn-Latn""; Illegal ID Japn-Latn",mismatch
-ch-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ከፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþłኝ,ከፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ኝ,mismatch
-und-Ethi-t-und-latn,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""und-Ethi-t-und-latn""; Invalid ID und-Ethi-t-und-latn",mismatch
-Malayalam-Arabic,മലയാളം എഴുത്ത്,مليارن يروتت,‎مليارن يروتت‎,mismatch
-ch-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-am-chr,ኢትዮጵያ,ᎯᏘᏲᏈᏈᏯ,ᎯᏘᏲᏈᏈᏯ,match
-dsb-dsb_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,t ͡ safé résumé ä ö ü ß æ œ ð þ v ñ,t͡safé résumé ä ö ü ß æ œ ð þ v ñ,mismatch
-ro-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-Latin-Armenian,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,match
-Oriya-Gurmukhi,ଓଡ଼ିଆ ଲେଖା,ਓਡ਼ਿਆ ਲੇਖਾ,ਓਡ਼ਿਆ ਲੇਖਾ,match
-Russian-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Russian-Latin-BGN""; Invalid ID Russian-Latin-BGN",mismatch
-ug-ug_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-hy-ar,հայերեն լեdelays,هاياران لاديلاوس,‎هاياران لاديلاوس‎,mismatch
-es-ja,español texto ñ,  ,エスパニョルテストɲ,mismatch
-Ethiopic-Ethiopic-Gurage,ኢትዮጵያ አዲስ,ኢትዮጵያ ኣዲስ,"Error: Unquoted - in ""Ethiopic-Ethiopic-Gurage""; Invalid ID Ethiopic-Ethiopic-Gurage",mismatch
-chr-chr_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-si-ar,සිංහල,سينْغهل,‎سينْغهل‎,mismatch
-Ethiopic-Latin-TekieAlibekit,ኢትዮጵያ አዲስ,$አለፍ $ሣልስ$ተ $ሳድስ$የ $ሳብዕ$ጰ $ሳድስ$የ $ራዕብ $አለፍ $ራዕብ$ደ $ሣልስ$ሰ $ሳድስ,"Error: Unquoted - in ""Ethiopic-Latin-TekieAlibekit""; Invalid ID Ethiopic-Latin-TekieAlibekit",mismatch
-Gurmukhi-Kannada,ਪੰਜਾਬੀ ਲਿਖਤ,ಪಜಾಬೀ ಲಿಖತ,ಪಜಾಬೀ ಲಿಖತ,match
-blt-fonipa-t-blt,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""blt-fonipa-t-blt""; Invalid ID blt-fonipa-t-blt",mismatch
-Tamil-Gujarati,தமிழ் எழுத்து,તમિળ઼્ એળ઼ુત્તુ,તમિળ઼્ એળ઼ુત્તુ,match
-Latin-Ethiopic,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cኧፍé ርéሱምé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-byn-Ethi-t-byn-latn-m0-xaleget,ብሊን ቋንቋ,ብሊን ቋንቋ,"Error: Unquoted - in ""byn-Ethi-t-byn-latn-m0-xaleget""; Invalid ID byn-Ethi-t-byn-latn-m0-xaleget",mismatch
-hy-hy_FONIPA,հայերեն լեdelays,hajɛɾɛn lɛdelays,hajɛɾɛn lɛdelays,match
-am-Ethi-t-am-brai,ኢትዮጵያ,ኢትዮጵያ,"Error: Unquoted - in ""am-Ethi-t-am-brai""; Invalid ID am-Ethi-t-am-brai",mismatch
-Tamil-ur,தமிழ் எழுத்து,تمیڑ یڑوتتو,‎تمير يروتتو‎,mismatch
-Devanagari-Malayalam,हिन्दी नमस्ते,ഹിന്ദീ നമസ്തേ,ഹിന്ദീ നമസ്തേ,match
-Thai-ThaiLogical,ภาษาไทย กรุงเทพ,ภาษาทไย กรุงทเพ,ภาษาทไย กรุงทเพ,match
-Gujarati-Gurmukhi,ગુજરાતી લખાણ,ਗੁਜਰਾਤੀ ਲਖਾਣ,ਗੁਜਰਾਤੀ ਲਖਾਣ,match
-ta-ta_FONIPA,தமிழ்,t̪amiɻ,t̪amiɻ,match
-Han-Spacedhan,漢字テスト,漢字ﾃｽﾄ,漢 字 テスト,mismatch
-Gujarati-Arabic,ગુજરાતી લખાણ,جوجراتي لكهان,‎جوجراتي لكهان‎,mismatch
-ch-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎬᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᎬᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
-es-am,español texto ñ,  ,ኤስፓኞልቴስቶኝ,mismatch
-Oriya-Devanagari,ଓଡ଼ିଆ ଲେଖା,ओड़िआ लेखा,ओड़िआ लेखा,match
-Gujarati-ur,ગુજરાતી લખાણ,گوجراتی لک ھان,‎جوجراتي لكهان‎,mismatch
-Oriya-Latin,ଓଡ଼ିଆ ଲେଖା,ōṛiā lēkhā,ōṛi&apos;ā lēkhā,mismatch
-Telugu-Malayalam,తెలుగు రాత,തെലുഗു രാത,തെലുഗു രാത,match
-Ethiopic-Latin-Xaleget,ኢትዮጵያ አዲስ,$ኢ$ተ $ሳድስ$የ $ሳብዕ$ጰ $ሳድስ$የ $ራዕብ $አ$ደ $ሣልስ$ሰ $ሳድስ,"Error: Unquoted - in ""Ethiopic-Latin-Xaleget""; Invalid ID Ethiopic-Latin-Xaleget",mismatch
-xh-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ጫፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþłን,ጫፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
-Hiragana-Katakana,あいうえおかきくけこ,アイウエオカキクケコ,アイウエオカキクケコ,match
-hy_AREVMDA-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
-es_FONIPA-es_419_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-Sinhala-Latin,සිංහල භාෂාව,siṅhala bhāshāva,"Error: Unquoted - in ""Sinhala-Latin""; Illegal ID Sinhala-Latin",mismatch
-Persian-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Persian-Latin-BGN""; Invalid ID Persian-Latin-BGN",mismatch
-es_419-zh,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,           ,卡费雷苏梅äö乌ßæœ德þłɲ,mismatch
-Cyrillic-Latin,абвгдежзиклм,abvgdežziklm,abvgdežziklm,match
-Devanagari-Gurmukhi,हिन्दी नमस्ते,ਹਿਨ੍ਦੀ ਨਮਸ੍ਤੇ,ਹਿਨ੍ਦੀ ਨਮਸ੍ਤੇ,match
-Simplified-Traditional,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-ru-ja,русский язык,ルッスキー ヤジク,ルッスキー ヤジク,match
-Bengali-Devanagari,বাংলা লেখা,बांला लेखा,बांला लेखा,match
-Telugu-ur,తెలుగు రాత,,"{:http_error, ""timeout""}",remote_error
-Ukrainian-Latin-BGN,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Ukrainian-Latin-BGN""; Invalid ID Ukrainian-Latin-BGN",mismatch
-ky-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,mismatch
-InterIndic-Kannada,हिन्दी,हिन्दी,हिन्दी,match
-Ethiopic-Latin-ALALOC,ኢትዮጵያ አዲስ,ʼ$ኢ$ተ $ሳድስ$የ $ሳብዕ$ጰ $ሳድስ$የ $ራዕብ $አ$ደ $ሣልስ$ሰ $ሳድስ,"Error: Unquoted - in ""Ethiopic-Latin-ALALOC""; Invalid ID Ethiopic-Latin-ALALOC",mismatch
-es_FONIPA-zh,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,c阿夫é 尔é苏姆é Ä Ö Ü ß Æ œ Ð þ Ł ñ,c阿弗é 尔é苏姆é Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
-xh-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,mismatch
-kk-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎چافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-IPA-XSampa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"cafe_H re_Hsume_H A_"" O_"" U_"" ß Æ 9 Ð þ Ł n~","cafe_H re_Hsume_H A_"" O_"" U_"" ß Æ 9 Ð þ Ł n~",match
-az-Title,Azərbaycan dili,A&Any-Upper(z)&Any-Upper(ə)&Any-Upper(r)&Any-Upper(b)&Any-Upper(a)&Any-Upper(y)&Any-Upper(c)&Any-Upper(a)&Any-Upper(n) &Any-Upper(d)İ&Any-Upper(l)İ,Azərbaycan Dili,mismatch
-hy_AREVMDA-hy_AREVMDA_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé ä ö ü ß æ œ ð þ ł ñ,café résumé ä ö ü ß æ œ ð þ ł ñ,match
-sgw-Ethi-t-und-ethi,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""sgw-Ethi-t-und-ethi""; Invalid ID sgw-Ethi-t-und-ethi",mismatch
-InterIndic-Latin,हिन्दी,हिन्दी,हिन्दी,match
-InterIndic-Gujarati,हिन्दी,हिन्दी,हिन्दी,match
-es_FONIPA-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cአፍé ርéሱምé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cአፍé ርéሱምé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-Gujarati-Kannada,ગુજરાતી લખાણ,ಗುಜರಾತೀ ಲಖಾಣ,ಗುಜರಾತೀ ಲಖಾಣ,match
-Hangul-Latin,한글 테스트 가나다,hangeul teseuteu ganada,hangeul teseuteu ganada,match
-Tamil-Oriya,தமிழ் எழுத்து,ତମିଳ଼୍ ଏଳ଼ୁତ୍ତୁ,ତମିଳ଼୍ ଏଳ଼ୁତ୍ତୁ,match
-InterIndic-Oriya,हिन्दी,हिन्दी,हिन्दी,match
-Gujarati-Bengali,ગુજરાતી લખાણ,গুজরাতী লখাণ,গুজরাতী লখাণ,match
-Gujarati-Tamil,ગુજરાતી લખાણ,குஜராதீ லகாண,குஜராதீ லகாண,match
-CanadianAboriginal-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-sat-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي Ä Ö Ü ß Æ أ Ð þ Ł ن,‎تْشافي ريسومي Ä Ö Ü ß Æ أ Ð þ Ł ن‎,mismatch
-am-am_FONIPA,ኢትዮጵያ,ʔi.tɨ.jo.pʼɨ.ja,ʔi.tɨ.jo.pʼɨ.ja,match
-Oriya-Bengali,ଓଡ଼ିଆ ଲେଖା,ওড়িআ লেখা,ওড়িআ লেখা,match
-si-am,සිංහල,ሲንግሀል,ሲንግሀለ,mismatch
-ia-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,كافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎كافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,mismatch
-tlh-tlh_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cɑfé résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cɑfé résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
-Telugu-Kannada,తెలుగు రాత,ತೆಲುಗು ರಾತ,ತೆಲುಗು ರಾತ,match
-sk-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ت  سافی ریسومی ا ö ü ß ا ا ذ þ ł ن,‎تسافی ریسومی ا ö ü ß ا ا ذ þ ł ن‎,mismatch
-my-t-my-d0-zawgyi,မြန်မာ ဘာသာ,မြန်မာ ဘာသာ,"Error: Unquoted - in ""my-t-my-d0-zawgyi""; Invalid ID my-t-my-d0-zawgyi",mismatch
-es-fa,español texto ñ,  ,‎ایسپانولتیستون‎,mismatch
-Telugu-InterIndic,తెలుగు రాత, , ,match
-lt-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,&Any-Upper(c)&Any-Upper(a)&Any-Upper(f)&Any-Upper(e)́ &Any-Upper(r)&Any-Upper(e)́&Any-Upper(s)&Any-Upper(u)&Any-Upper(m)&Any-Upper(e)́ Ä Ö Ü &Any-Upper(ß) Æ &Any-Upper(œ) Ð &Any-Upper(þ) Ł &Any-Upper(n)̃,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,mismatch
-es_419-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,           ,カフェレスメäöウßæœドþłɲ,mismatch
-Kannada-Gurmukhi,ಕನ್ನಡ ಬರಹ,ਕਨ੍ਨਡ ਬਰਹ,ਕਨ੍ਨਡ ਬਰਹ,match
-InterIndic-ur,हिन्दी,हिन्दी,हिन्दी,match
-Hant-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,"Error: Unquoted - in ""Hant-Latin""; Illegal ID Hant-Latin",mismatch
-Gurmukhi-ur,ਪੰਜਾਬੀ ਲਿਖਤ,پجابی لیک ھت,‎بجابي ليكهت‎,mismatch
-Kannada-InterIndic,ಕನ್ನಡ ಬರಹ, , ,match
-Gurmukhi-Telugu,ਪੰਜਾਬੀ ਲਿਖਤ,పజాబీ లిఖత,పజాబీ లిఖత,match
-sat-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه Ä Ö Ü ß Æ ا Ð þ Ł ن,‎چافه ریسومه Ä Ö Ü ß Æ ا Ð þ Ł ن‎,mismatch
-sat-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ቻፌ́ሬ́ሱሜ́ÄÖÜßÆœÐþŁን,ቻፌ ሬሱሜ Ä Ö Ü ß Æ œ Ð þ Ł ን,mismatch
-hy_AREVMDA-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎چافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-cs-ja,český jazyk,チェスキー・ヤジク,チェスキー・ヤジク,match
-ia-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,mismatch
-kk-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
-Oriya-Gujarati,ଓଡ଼ିଆ ଲେଖା,ઓડ઼િઆ લેખા,ઓડ઼િઆ લેખા,match
-Thai-Latin,ภาษาไทย กรุงเทพ,p̣hās̄ʹāthịy; krungtheph,p̣hās̄ʹā thịy krungtheph,mismatch
-Bengali-Arabic,বাংলা লেখা,بانلا ليكها,‎بانلا ليكها‎,mismatch
-Lao-Latin,ພາສາລາວ,phasalav,"Error: Unquoted - in ""Lao-Latin""; Illegal ID Lao-Latin",mismatch
-pl-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ト サフé ルéスムé ä ö ü ß æ œ ð þ ウ ñ,ツァフé ルéスムé ä ö ü ß æ œ ð þ ウ ñ,mismatch
-Devanagari-Latin,हिन्दी नमस्ते,hindī namastē,hindī namastē,match
-cs-am,český jazyk,ቸስኪ፞ያዝክ,ቸስኪ፞ ያዝክ,mismatch
-ky-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ቻፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþłን,ቻፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
 pl-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ጻፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþውን,ጻፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ው ን,mismatch
-my-fa,မြန်မာ ဘာသာ,میانگما باثا,‎میانگما باثا‎,mismatch
-InterIndic-Bengali,हिन्दी,हिन्दी,हिन्दी,match
-Malayalam-Telugu,മലയാളം എഴുത്ത്,మలయాళం ఎళుత్త్,మలయాళం ఎళుత్త్,match
+Kannada-InterIndic,ಕನ್ನಡ ಬರಹ, , ,match
+Telugu-Malayalam,తెలుగు రాత,തെലുഗു രാത,തെലുഗു രാത,match
+hy-am,հայերեն լեdelays,ሃየረንለዴላይስ,ሃየረን ለዴላይስ,mismatch
+es-am,español texto ñ,ኤስፓኞልቴስቶኝ,ኤስፓኞልቴስቶኝ,match
+Sinhala-Latin,සිංහල භාෂාව,siṅhala bhāshāva,"Error: Unquoted - in ""Sinh-Latn""; Illegal ID Sinh-Latn",mismatch
+si-am,සිංහල,ሲንግሀል,ሲንግሀለ,mismatch
+Telugu-InterIndic,తెలుగు రాత, , ,match
+Malayalam-InterIndic,മലയാളം എഴുത്ത്, , ,match
+Devanagari-Oriya,हिन्दी नमस्ते,ହିନ୍ଦୀ ନମସ୍ତେ,ହିନ୍ଦୀ ନମସ୍ତେ,match
+Devanagari-Malayalam,हिन्दी नमस्ते,ഹിന്ദീ നമസ്തേ,ഹിന്ദീ നമസ്തേ,match
+Latin-Thai,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFE๊ RE๊SUME๊ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,จะเฟ๊เร๊ซุเม๊ะ̈ โ̈ ุ̈ ß แ œ ð þ ฦน̃,mismatch
+InterIndic-Tamil,हिन्दी,हिन्दी,हिन्दी,match
+Georgian-Latin,საქართველო ქალაქი,sakartvelo kalaki,sakartvelo kalaki,match
+Latin-Ethiopic,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cኧፍé ርéሱምé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
+Kannada-ur,ಕನ್ನಡ ಬರಹ,کننڈ بره,‎کننڈ بره‎,match
+uz_Cyrl-uz_Latn,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+zu-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ጫፌ́ሬ́ሱሜ́አ̈ኦ̈ኡ̈ßኧœዝþłን,ጫፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
+tr-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,match
+si-ar,සිංහල,سينْغهل,‎سينْغهل‎,match
+ch-ch_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kæfé ɾésumé ä ö ü ß æ œ ð þ ł ɲ,kæfé ɾésumé ä ö ü ß æ œ ð þ ł ɲ,match
+si-si_Latn,සිංහල,siṁhal,siṁhala,mismatch
+Telugu-Oriya,తెలుగు రాత,ତେଲୁଗୁ ରାତ,ତେଲୁଗୁ ରାତ,match
+es_419-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎧᏪᎴᏑᎺᎠᎣᏫᎥᏗᏂ,ᎧᏪᎴᏑᎺᎠᎣᎤᎥᏗᏂ,mismatch
+Telugu-Gujarati,తెలుగు రాత,તેલુગુ રાત,તેલુગુ રાત,match
+InterIndic-Telugu,हिन्दी,हिन्दी,हिन्दी,match
+Kannada-Latin,ಕನ್ನಡ ಬರಹ,kannaḍa baraha,kannaḍa baraha,match
+es-es_FONIPA,español texto ñ,espaɲoltestoɲ,espaɲoltestoɲ,match
+Thai-ThaiLogical,ภาษาไทย กรุงเทพ,ภาษาทไย กรุงทเพ,ภาษาทไย กรุงทเพ,match
+ThaiLogical-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+CanadianAboriginal-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+InterIndic-Latin,हिन्दी,हिन्दी,हिन्दी,match
+Kannada-Bengali,ಕನ್ನಡ ಬರಹ,কন্নড বরহ,কন্নড বরহ,match
+kk-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
+Kannada-Gujarati,ಕನ್ನಡ ಬರಹ,કન્નડ બરહ,કન્નડ બરહ,match
+lt-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,Café Résumé Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,match
+Gurmukhi-InterIndic,ਪੰਜਾਬੀ ਲਿਖਤ, , ,match
+Syriac-Latin,ܣܘܪܝܝܐ,swryyʾ,swryyʾ,match
+Bengali-Oriya,বাংলা লেখা,ବାଂଲା ଲେଖା,ବାଂଲା ଲେଖା,match
+pl-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏣᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀Ꮻ̀Ꮒ,ᏣᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ  Ꮻ Ꮒ,mismatch
+cs_FONIPA-ko,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,타프에́르에́수므에́아̈오̈우̈ßæœðþł느̃,타프에́르에́수므에́아̈오̈우̈ßÆœÐþŁ느̃,mismatch
+Telugu-Tamil,తెలుగు రాత,தெலுகு ராத,தெலுகு ராத,match
+Tamil-InterIndic,தமிழ் எழுத்து, , ,match
+am-chr,ኢትዮጵያ,ᎯᏘᏲᏈᏈᏯ,ᎯᏘᏲᏈᏈᏯ,match
+Devanagari-Tamil,हिन्दी नमस्ते,ஹிந்தீ நமஸ்தே,ஹிந்தீ நமஸ்தே,match
+rm_SURSILV-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,كافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎كافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,match
+my-my_FONIPA,မြန်မာ ဘာသာ,mjàɴ.mà .bà.θà,mjàɴ.mà .bà.θà,match
+es_419-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,كافيريسومياöوßااذþłن,‎كافيريسومياöوßااذþłن‎,match
+Latin-Armenian,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,match
+es-ar,español texto ñ,يسبانولتيستون,‎أسبانولتيستون‎,mismatch
+hy_AREVMDA-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
+el-Lower,ελληνικά κείμενο,ελληνικά κείμενο,ελληνικά κείμενο,match
+Latin-Bopomofo,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜˊ ㄖㄜˊㄙㄨ˙ㄇㄜˊ Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜˊ ㄖㄜˊㄙㄨ˙ㄇㄜˊ Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+Han-Latin,漢字テスト,hànzìﾃｽﾄ,hàn zì テスト,mismatch
+Gujarati-Arabic,ગુજરાતી લખાણ,جوجراتي لكهان,‎جوجراتي لكهان‎,match
+nl-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Café Résumé Ä Ö Ü Ss Æ Œ Ð Þ Ł Ñ,Café Résumé Ä Ö Ü Ss Æ Œ Ð Þ Ł Ñ,match
+Cyrillic-Latin,абвгдежзиклм,abvgdežziklm,abvgdežziklm,match
+my-ar,မြန်မာ ဘာသာ,ميانْغما باثا,‎ميانْغما باثا‎,match
+Bengali-Malayalam,বাংলা লেখা,ബാംലാ ലേഖാ,ബാംലാ ലേഖാ,match
+es_FONIPA-es_419_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+my-am,မြန်မာ ဘာသာ,ምያ̀ጝማ̀ባ̀ሳ̀,ምያጝማ ባሳ,mismatch
+ky-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,match
+Gujarati-Devanagari,ગુજરાતી લખાણ,गुजराती लखाण,गुजराती लखाण,match
+ia-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+rm_SURSILV-rm_FONIPA_SURSILV,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafe resume ä ö ü ß æ œ ð þ ł ñ,kafe resume ä ö ü ß æ œ ð þ ł ñ,match
+hy_AREVMDA-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,match
+ug-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
+es_419-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ካፌሬሱሜአ̈ኦ̈ውßኧœዝþłኝ,ካፌሬሱሜäöኡßኧœዝþłኝ,mismatch
+Malayalam-Kannada,മലയാളം എഴുത്ത്,,"{:http_error, ""timeout""}",remote_error
+Oriya-Telugu,ଓଡ଼ିଆ ଲେଖା,ఓడిఆ లేఖా,ఓడిఆ లేఖా,match
+Gurmukhi-Devanagari,ਪੰਜਾਬੀ ਲਿਖਤ,पजाबी लिखत,पजाबी लिखत,match
+eo-eo_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,t͡safe resume ä ö ü ß æ œ ð þ ł ñ,t͡safe resume ä ö ü ß æ œ ð þ ł ñ,match
+Gurmukhi-Telugu,ਪੰਜਾਬੀ ਲਿਖਤ,పజాబీ లిఖత,పజాబీ లిఖత,match
+sk-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تسافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تسافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,match
+Gujarati-Bengali,ગુજરાતી લખાણ,গুজরাতী লখাণ,গুজরাতী লখাণ,match
+Oriya-Latin,ଓଡ଼ିଆ ଲେଖା,ōṛiā lēkhā,ōṛi&apos;ā lēkhā,mismatch
+el-Upper,ελληνικά κείμενο,ΕΛΛΗΝΙΚΑ ΚΕΙΜΕΝΟ,ΕΛΛΗΝΙΚΑ ΚΕΙΜΕΝΟ,match
+xh-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch
+sat-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́̀Ꮄ́ᏑᎺ́̀̀̀̀̀̀̀̀̀̀Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́          Ꮒ,mismatch
+xh-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,نچافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎نچافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+ch-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+chr-chr_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
+Tamil-Telugu,தமிழ் எழுத்து,తమిళ్ ఎళుత్తు,తమిళ్ ఎళుత్తు,match
+Hebrew-Latin,שלום עולם,şlwm ʻwlm,şlwm ʻwlm,match
+InterIndic-Arabic,हिन्दी,हिन्दी,हिन्दी,match
+Telugu-Kannada,తెలుగు రాత,ತೆಲುಗು ರಾತ,ತೆಲುಗು ರಾತ,match
+hy-fa,հայերեն լեdelays,هایاران لادیلاوس,‎هایاران لادیلاوس‎,match
+Gujarati-ur,ગુજરાતી લખાણ,گوجراتی لکھان,‎گوجراتی لکھان‎,match
+sat-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ቻፌ́ሬ́ሱሜ́ÄÖÜßÆœÐþŁን,ቻፌ ሬሱሜ Ä Ö Ü ß Æ œ Ð þ Ł ን,mismatch
+Latin-Kannada,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ಚೞೆ́ ರೆ́ಸುಮೆ́ ಅ̈ ಒ̈ ಉ̈ ß æ œ ð þ ł ಞ್,ಚೞೆ́ ರೆ́ಸುಮೆ́ ಅ̈ ಒ̈ ಉ̈ ß Æ œ Ð þ Ł ಞ್,mismatch
+Malayalam-Bengali,മലയാളം എഴുത്ത്,মলযালং এলুত্ত্,মলযালং এলুত্ত্,match
+Gujarati-Tamil,ગુજરાતી લખાણ,குஜராதீ லகாண,குஜராதீ லகாண,match
+Oriya-InterIndic,ଓଡ଼ିଆ ଲେଖା, , ,match
+Greek-Latin,αβγδεζηθικλμ,abgdezēthiklm,abgdezēthiklm,match
+Devanagari-Kannada,हिन्दी नमस्ते,ಹಿನ್ದೀ ನಮಸ್ತೇ,ಹಿನ್ದೀ ನಮಸ್ತೇ,match
+Bengali-ur,বাংলা লেখা,بانلا لیکھا,‎بانلا لیکھا‎,match
+Gurmukhi-Bengali,ਪੰਜਾਬੀ ਲਿਖਤ,পজাবী লিখত,পজাবী লিখত,match
+Latin-Gurmukhi,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß æ œ ð þ ł ਞ੍,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß Æ œ Ð þ Ł ਞ੍,mismatch
+ro-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎کافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+eo-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏣᏪ̀ᎴᏑᎺ̀Ꭰ̀Ꭳ̀Ꭴ̀̀Ꭵ̀̀Ꮧ̀̀̀Ꮒ,ᏣᏪ ᎴᏑᎺ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,mismatch

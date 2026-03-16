@@ -311,8 +311,9 @@ defmodule SpotCheck do
   end
 
   # Transform IDs the ICU demo rejects even after BCP47 conversion.
+  # Sinh-Latn is rejected with "Unquoted - in Sinh-Latn; Illegal ID".
   @icu_demo_rejected MapSet.new(~w(
-    Japn-Latn mn-mn_Latn-MNS ru_Latn-ru-BGN gz-Ethi-t-und-sarb
+    Japn-Latn Sinh-Latn mn-mn_Latn-MNS ru_Latn-ru-BGN gz-Ethi-t-und-sarb
   ))
 
   # Returns true if the ICU demo site is known to support this transform ID.

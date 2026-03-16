@@ -8,7 +8,7 @@ defmodule Unicode.Transform do
   and support operations such as transliteration between scripts,
   normalization, and case mapping.
 
-  ## Usage
+  ## Examples
 
       iex> Unicode.Transform.transform("Ä Ö Ü ß", from: :latin, to: :ascii)
       {:ok, "A O U ss"}
@@ -411,14 +411,28 @@ defmodule Unicode.Transform do
   @spec do_transform(String.t(), String.t(), :forward | :reverse) ::
           {:ok, String.t()} | {:error, term()}
   def do_transform(string, transform_id, direction) do
-    case get_compiled_transform(transform_id, direction) do
-      {:ok, compiled} ->
-        {:ok, Engine.execute(string, compiled)}
+    case compiled_module_transform(string, transform_id, direction) do
+      {:ok, _} = result ->
+        result
 
-      {:error, _} = error ->
-        error
+      :not_found ->
+        case get_compiled_transform(transform_id, direction) do
+          {:ok, compiled} ->
+            {:ok, Engine.execute(string, compiled)}
+
+          {:error, _} = error ->
+            error
+        end
     end
   end
+
+  # Compiled module fast paths for common transforms.
+  # These bypass the cursor-based engine entirely.
+  defp compiled_module_transform(string, "Latin-ASCII", :forward) do
+    {:ok, Unicode.Transform.LatinAscii.transform(string)}
+  end
+
+  defp compiled_module_transform(_string, _transform_id, _direction), do: :not_found
 
   # Scripts that should be skipped when detecting — they don't represent
   # a meaningful source script for transliteration.
