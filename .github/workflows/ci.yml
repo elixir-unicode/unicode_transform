@@ -93,7 +93,7 @@ jobs:
     # This step fails if something was found unformatted.
     # Customize this step as desired.
     - name: Check Formatting
-      run: mixformat --check-formatted
+      run: mix format --check-formatted
 
     # Step: Execute the tests without the NIF
     - name: Run tests without NIF

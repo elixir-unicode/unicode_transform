@@ -28,7 +28,7 @@ defmodule Unicode.Transform do
 
   The string is used as-is. If the ID is not found as a built-in or
   in the CLDR transform files, and it has the form `"Any-Target"`,
-  the library falls back to automatic script detection (see below).
+  `unicode_transform` falls back to automatic script detection (see below).
 
   #### Script-based (`:from` / `:to` options)
 
@@ -40,12 +40,12 @@ defmodule Unicode.Transform do
      (e.g., `Any-NFC`, `Any-Upper`), it is dispatched directly
      to the corresponding `String` function.
 
-  2. **Forward file lookup** — the library looks for a CLDR XML
+  2. **Forward file lookup** — `unicode_transform` looks for a CLDR XML
      file matching `"From-To"` (e.g., `"Greek-Latin"`), checking
      the alias index built from file metadata.
 
   3. **Reverse file lookup** — if no forward match is found,
-     the library looks for `"To-From"` and marks the direction
+     `unicode_transform` looks for `"To-From"` and marks the direction
      as `:reverse` (e.g., `to: :greek, from: :latin` resolves
      to `"Greek-Latin"` in reverse).
 
@@ -59,7 +59,7 @@ defmodule Unicode.Transform do
   ID is used, `unicode_transform` first checks for a specific `Any-X` transform
   (built-in or file-based, such as `Any-Accents` or `Any-Publishing`).
 
-  If no specific `Any-X` transform exists, the library falls back to
+  If no specific `Any-X` transform exists, `unicode_transform` falls back to
   **automatic script detection**: it calls `Unicode.script_dominance/1`
   to identify the scripts present in the input string, then chains
   a `{detected_script}-X` transform for each detected script. Common,

@@ -1,6 +1,6 @@
 # Available Transforms
 
-This document lists all transforms available in `unicode_transform`, including the `:from` and `:to` option atoms, direct transform IDs for the `:transform` option, and the 394 CLDR XML rule sets that ship with the library.
+This document lists all transforms available in `unicode_transform`, including the `:from` and `:to` option atoms, direct transform IDs for the `:transform` option, and the 394 CLDR XML rule sets that ship with `unicode_transform`.
 
 ## Using transforms
 
@@ -67,7 +67,7 @@ iex> Unicode.Transform.available_transforms() |> Enum.take(5)
 ["Amharic-Latin-BGN", "Any-Accents", "Any-Publishing", "Arabic-Latin-BGN", "Arabic-Latin"]
 ```
 
-This returns a sorted list of all transform IDs the library can resolve.
+This returns a sorted list of all transform IDs `unicode_transform` can resolve.
 
 ## Built-in transforms
 

@@ -159,7 +159,7 @@ iex> Unicode.Transform.available_transforms() |> Enum.take(5)
 
 ## How transform resolution works
 
-When you call `Unicode.Transform.transform/2`, the library resolves the transform name, compiles its rules, and executes them against the input string.
+When you call `Unicode.Transform.transform/2`, `unicode_transform` resolves the transform name, compiles its rules, and executes them against the input string.
 
 ### Resolution
 
@@ -169,7 +169,7 @@ Transform names are resolved in order of priority:
 
 2. **CLDR XML alias match** — each of the 394 XML files declares forward and backward aliases in its metadata. The alias `"Greek-Latin"` points to `priv/transforms/Greek-Latin.xml` in the forward direction. The backward alias `"Latin-Greek"` points to the same file but compiles in the reverse direction. Aliases are indexed into a `persistent_term` map on first use.
 
-3. **Filename match** — if no alias matches, the library looks for a file named `priv/transforms/<transform-id>.xml`.
+3. **Filename match** — if no alias matches, `unicode_transform` looks for a file named `priv/transforms/<transform-id>.xml`.
 
 4. **Reverse direction of bidirectional files** — for files with `direction="both"`, the reverse transform ID is also indexed (e.g., `Latin-ConjoiningJamo.xml` with `direction="both"` is also reachable as `ConjoiningJamo-Latin`).
 
@@ -261,7 +261,7 @@ iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin)
 ```
 
 When `:backend` is `:nif` and ICU does not recognise the transform ID (for
-example, CLDR-specific transforms like `"Armenian-Latin-BGN"`), the library
+example, CLDR-specific transforms like `"Armenian-Latin-BGN"`), `unicode_transform`
 falls back to the Elixir engine automatically.
 
 ### Checking availability
