@@ -38,9 +38,6 @@ jobs:
             elixir: "1.20.0-rc.1-otp-28"
             lint: true
             
-    - name: Install build tools
-      run: "sudo apt-get update; sudo apt-get -y build-essential"
-            
     # Step: Setup Elixir + Erlang image as the base.
     - name: Set up Elixir
       uses: erlef/setup-beam@v1
