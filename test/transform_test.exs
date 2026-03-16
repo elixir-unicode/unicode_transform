@@ -750,4 +750,96 @@ defmodule Unicode.TransformTest do
       assert Unicode.Transform.to_bcp47_transform_id("de-ASCII") == "de-ASCII"
     end
   end
+
+  describe "Any- transform resolution" do
+    # Builtins: Any-Upper, Any-NFC, etc. should still resolve directly.
+
+    test "Any-Upper still resolves to builtin via :from/:to" do
+      assert {:ok, "HELLO"} = Unicode.Transform.transform("hello", from: :any, to: :upper)
+    end
+
+    test "Any-Upper still resolves to builtin via transform: string" do
+      assert {:ok, "HELLO"} = Unicode.Transform.transform("hello", transform: "Any-Upper")
+    end
+
+    test "Any-NFC still resolves to builtin" do
+      input = "A\u0308"
+      assert {:ok, "Ä"} = Unicode.Transform.transform(input, from: :any, to: :nfc)
+    end
+
+    test "Any-NFD still resolves to builtin" do
+      assert {:ok, "A\u0308"} = Unicode.Transform.transform("Ä", from: :any, to: :nfd)
+    end
+
+    test "Any-Lower still resolves to builtin" do
+      assert {:ok, "hello"} = Unicode.Transform.transform("HELLO", from: :any, to: :lower)
+    end
+
+    test "Any-Title still resolves to builtin" do
+      assert {:ok, "Hello World"} =
+               Unicode.Transform.transform("hello world", from: :any, to: :title)
+    end
+
+    test "Any-Remove still resolves to builtin" do
+      assert {:ok, ""} = Unicode.Transform.transform("hello", from: :any, to: :remove)
+    end
+
+    test "Any-Null still resolves to builtin" do
+      assert {:ok, "hello"} = Unicode.Transform.transform("hello", from: :any, to: :null)
+    end
+
+    # File-based Any- transforms should still resolve to their files.
+
+    test "Any-Accents still resolves to file-based transform" do
+      assert {:ok, _result} = Unicode.Transform.transform("abc", transform: "Any-Accents")
+    end
+
+    test "Any-Publishing still resolves to file-based transform" do
+      assert {:ok, _result} = Unicode.Transform.transform("abc", transform: "Any-Publishing")
+    end
+
+    # Any-X where no specific Any-X exists should detect the input script
+    # and resolve to {detected_script}-X.
+
+    test "Any-Latin via :from/:to detects Greek and transforms" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ", from: :any, to: :latin)
+      assert result =~ ~r/^[a-z]/
+    end
+
+    test "Any-Latin via transform: string detects Greek and transforms" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ", transform: "Any-Latin")
+      assert result =~ ~r/^[a-z]/
+    end
+
+    test "Any-Latin detects Cyrillic and transforms" do
+      assert {:ok, result} = Unicode.Transform.transform("абвг", from: :any, to: :latin)
+      assert result =~ ~r/^[a-z]/
+    end
+
+    test "Any-Latin with mixed Greek and Cyrillic transforms both scripts" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ абвг", from: :any, to: :latin)
+      # Both Greek and Cyrillic should be transliterated
+      refute result =~ ~r/[α-ωа-я]/
+    end
+
+    test "Any-Latin with Devanagari input detects and transforms" do
+      assert {:ok, result} = Unicode.Transform.transform("नमस्ते", from: :any, to: :latin)
+      assert result =~ ~r/^[a-z]/i
+    end
+
+    test "Any-Latin with pure ASCII input returns error (no Latin-Latin transform)" do
+      assert {:error, {:unknown_transform, "Latin-Latin"}} =
+               Unicode.Transform.transform("hello", from: :any, to: :latin)
+    end
+
+    test "Any-ASCII via transform: string detects Latin and transforms" do
+      assert {:ok, result} = Unicode.Transform.transform("café", transform: "Any-ASCII")
+      assert result == "cafe"
+    end
+
+    test "Any-Latin via BCP47 atom :latn" do
+      assert {:ok, result} = Unicode.Transform.transform("αβγδ", from: :any, to: :latn)
+      assert result =~ ~r/^[a-z]/
+    end
+  end
 end

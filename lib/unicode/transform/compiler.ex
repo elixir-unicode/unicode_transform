@@ -66,8 +66,8 @@ defmodule Unicode.Transform.Compiler do
   A CompiledTransform struct.
 
   """
-  @spec compile([struct()], :forward | :reverse, function()) :: CompiledTransform.t()
-  def compile(rules, direction, resolve_transform \\ fn _, _ -> nil end) do
+  @spec compile([struct()], :forward | :reverse, function(), map()) :: CompiledTransform.t()
+  def compile(rules, direction, resolve_transform \\ fn _, _ -> nil end, context \\ %{}) do
     variables = collect_variables(rules)
     filter = extract_filter(rules, direction)
     inverse_filter = extract_filter(rules, invert_direction(direction))
@@ -78,7 +78,7 @@ defmodule Unicode.Transform.Compiler do
       |> resolve_variables(variables)
       |> group_into_passes()
       |> maybe_reverse_passes(direction)
-      |> compile_passes(resolve_transform, direction)
+      |> compile_passes(resolve_transform, direction, context)
 
     %CompiledTransform{
       passes: passes,
@@ -326,14 +326,18 @@ defmodule Unicode.Transform.Compiler do
 
   defp maybe_reverse_passes(passes, :forward), do: passes
 
-  # Compile passes into executable form
-  defp compile_passes(passes, _resolve_transform, _direction) do
+  # Compile passes into executable form.
+  # Context contains source/target script names from the parent transform,
+  # used to narrow bare script names in sub-transform references.
+  defp compile_passes(passes, _resolve_transform, _direction, context) do
     Enum.map(passes, fn
       %Transform{forward: name} ->
-        if Builtin.builtin?(name) do
-          {:builtin, name}
+        resolved = narrow_transform_name(name, context)
+
+        if Builtin.builtin?(resolved) do
+          {:builtin, resolved}
         else
-          {:transform, name}
+          {:transform, resolved}
         end
 
       conversions when is_list(conversions) ->
@@ -341,6 +345,31 @@ defmodule Unicode.Transform.Compiler do
         {:conversions, compiled}
     end)
   end
+
+  # Narrow a bare script name using the parent transform's source/target context.
+  # For example, ::Latin; inside Greek-Latin.xml resolves to "Greek-Latin".
+  # Names that are already compound (contain "-") or are builtins pass through unchanged.
+  defp narrow_transform_name(name, %{source: source, target: target})
+       when is_binary(source) and source != "" and is_binary(target) and target != "" do
+    cond do
+      Builtin.builtin?(name) ->
+        name
+
+      String.contains?(name, "-") ->
+        name
+
+      String.downcase(name) == String.downcase(target) ->
+        "#{source}-#{target}"
+
+      String.downcase(name) == String.downcase(source) ->
+        "#{target}-#{source}"
+
+      true ->
+        name
+    end
+  end
+
+  defp narrow_transform_name(name, _context), do: name
 
   # Compile a single conversion rule into a matcher
   defp compile_conversion(%Conversion{left: left, right: right}) do

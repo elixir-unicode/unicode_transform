@@ -465,9 +465,25 @@ defmodule Unicode.Transform do
           {:ok, compiled} ->
             {:ok, Engine.execute(string, compiled)}
 
+          {:error, {:unknown_transform, id}} ->
+            maybe_detect_any(string, id)
+
           {:error, _} = error ->
             error
         end
+    end
+  end
+
+  # When an "Any-X" transform has no specific file, fall back to
+  # script detection — detect the input script and chain the
+  # appropriate {detected_script}-X transforms.
+  defp maybe_detect_any(string, transform_id) do
+    case String.split(transform_id, "-", parts: 2) do
+      ["Any", target] ->
+        transform_detected_scripts(string, target, default_backend())
+
+      _ ->
+        {:error, {:unknown_transform, transform_id}}
     end
   end
 
@@ -574,7 +590,8 @@ defmodule Unicode.Transform do
     end
   end
 
-  # Resolve "Any-X" transforms, checking builtins first.
+  # Resolve "Any-X" transforms, checking builtins first, then files,
+  # then falling back to script detection.
   defp resolve_any_to(to_name) do
     cond do
       Builtin.builtin?("Any-#{to_name}") ->
@@ -583,8 +600,12 @@ defmodule Unicode.Transform do
       Builtin.builtin?(to_name) ->
         {:ok, to_name, :forward}
 
-      true ->
+      Loader.find_transform("Any-#{to_name}") != nil ->
         {:ok, "Any-#{to_name}", :forward}
+
+      true ->
+        # No specific Any-X transform exists; fall back to script detection
+        {:detect, to_name}
     end
   end
 
@@ -660,7 +681,16 @@ defmodule Unicode.Transform do
 
         # Combine file direction with requested direction
         effective_direction = combine_directions(direction, file_direction)
-        compiled = Compiler.compile(rules, effective_direction, &resolve_transform/2)
+
+        # Build context for sub-transform narrowing: bare script names
+        # like ::Latin; inside Greek-Latin.xml resolve to Greek-Latin.
+        source = bcp47_script_to_unicode(data.source) || data.source
+        target = bcp47_script_to_unicode(data.target) || data.target
+        context = %{source: source, target: target}
+
+        compiled =
+          Compiler.compile(rules, effective_direction, &resolve_transform/2, context)
+
         {:ok, compiled}
 
       nil ->
