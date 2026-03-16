@@ -30,22 +30,31 @@ defmodule Unicode.Transform.Nif do
 
   @doc false
   def init do
-    path = :code.priv_dir(:unicode_transform) ++ ~c"/utransform"
+    if nif_enabled?() do
+      path = :code.priv_dir(:unicode_transform) ++ ~c"/utransform"
 
-    case :erlang.load_nif(path, 0) do
-      :ok -> :ok
-      {:error, _reason} -> :ok
+      case :erlang.load_nif(path, 0) do
+        :ok -> :ok
+        {:error, _reason} -> :ok
+      end
+    else
+      :ok
     end
   end
 
   @doc """
   Returns whether the NIF transform backend is available.
 
+  The NIF is considered available when it is enabled via the
+  `UNICODE_TRANSFORM_NIF` environment variable or the
+  `:nif` application config key, **and** the shared library
+  was loaded successfully.
+
   ### Returns
 
-  * `true` if the NIF shared library was loaded successfully.
+  * `true` if the NIF is enabled and the shared library was loaded.
 
-  * `false` if the NIF is not compiled or ICU libraries are missing.
+  * `false` otherwise.
 
   ### Examples
 
@@ -55,6 +64,15 @@ defmodule Unicode.Transform.Nif do
   """
   @spec available?() :: boolean()
   def available? do
+    nif_enabled?() and nif_loaded?()
+  end
+
+  defp nif_enabled? do
+    System.get_env("UNICODE_TRANSFORM_NIF") == "true" or
+      Application.get_env(:unicode_transform, :nif, false) == true
+  end
+
+  defp nif_loaded? do
     try do
       case transform("Any-Null", "", 0) do
         {:ok, _} -> true

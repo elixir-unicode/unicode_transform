@@ -48,6 +48,7 @@ defmodule UnicodeTransform.MixProject do
       files: [
         "lib",
         "c_src",
+        "priv/transforms",
         "logo.png",
         "mix.exs",
         "README*",

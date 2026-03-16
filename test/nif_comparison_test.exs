@@ -3,12 +3,14 @@ defmodule Unicode.Transform.NifComparisonTest do
   Property-based tests comparing the pure-Elixir transform engine
   against the ICU NIF backend. The NIF result is treated as canonical.
 
-  These tests require the NIF to be compiled and available. They are
-  automatically skipped when the NIF is not loaded.
+  These tests require the NIF to be compiled and available. The `:nif`
+  module tag is excluded by `test_helper.exs` when the NIF is not loaded.
   """
 
   use ExUnit.Case, async: true
   use ExUnitProperties
+
+  @moduletag :nif
 
   alias Unicode.Transform.Nif
 
@@ -203,13 +205,9 @@ defmodule Unicode.Transform.NifComparisonTest do
   # -------------------------------------------------------------------
 
   setup_all do
-    unless Nif.available?() do
-      IO.puts("\nSkipping NIF comparison tests — NIF not available")
-    end
-
     available = both_available(@common_transforms)
 
-    if Nif.available?() and available == [] do
+    if available == [] do
       IO.puts("\nWarning: NIF is available but no common transforms found in both backends")
     end
 
