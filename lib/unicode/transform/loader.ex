@@ -4,6 +4,7 @@ defmodule Unicode.Transform.Loader do
 
   Uses SweetXml to parse the XML and extract the transform
   metadata and rule text.
+
   """
 
   import SweetXml

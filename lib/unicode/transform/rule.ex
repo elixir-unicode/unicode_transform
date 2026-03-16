@@ -7,10 +7,15 @@ defmodule Unicode.Transform.Rule do
   and include the following types:
 
   * `Unicode.Transform.Rule.Comment` — comment lines
+
   * `Unicode.Transform.Rule.Filter` — global filter rules restricting which characters are affected
+
   * `Unicode.Transform.Rule.Transform` — transform directives (e.g., `:: NFD ;`)
+
   * `Unicode.Transform.Rule.Definition` — variable definitions (e.g., `$var = value ;`)
+
   * `Unicode.Transform.Rule.Conversion` — conversion rules with direction, context, and revisit
+
   """
 end
 
