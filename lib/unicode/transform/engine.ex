@@ -55,19 +55,7 @@ defmodule Unicode.Transform.Engine do
         {:transform, _} ->
           # Normalize to NFC after sub-transform passes so that combining marks
           # produced by one transform are recomposed before the next pass.
-          nfc_result = String.normalize(result, :nfc)
-
-          # When chaining through Latin/IPA (e.g., xx-FONIPA → target-script),
-          # ICU implicitly applies Latin-ASCII normalization to strip diacritics
-          # before the next transform consumes the text. We do the same when
-          # the next pass is also a :transform (indicating a chain).
-          case rest do
-            [{:transform, _} | _] ->
-              Unicode.Transform.LatinAscii.transform(nfc_result)
-
-            _ ->
-              nfc_result
-          end
+          String.normalize(result, :nfc)
 
         _ ->
           result
