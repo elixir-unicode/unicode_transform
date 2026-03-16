@@ -8,7 +8,6 @@ defmodule Unicode.Transform.Loader do
 
   import SweetXml
 
-  @transforms_dir "transforms"
   @alias_index_key :unicode_transform_alias_index
 
   @doc """
@@ -60,7 +59,7 @@ defmodule Unicode.Transform.Loader do
   """
   @spec transforms_dir() :: Path.t()
   def transforms_dir do
-    @transforms_dir
+    Path.join(:code.priv_dir(:unicode_transform), "transforms")
   end
 
   @doc """
@@ -73,7 +72,7 @@ defmodule Unicode.Transform.Loader do
   """
   @spec list_transforms() :: [Path.t()]
   def list_transforms do
-    @transforms_dir
+    transforms_dir()
     |> Path.join("*.xml")
     |> Path.wildcard()
     |> Enum.sort()
@@ -84,7 +83,7 @@ defmodule Unicode.Transform.Loader do
 
   Resolves transform names by checking:
 
-  1. Exact filename match (e.g., `"Latin-ASCII"` → `"transforms/Latin-ASCII.xml"`).
+  1. Exact filename match (e.g., `"Latin-ASCII"` → `"priv/transforms/Latin-ASCII.xml"`).
 
   2. Forward alias match from XML metadata.
 

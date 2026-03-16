@@ -39,7 +39,10 @@ defmodule Unicode.Transform.LatinAsciiTest do
   describe "Latin-ASCII: non-breaking space" do
     test "non-breaking space becomes ASCII space" do
       assert {:ok, "There and Back Again"} =
-               Unicode.Transform.transform("There\u00a0and Back\u00a0Again", from: :latin, to: :ascii)
+               Unicode.Transform.transform("There\u00a0and Back\u00a0Again",
+                 from: :latin,
+                 to: :ascii
+               )
     end
   end
 end

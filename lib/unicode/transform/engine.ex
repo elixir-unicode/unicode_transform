@@ -212,11 +212,93 @@ defmodule Unicode.Transform.Engine do
   end
 
   # Resolve replacement text, handling backreferences ($1, $2, etc.)
+  # and function calls (&FunctionName($1))
   defp resolve_replacement(replacement, captures) when is_binary(replacement) do
-    if String.contains?(replacement, "$") && captures != [] do
-      Pattern.apply_backreferences(replacement, captures)
+    resolved =
+      if String.contains?(replacement, "$") && captures != [] do
+        Pattern.apply_backreferences(replacement, captures)
+      else
+        replacement
+      end
+
+    if String.contains?(resolved, "&") do
+      resolve_function_calls(resolved)
     else
-      replacement
+      resolved
+    end
+  end
+
+  # Resolve &FunctionName(arg) calls in replacement text.
+  # After backreference substitution, function calls look like &Any-Upper(x)
+  # where x is the resolved text from captures.
+  defp resolve_function_calls(text) do
+    do_resolve_functions(text, "")
+  end
+
+  defp do_resolve_functions("", acc), do: acc
+
+  defp do_resolve_functions(<<"&", rest::binary>>, acc) do
+    case extract_function_call(rest) do
+      {:ok, func_name, arg, remainder} ->
+        result = apply_function_call(func_name, arg)
+        do_resolve_functions(remainder, acc <> result)
+
+      :not_a_function ->
+        do_resolve_functions(rest, acc <> "&")
+    end
+  end
+
+  defp do_resolve_functions(<<char::utf8, rest::binary>>, acc) do
+    do_resolve_functions(rest, acc <> <<char::utf8>>)
+  end
+
+  # Extract function name and argument from &FuncName(arg)
+  # Returns {:ok, name, arg, rest} or :not_a_function
+  defp extract_function_call(text) do
+    case Regex.run(~r/\A([A-Za-z][A-Za-z0-9_-]*)\(/, text) do
+      [prefix, func_name] ->
+        rest_after_paren =
+          binary_part(text, byte_size(prefix), byte_size(text) - byte_size(prefix))
+
+        case extract_function_arg(rest_after_paren, 1, "") do
+          {:ok, arg, remainder} -> {:ok, func_name, arg, remainder}
+          :error -> :not_a_function
+        end
+
+      _ ->
+        :not_a_function
+    end
+  end
+
+  # Extract the argument from inside parentheses, handling nested parens
+  defp extract_function_arg("", _depth, _acc), do: :error
+
+  defp extract_function_arg(<<"(", rest::binary>>, depth, acc) do
+    extract_function_arg(rest, depth + 1, acc <> "(")
+  end
+
+  defp extract_function_arg(<<")", rest::binary>>, 1, acc) do
+    {:ok, acc, rest}
+  end
+
+  defp extract_function_arg(<<")", rest::binary>>, depth, acc) do
+    extract_function_arg(rest, depth - 1, acc <> ")")
+  end
+
+  defp extract_function_arg(<<char::utf8, rest::binary>>, depth, acc) do
+    extract_function_arg(rest, depth, acc <> <<char::utf8>>)
+  end
+
+  # Apply a function call to its argument
+  defp apply_function_call(func_name, arg) do
+    if Builtin.builtin?(func_name) do
+      Builtin.apply(arg, func_name)
+    else
+      # Try as a transform name
+      case Unicode.Transform.do_transform(arg, func_name, :forward) do
+        {:ok, result} -> result
+        {:error, _} -> "&" <> func_name <> "(" <> arg <> ")"
+      end
     end
   end
 

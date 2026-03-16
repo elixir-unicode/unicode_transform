@@ -414,5 +414,4 @@ defmodule Unicode.Transform do
       end
     end
   end
-
 end

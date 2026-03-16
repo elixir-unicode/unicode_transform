@@ -123,6 +123,11 @@ defmodule Unicode.Transform.Pattern do
     do_tokenize(remainder, [{:backref, String.to_integer(digits)} | acc])
   end
 
+  # Dot — wildcard matching any single character
+  defp do_tokenize(<<".", rest::binary>>, acc) do
+    do_tokenize(rest, [{:wildcard} | acc])
+  end
+
   # Spaces — generally syntactic in patterns, skip them
   defp do_tokenize(<<" ", rest::binary>>, acc) do
     do_tokenize(rest, acc)
@@ -153,6 +158,7 @@ defmodule Unicode.Transform.Pattern do
     _ -> Regex.escape(set)
   end
 
+  defp token_to_regex({:wildcard}), do: "."
   defp token_to_regex({:group_open}), do: "("
   defp token_to_regex({:group_close}), do: ")"
   defp token_to_regex({:quantifier, q}), do: q

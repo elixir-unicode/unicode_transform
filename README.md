@@ -167,9 +167,9 @@ Transform names are resolved in order of priority:
 
 1. **Built-in transforms** — names like `NFC`, `NFD`, `Any-Upper`, `Any-Lower`, and `Any-Title` map directly to Elixir standard library functions (`String.normalize/2`, `String.upcase/1`, etc.).
 
-2. **CLDR XML alias match** — each of the 394 XML files declares forward and backward aliases in its metadata. The alias `"Greek-Latin"` points to `transforms/Greek-Latin.xml` in the forward direction. The backward alias `"Latin-Greek"` points to the same file but compiles in the reverse direction. Aliases are indexed into a `persistent_term` map on first use.
+2. **CLDR XML alias match** — each of the 394 XML files declares forward and backward aliases in its metadata. The alias `"Greek-Latin"` points to `priv/transforms/Greek-Latin.xml` in the forward direction. The backward alias `"Latin-Greek"` points to the same file but compiles in the reverse direction. Aliases are indexed into a `persistent_term` map on first use.
 
-3. **Filename match** — if no alias matches, the library looks for a file named `transforms/<transform-id>.xml`.
+3. **Filename match** — if no alias matches, the library looks for a file named `priv/transforms/<transform-id>.xml`.
 
 4. **Reverse direction of bidirectional files** — for files with `direction="both"`, the reverse transform ID is also indexed (e.g., `Latin-ConjoiningJamo.xml` with `direction="both"` is also reachable as `ConjoiningJamo-Latin`).
 

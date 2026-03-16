@@ -482,7 +482,8 @@ defmodule Unicode.TransformTest do
 
   describe "loader" do
     test "loads a transform file" do
-      data = Unicode.Transform.Loader.load_file("transforms/Latin-ASCII.xml")
+      path = Path.join(Unicode.Transform.Loader.transforms_dir(), "Latin-ASCII.xml")
+      data = Unicode.Transform.Loader.load_file(path)
       assert data.source == "Latin"
       assert data.target == "ASCII"
       assert data.direction == "both"
@@ -492,7 +493,7 @@ defmodule Unicode.TransformTest do
 
     test "derives transform ID from file path" do
       assert "Latin-ASCII" =
-               Unicode.Transform.Loader.transform_id_from_file("transforms/Latin-ASCII.xml")
+               Unicode.Transform.Loader.transform_id_from_file("priv/transforms/Latin-ASCII.xml")
     end
 
     test "finds transforms by alias" do
@@ -646,6 +647,51 @@ defmodule Unicode.TransformTest do
       assert [%Conversion{direction: :both, right: right}] = rules
       assert right.text == "b"
       assert right.after_context == "c"
+    end
+  end
+
+  describe "function calls in replacement text" do
+    test "az-Title applies title case with &Any-Upper and &Any-Lower" do
+      {:ok, result} = Unicode.Transform.transform("hello world", transform: "az-Title")
+      assert result == "Hello World"
+    end
+
+    test "lt-Title applies title case" do
+      {:ok, result} = Unicode.Transform.transform("hello world", transform: "lt-Title")
+      assert result == "Hello World"
+    end
+
+    test "tr-Title applies title case" do
+      {:ok, result} = Unicode.Transform.transform("hello world", transform: "tr-Title")
+      assert result == "Hello World"
+    end
+
+    test "el-Title applies title case with &Any-Title" do
+      {:ok, result} = Unicode.Transform.transform("hello world", transform: "el-Title")
+      assert result == "Hello World"
+    end
+
+    test "Title transforms handle accented text" do
+      {:ok, result} = Unicode.Transform.transform("café résumé", transform: "az-Title")
+      assert result == "Café Résumé"
+    end
+
+    test "Title transforms lowercase after first letter" do
+      {:ok, result} = Unicode.Transform.transform("HELLO WORLD", transform: "az-Title")
+      assert result == "Hello World"
+    end
+  end
+
+  describe "wildcard dot in patterns" do
+    test "dot matches any character in conversion rules" do
+      # The (.) pattern should match any single character
+      regex_source = Unicode.Transform.Pattern.to_regex_source("(.)")
+      assert regex_source == "(.)"
+    end
+
+    test "escaped dot matches literal dot" do
+      regex_source = Unicode.Transform.Pattern.to_regex_source("\\.")
+      assert regex_source == "\\."
     end
   end
 end

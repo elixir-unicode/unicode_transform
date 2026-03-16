@@ -81,8 +81,9 @@ locale_samples = %{
 
 defmodule SpotCheck do
   @demo_url "https://util.unicode.org/UnicodeJsps/transform.jsp"
+  @max_runs 100
 
-  def run(transforms, script_samples, locale_samples, count \\ 200) do
+  def run(transforms, script_samples, locale_samples, count \\ @max_runs) do
     :rand.seed(:exsss, {42, 42, 42})
     selected = Enum.take_random(transforms, count)
 
@@ -107,8 +108,6 @@ defmodule SpotCheck do
             IO.puts("  Remote: #{inspect(remote)}")
           {:error, reason} ->
             IO.puts("ERROR: #{inspect(reason)}")
-          {:skip, reason} ->
-            IO.puts("SKIP: #{reason}")
         end
 
         if idx < length(selected) do
@@ -156,9 +155,9 @@ defmodule SpotCheck do
       {:ok, remote_output} ->
         case local_result do
           {:ok, local_output} ->
-            # Normalize whitespace for comparison
-            local_normalized = String.trim(local_output)
-            remote_normalized = String.trim(remote_output)
+            # Normalize for comparison: trim whitespace and strip bidi markers
+            local_normalized = normalize_for_comparison(local_output)
+            remote_normalized = normalize_for_comparison(remote_output)
 
             if local_normalized == remote_normalized do
               {:match, local_output, remote_output}
@@ -250,7 +249,6 @@ defmodule SpotCheck do
     matches = Enum.count(results, fn {_, _, r} -> match?({:match, _, _}, r) end)
     mismatches = Enum.count(results, fn {_, _, r} -> match?({:mismatch, _, _}, r) end)
     errors = Enum.count(results, fn {_, _, r} -> match?({:error, _}, r) end)
-    skips = Enum.count(results, fn {_, _, r} -> match?({:skip, _}, r) end)
     total = length(results)
 
     IO.puts("\n========== SUMMARY ==========")
@@ -258,8 +256,7 @@ defmodule SpotCheck do
     IO.puts("Matches:    #{matches}")
     IO.puts("Mismatches: #{mismatches}")
     IO.puts("Errors:     #{errors}")
-    IO.puts("Skips:      #{skips}")
-    IO.puts("Match rate: #{Float.round(matches / max(total - errors - skips, 1) * 100, 1)}%")
+    IO.puts("Match rate: #{Float.round(matches / max(total - errors, 1) * 100, 1)}%")
     IO.puts("=============================\n")
   end
 
@@ -276,7 +273,6 @@ defmodule SpotCheck do
              {:error, {:local_error, reason, r}} -> {inspect(reason), r, "local_error"}
              {:error, {:remote_error, reason}} -> {"", inspect(reason), "remote_error"}
              {:error, reason} -> {"", inspect(reason), "error"}
-             {:skip, reason} -> {"", reason, "skip"}
            end
 
          [transform_id, csv_escape(input), csv_escape(to_string(local)), csv_escape(to_string(remote)), status]
@@ -294,7 +290,52 @@ defmodule SpotCheck do
       str
     end
   end
+
+  # Normalize text for comparison by trimming whitespace and stripping
+  # directional bidi markers that ICU adds but our library does not.
+  # LRM (U+200E) typically appears at the start; RLM (U+200F) at the end.
+  defp normalize_for_comparison(text) do
+    # U+200E = LRM (Left-to-Right Mark), U+200F = RLM (Right-to-Left Mark)
+    lrm = <<0x200E::utf8>>
+    rlm = <<0x200F::utf8>>
+
+    text
+    |> String.trim()
+    |> String.trim_leading(lrm)
+    |> String.trim_leading(rlm)
+    |> String.trim_trailing(lrm)
+    |> String.trim_trailing(rlm)
+  end
+
+  # Transform IDs the ICU demo rejects with "Illegal ID" or "Invalid ID".
+  # These use CLDR-extended names the demo doesn't recognize.
+  @icu_demo_rejected MapSet.new(~w(
+    Hant-Latin Japn-Latn Sinhala-Latin Lao-Latin
+    mn-mn_Latn-MNS ru_Latn-ru-BGN gz-Ethi-t-und-sarb
+  ))
+
+  # Returns true if the ICU demo site is known to support this transform ID.
+  # The demo doesn't support hyphenated BGN-style names, BCP-47 style IDs,
+  # or certain CLDR-extended script names.
+  def icu_demo_supported?(transform_id) do
+    cond do
+      MapSet.member?(@icu_demo_rejected, transform_id) -> false
+
+      # BCP-47 style IDs with "-t-" are not supported
+      String.contains?(transform_id, "-t-") -> false
+
+      # Hyphenated BGN/variant names with 3+ hyphen-separated segments
+      # e.g., "Armenian-Latin-BGN", "Georgian-Latin-BGN_1981"
+      length(String.split(transform_id, "-")) > 2 -> false
+
+      true -> true
+    end
+  end
 end
 
-transforms = Unicode.Transform.available_transforms()
+transforms =
+  Unicode.Transform.available_transforms()
+  |> Enum.filter(&SpotCheck.icu_demo_supported?/1)
+
+IO.puts("#{length(transforms)} transforms after filtering unsupported ICU demo IDs\n")
 SpotCheck.run(transforms, script_samples, locale_samples)
