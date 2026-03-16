@@ -107,4 +107,5 @@ jobs:
       
     # Step: Run dialyzer
     - name: Run dialyzer
+      if: ${{ matrix.lint }}
       run: mix dialyzer
