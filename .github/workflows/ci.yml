@@ -38,8 +38,8 @@ jobs:
             elixir: "1.20.0-rc.1-otp-28"
             lint: true
     steps:        
-    - name: Install build tools
-      run: "sudo apt-get update; sudo apt-get install -y build-essential gcc"
+    - name: Install build tools and ICU
+      run: "sudo apt-get update; sudo apt-get install -y build-essential gcc pkg-config libicu-dev"
         
     # Step: Setup Elixir + Erlang image as the base.
     - name: Set up Elixir

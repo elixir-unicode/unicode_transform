@@ -22,6 +22,8 @@ erl_crash.dump
 # asdf
 .tool-versions
 
-# object files
+# Build artifacts
 priv/*.so
+c_src/*.o
+c_src/env.mk
 
