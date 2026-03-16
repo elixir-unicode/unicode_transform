@@ -432,7 +432,7 @@ defmodule Unicode.Transform do
   # rule resolution and by the compiler callback. Accepts a string
   # transform ID directly.
   @doc false
-  @spec do_transform(String.t(), String.t(), :forward | :reverse, :nif | :elixir) ::
+  @spec do_transform(String.t(), String.t(), :forward | :reverse, :nif | :elixir | nil) ::
           {:ok, String.t()} | {:error, term()}
   def do_transform(string, transform_id, direction, backend \\ nil)
 
