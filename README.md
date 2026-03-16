@@ -1,8 +1,8 @@
 # Unicode Transform
 
-An Elixir implementation of the [CLDR Transform](https://unicode.org/reports/tr35/tr35-general.html#Transforms) specification ([Unicode Technical Standard #35, Section 10](https://unicode.org/reports/tr35/tr35-general.html#Rule_Syntax)). This library transliterates text between scripts, applies normalization and case mappings, and executes arbitrary CLDR transform rule sets at runtime.
+`unicode_transform` is an Elixir implementation of the [CLDR Transform](https://unicode.org/reports/tr35/tr35-general.html#Transforms) specification ([Unicode Technical Standard #35, Section 10](https://unicode.org/reports/tr35/tr35-general.html#Rule_Syntax)). It transliterates text between scripts, applies normalization and case mappings, and executes arbitrary CLDR transform rule sets at runtime. A opt-in NIF is included in the library for high performance transformations (see the [performance](#performance) section for details - the NIF is not always the fastest transformer).
 
-The library ships with 394 CLDR transform XML files covering script conversions (Greek, Cyrillic, Arabic, Devanagari, Thai, Hangul, and many more), Indic cross-script transliterations, BGN/PCGN romanizations, and specialized transforms like `Any-Publishing` and `Fullwidth-Halfwidth`.
+`unicode_transform` ships with all 394 CLDR transform XML files covering script conversions (Greek, Cyrillic, Arabic, Devanagari, Thai, Hangul, and many more), Indic cross-script transliterations, BGN/PCGN romanizations, and specialized transforms like `Any-Publishing` and `Fullwidth-Halfwidth`.
 
 ## Installation
 
@@ -377,10 +377,31 @@ ICU applies context-aware σ → ς conversion (final sigma at word boundaries).
 
 ## Performance
 
+### Key observations
+
+- **Built-in transforms** (`Any-Upper`, `NFC`) delegate to Elixir's `String`
+  module. They are already fast and the NIF adds overhead from the
+  UTF-8 → UTF-16 → UTF-8 round-trip, making the Elixir backend faster.
+
+- **Script-to-Latin transforms** show the NIF's strength. The Elixir engine's
+  cursor-based algorithm scales linearly with input length × number of rules.
+  ICU's compiled transliterator is largely insensitive to input length:
+  Greek-Latin is **130×** faster via the NIF at 100 characters, and
+  Han-Latin is **225×** faster.
+
+- **Thai-Latin and Devanagari-Latin** are closer because the Elixir engine uses
+  efficient chained sub-transforms rather than large flat rule sets.
+
+- **Hangul-Latin** is fast in both backends because the Elixir engine uses
+  built-in NFKD decomposition to split syllables before applying a small
+  jamo-to-Latin rule set.
+
+- Note that the ICU library uses UTF-16 internally so there is a cost of converting from Elixir's UTF-8 to ICU's UTF-16 and back again in each NIF call. That overhead is baked into the performance results above.
+
 ### Backend comparison
 
 Mean execution time per call, comparing the Elixir engine and the ICU NIF
-backend across a range of scripts and input lengths. Benchmarked on Apple M1.
+backend across a range of scripts and input lengths. Benchmarked on Apple M1 Max.
 
 | Transform | Backend | 10 chars | 50 chars | 100 chars |
 |---|---|---|---|---|
@@ -404,27 +425,6 @@ backend across a range of scripts and input lengths. Benchmarked on Apple M1.
 | Hangul-Latin | NIF | 0.12 ms | 0.14 ms | 0.16 ms |
 | Han-Latin | Elixir | 41.77 ms | 211.05 ms | 444.12 ms |
 | Han-Latin | NIF | 0.30 ms | 0.65 ms | 1.97 ms |
-
-**Key observations:**
-
-- **Built-in transforms** (`Any-Upper`, `NFC`) delegate to Elixir's `String`
-  module. They are already fast and the NIF adds overhead from the
-  UTF-8 → UTF-16 → UTF-8 round-trip, making the Elixir backend faster.
-
-- **Script-to-Latin transforms** show the NIF's strength. The Elixir engine's
-  cursor-based algorithm scales linearly with input length × number of rules.
-  ICU's compiled transliterator is largely insensitive to input length:
-  Greek-Latin is **130×** faster via the NIF at 100 characters, and
-  Han-Latin is **225×** faster.
-
-- **Thai-Latin and Devanagari-Latin** are closer because the Elixir engine uses
-  efficient chained sub-transforms rather than large flat rule sets.
-
-- **Hangul-Latin** is fast in both backends because the Elixir engine uses
-  built-in NFKD decomposition to split syllables before applying a small
-  jamo-to-Latin rule set.
-
-- Note that the ICU library uses UTF-16 internally so there is a cost of converting from Elixir's UTF-8 to ICU's UTF-16 and back again in each NIF call. That overhead if baked into the performance results above.
 
 ### Latin-ASCII: fast-path vs engine vs NIF
 
