@@ -1,0 +1,101 @@
+transform,input,local_output,remote_output,status
+pl-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تسافي ريسومي أ ö ü ß أ أ ذ þ أ ن,‎تسافي ريسومي أ ö ü ß أ أ ذ þ أ ن‎,match
+Kannada-InterIndic,ಕನ್ನಡ ಬರಹ, , ,match
+Telugu-Oriya,తెలుగు రాత,ତେଲୁଗୁ ରାତ,ତେଲୁଗୁ ରାତ,match
+hy-ar,հայերեն լեdelays,هاياران لاديلاوس,‎هاياران لاديلاوس‎,match
+es-ar,español texto ñ,يسبانولتيستون,‎أسبانولتيستون‎,mismatch
+Syriac-Latin,ܣܘܪܝܝܐ,swryyʾ,swryyʾ,match
+si-ar,සිංහල,سينْغهل,‎سينْغهل‎,match
+Telugu-Kannada,తెలుగు రాత,ತೆಲುಗು ರಾತ,ತೆಲುಗು ರಾತ,match
+Malayalam-InterIndic,മലയാളം എഴുത്ത്, , ,match
+Devanagari-Oriya,हिन्दी नमस्ते,ହିନ୍ଦୀ ନମସ୍ତେ,ହିନ୍ଦୀ ନମସ୍ତେ,match
+Devanagari-Malayalam,हिन्दी नमस्ते,ഹിന്ദീ നമസ്തേ,ഹിന്ദീ നമസ്തേ,match
+Latin-Thai,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,จะเฟ๊เร๊ซุเม๊ Ä Ö Ü SS Æ Œ Ð Þ Ł น̃,จะเฟ๊เร๊ซุเม๊ะ̈ โ̈ ุ̈ ß แ œ ð þ ฦน̃,mismatch
+InterIndic-Tamil,हिन्दी,हिन्दी,हिन्दी,match
+Georgian-Latin,საქართველო ქალაქი,sakartvelo kalaki,sakartvelo kalaki,match
+Latin-Ethiopic,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cኧፍé ርéሱምé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
+Kannada-ur,ಕನ್ನಡ ಬರಹ,کننڈ بره,‎کننڈ بره‎,match
+vec-vec_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafˈe ɾˈesumˈe ä ö ü ß æ œ ð þ e̯ ɲ,kaˈfe ˈɾesuˈme ä ö ü ß æ œ ð þ e̯ ɲ,mismatch
+zu-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن,‎تْشافي ريسومي أ ö ü ß أ أ ذ þ ł ن‎,match
+tr-Upper,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,match
+si-chr,සිංහල,ᏏᏂᎲᎵ,ᏏᏂᎲᎸ,mismatch
+ch-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎬᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,ᎬᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,match
+sk-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ጻፌ፞ ሬ፞ሱሜ፞ ኧ ኦ̈ ኡ̈ ß ኧ œ ዝ þ ł ን,ጻፌ፞ ሬ፞ሱሜ፞ ኧ ö ü ß ኧ œ ዝ þ ł ን,mismatch
+Telugu-Tamil,తెలుగు రాత,தெலுகு ராத,தெலுகு ராத,match
+es_419-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,کافیریسومیاöوßااذþłن,‎کافیریسومیاöوßااذþłن‎,match
+Telugu-Gurmukhi,తెలుగు రాత,ਤੇਲੁਗੁ ਰਾਤ,ਤੇਲੁਗੁ ਰਾਤ,match
+InterIndic-Telugu,हिन्दी,हिन्दी,हिन्दी,match
+Kannada-Latin,ಕನ್ನಡ ಬರಹ,kannaḍa baraha,kannaḍa baraha,match
+es-fa,español texto ñ,یسپانولتیستون,‎ایسپانولتیستون‎,mismatch
+Thai-ThaiSemi,ภาษาไทย กรุงเทพ,ภาษาไทย; กรุงเทพ,ภาษาไทย; กรุงเทพ,match
+am-am_FONIPA,ኢትዮጵያ,ʔi.tɨ.jo.pʼɨ.ja,ʔi.tɨ.jo.pʼɨ.ja,match
+CanadianAboriginal-Latin,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+InterIndic-Latin,हिन्दी,हिन्दी,हिन्दी,match
+Kannada-Bengali,ಕನ್ನಡ ಬರಹ,কন্নড বরহ,কন্নড বরহ,match
+kk-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎چافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+Kannada-Gujarati,ಕನ್ನಡ ಬರಹ,કન્નડ બરહ,કન્નડ બરહ,match
+lt-Upper,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,match
+Gurmukhi-InterIndic,ਪੰਜਾਬੀ ਲਿਖਤ, , ,match
+Tamil-Arabic,தமிழ் எழுத்து,تمير يروتتو,‎تمير يروتتو‎,match
+Bengali-Oriya,বাংলা লেখা,ବାଂଲା ଲେଖା,ବାଂଲା ଲେଖା,match
+pl-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تسافه ریسومه آ ö ü ß ا ا ذ þ او ن,‎تسافه ریسومه آ ö ü ß ا ا ذ þ او ن‎,match
+de-ASCII,Ä Ö Ü ß äöü,AE OE UE ss aeoeue,AE OE UE ss aeoeue,match
+Telugu-ur,తెలుగు రాత,تیلوگو رات,‎تیلوگو رات‎,match
+Tamil-Kannada,தமிழ் எழுத்து,ತಮಿೞ್ ಎೞುತ್ತು,ತಮಿೞ್ ಎೞುತ್ತು,match
+am-fa,ኢትዮጵያ,یتویوپویا,‎ایتویوپویا‎,mismatch
+Devanagari-Tamil,हिन्दी नमस्ते,ஹிந்தீ நமஸ்தே,ஹிந்தீ நமஸ்தே,match
+rm_SURSILV-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎧᏪ ᎴᏑᎺ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,ᎧᏪ ᎴᏑᎺ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,match
+nl-Title,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,Café Résumé Ä Ö Ü Ss Æ Œ Ð Þ Ł Ñ,Café Résumé Ä Ö Ü Ss Æ Œ Ð Þ Ł Ñ,match
+es_419-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᎧᏪᎴᏑᎺᎠᎣᎤᎥᏗᏂ,ᎧᏪᎴᏑᎺᎠᎣᎤᎥᏗᏂ,match
+Latin-Armenian,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,ծաֆե́ րե́սումե́ Ա̈ Ո̈ ՈՒ̈ ß Æ œ Ð þ Ł ն̃,match
+es-chr,español texto ñ,ᎡᏍᏆᏃᎵᏖᏍᏙᏂ,ᎡᏍᏆᏃᎵᏖᏍᏙᏂ,match
+hy_AREVMDA-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎چافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+el-Title,ελληνικά κείμενο,Ελληνικά Κείμενο,Ελληνικά Κείμενο,match
+Latin-Bopomofo,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜˊ ㄖㄜˊㄙㄨ˙ㄇㄜˊ Ä Ö Ü ß Æ œ Ð þ Ł ñ,ㄘㄚ˙ㄈㄜˊ ㄖㄜˊㄙㄨ˙ㄇㄜˊ Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+Han-Latin,漢字テスト,hànzìﾃｽﾄ,hàn zì テスト,mismatch
+Gujarati-Arabic,ગુજરાતી લખાણ,جوجراتي لكهان,‎جوجراتي لكهان‎,match
+nv-nv_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cɑfé résumé ä ö ü ß æ œ ð þ ɬ ñ,cɑfé résumé ä ö ü ß æ œ ð þ ɬ ñ,match
+Cyrillic-Latin,абвгдежзиклм,abvgdežziklm,abvgdežziklm,match
+my-chr,မြန်မာ ဘာသာ,ᎻᏯ̀ᏂᎹ̀ Ꮖ̀Ꮜ̀,ᎻᏯ̀ᏂᎹ̀ Ꮖ̀Ꮜ̀,match
+Bengali-Malayalam,বাংলা লেখা,ബാംലാ ലേഖാ,ബാംലാ ലേഖാ,match
+es_FONIPA-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cアフé ルéスンé Ä Ö Ü ß Æ œ Ð þ Ł ñ,cアフé ルéスンé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+my-ar,မြန်မာ ဘာသာ,ميانْغما باثا,‎ميانْغما باثا‎,match
+ky-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,match
+Gujarati-Devanagari,ગુજરાતી લખાણ,गुजराती लखाण,गुजराती लखाण,match
+ia-ia_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,kafé ɾésumé ä ö ü ß æ œ ð þ ł ñ,kafé ɾésumé ä ö ü ß æ œ ð þ ł ñ,match
+ro-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ካፌ́ ሬ́ሱሜ́ አ̈ ኦ̈ ኡ̈ ß ኧ œ ዝ þ ł ን,ካፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
+hy_AREVMDA-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,ᏝᏪ́ Ꮄ́ᏑᎺ́ Ꭰ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,match
+ug-ug_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,match
+es_419-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,كافيريسومياöوßااذþłن,‎كافيريسومياöوßااذþłن‎,match
+Malayalam-Kannada,മലയാളം എഴുത്ത്,ಮಲಯಾಳಂ ಎೞುತ್ತ್,ಮಲಯಾಳಂ ಎೞುತ್ತ್,match
+Oriya-Telugu,ଓଡ଼ିଆ ଲେଖା,ఓడిఆ లేఖా,ఓడిఆ లేఖా,match
+Gurmukhi-Devanagari,ਪੰਜਾਬੀ ਲਿਖਤ,पजाबी लिखत,पजाबी लिखत,match
+eo-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تسافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎تسافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+Gurmukhi-Telugu,ਪੰਜਾਬੀ ਲਿਖਤ,పజాబీ లిఖత,పజాబీ లిఖత,match
+sk-chr,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ᏣᏪᎡ ᎴᎡᏑᎺᎡ Ꭵ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,ᏣᏪᎡ ᎴᎡᏑᎺᎡ Ꭵ Ꭳ Ꭴ  Ꭵ  Ꮧ   Ꮒ,match
+Gujarati-Bengali,ગુજરાતી લખાણ,গুজরাতী লখাণ,গুজরাতী লখাণ,match
+Oriya-Latin,ଓଡ଼ିଆ ଲେଖା,ōṛiā lēkhā,ōṛi'ā lēkhā,mismatch
+eo-am,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ጻፌ ሬሱሜ አ̈ ኦ̈ ኡ̈ ß ኧ œ ዝ þ ł ን,ጻፌ ሬሱሜ ä ö ü ß ኧ œ ዝ þ ł ን,mismatch
+xh-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,نچافه ریسومه آ ö ü ß ا ا ذ þ ł ن,‎نچافه ریسومه آ ö ü ß ا ا ذ þ ł ن‎,match
+sat-fa,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,چافه ریسومه Ä Ö Ü ß Æ ا Ð þ Ł ن,‎چافه ریسومه Ä Ö Ü ß Æ ا Ð þ Ł ن‎,match
+xh-xh_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ǀafé résumé ä ö ü ß æ œ ð þ ł ñ,ǀafé résumé ä ö ü ß æ œ ð þ ł ñ,match
+chr-chr_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,CAFÉ RÉSUMÉ Ä Ö Ü SS Æ Œ Ð Þ Ł Ñ,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,mismatch
+cs-am,český jazyk,ቸስኪ፞ ያዝክ,ቸስኪ፞ ያዝክ,match
+Tamil-ur,தமிழ் எழுத்து,تمیڑ یڑوتتو,‎تمیڑ یڑوتتو‎,match
+Hebrew-Latin,שלום עולם,şlwm ʻwlm,şlwm ʻwlm,match
+InterIndic-Arabic,हिन्दी,हिन्दी,हिन्दी,match
+Telugu-Latin,తెలుగు రాత,telugu rāta,telugu rāta,match
+hy-hy_FONIPA,հայերեն լեdelays,hajɛɾɛn lɛdelays,hajɛɾɛn lɛdelays,match
+Gujarati-ur,ગુજરાતી લખાણ,گوجراتی لکھان,‎گوجراتی لکھان‎,match
+sat-ar,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,تْشافي ريسومي Ä Ö Ü ß Æ أ Ð þ Ł ن,‎تْشافي ريسومي Ä Ö Ü ß Æ أ Ð þ Ł ن‎,match
+Latin-Kannada,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ಚೞೆ́ ರೆ́ಸುಮೆ́ ಅ̈ ಒ̈ ಉ̈ ß æ œ ð þ ł ಞ್,ಚೞೆ́ ರೆ́ಸುಮೆ́ ಅ̈ ಒ̈ ಉ̈ ß Æ œ Ð þ Ł ಞ್,mismatch
+Malayalam-Bengali,മലയാളം എഴുത്ത്,মলযালং এলুত্ত্,মলযালং এলুত্ত্,match
+Gujarati-Tamil,ગુજરાતી લખાણ,குஜராதீ லகாண,குஜராதீ லகாண,match
+Oriya-InterIndic,ଓଡ଼ିଆ ଲେଖା, , ,match
+Greek-Latin,αβγδεζηθικλμ,abgdezēthiklm,abgdezēthiklm,match
+Devanagari-Kannada,हिन्दी नमस्ते,ಹಿನ್ದೀ ನಮಸ್ತೇ,ಹಿನ್ದೀ ನಮಸ್ತೇ,match
+Bengali-ur,বাংলা লেখা,بانلا لیکھا,‎بانلا لیکھا‎,match
+Gurmukhi-Bengali,ਪੰਜਾਬੀ ਲਿਖਤ,পজাবী লিখত,পজাবী লিখত,match
+Latin-Gurmukhi,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß æ œ ð þ ł ਞ੍,ਚਫ਼ੇ́ ਰੇ́ਸੁਮੇ́ ਅ̈ ਓ̈ ਉ̈ ß Æ œ Ð þ Ł ਞ੍,mismatch
+ro-ja,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,カフé・ルéスムé・ä・ö・ü・ß・æ・œ・ð・þ・ł・ñ,カフé・ルéスムé・ä・ö・ü・ß・æ・œ・ð・þ・ł・ñ,match
+eo-eo_FONIPA,café résumé Ä Ö Ü ß Æ œ Ð þ Ł ñ,t͡safe resume ä ö ü ß æ œ ð þ ł ñ,t͡safe resume ä ö ü ß æ œ ð þ ł ñ,match

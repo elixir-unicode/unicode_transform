@@ -72,7 +72,8 @@ defmodule UnicodeTransform.MixProject do
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false, optional: true},
       {:req, "~> 0.5", only: :dev, runtime: false},
       {:benchee, "~> 1.0", only: :dev, runtime: false},
-      {:elixir_make, "~> 0.9", runtime: false, optional: true}
+      {:elixir_make, "~> 0.9", runtime: false, optional: true},
+      {:stream_data, "~> 1.0", only: :test}
     ]
   end
 

@@ -113,6 +113,21 @@ defmodule Unicode.Transform do
     any: "Any"
   }
 
+  @doc """
+  Returns the default transform backend.
+
+  ### Returns
+
+  * `:nif` if the ICU NIF is loaded and available.
+
+  * `:elixir` otherwise.
+
+  """
+  @spec default_backend() :: :nif | :elixir
+  def default_backend do
+    if Unicode.Transform.Nif.available?(), do: :nif, else: :elixir
+  end
+
   # BCP47 (ISO 15924) script code string -> Unicode script name.
   # Used to resolve transform IDs like "Grek-Latn" to "Greek-Latin".
   @bcp47_script_to_unicode %{
@@ -166,6 +181,7 @@ defmodule Unicode.Transform do
           | {:to, atom() | String.t()}
           | {:transform, String.t()}
           | {:direction, :forward | :reverse}
+          | {:backend, :nif | :elixir}
 
   @doc """
   Transforms a string using the specified transform.
@@ -201,6 +217,12 @@ defmodule Unicode.Transform do
   * `:direction` — `:forward` (default) or `:reverse`. Only used
     with `:transform`.
 
+  * `:backend` — `:nif` or `:elixir`. Selects the transform engine.
+    When set to `:nif`, transforms are executed via ICU4C's native
+    transliterator. When set to `:elixir`, the pure-Elixir CLDR-based
+    engine is used. Defaults to `:nif` when the NIF is available,
+    otherwise `:elixir`.
+
   ### Returns
 
   * `{:ok, transformed_string}` on success.
@@ -225,12 +247,14 @@ defmodule Unicode.Transform do
   @spec transform(String.t(), [transform_option()]) ::
           {:ok, String.t()} | {:error, term()}
   def transform(string, options) when is_list(options) do
+    backend = Keyword.get(options, :backend, default_backend())
+
     case resolve_options(options) do
       {:ok, transform_id, direction} ->
-        do_transform(string, transform_id, direction)
+        do_transform(string, transform_id, direction, backend)
 
       {:detect, to} ->
-        transform_detected_scripts(string, to)
+        transform_detected_scripts(string, to, backend)
 
       {:error, _} = error ->
         error
@@ -408,26 +432,41 @@ defmodule Unicode.Transform do
   # rule resolution and by the compiler callback. Accepts a string
   # transform ID directly.
   @doc false
-  @spec do_transform(String.t(), String.t(), :forward | :reverse) ::
+  @spec do_transform(String.t(), String.t(), :forward | :reverse, :nif | :elixir) ::
           {:ok, String.t()} | {:error, term()}
-  def do_transform(string, transform_id, direction) do
+  def do_transform(string, transform_id, direction, backend \\ nil)
+
+  def do_transform(string, transform_id, direction, nil) do
+    do_transform(string, transform_id, direction, default_backend())
+  end
+
+  def do_transform(string, transform_id, direction, :nif) do
     case nif_transform(string, transform_id, direction) do
       {:ok, _} = result ->
         result
 
       :not_available ->
-        case compiled_module_transform(string, transform_id, direction) do
-          {:ok, _} = result ->
-            result
+        # Fall back to Elixir engine if NIF doesn't recognize the transform
+        do_transform_elixir(string, transform_id, direction)
+    end
+  end
 
-          :not_found ->
-            case get_compiled_transform(transform_id, direction) do
-              {:ok, compiled} ->
-                {:ok, Engine.execute(string, compiled)}
+  def do_transform(string, transform_id, direction, :elixir) do
+    do_transform_elixir(string, transform_id, direction)
+  end
 
-              {:error, _} = error ->
-                error
-            end
+  defp do_transform_elixir(string, transform_id, direction) do
+    case compiled_module_transform(string, transform_id, direction) do
+      {:ok, _} = result ->
+        result
+
+      :not_found ->
+        case get_compiled_transform(transform_id, direction) do
+          {:ok, compiled} ->
+            {:ok, Engine.execute(string, compiled)}
+
+          {:error, _} = error ->
+            error
         end
     end
   end
@@ -461,7 +500,7 @@ defmodule Unicode.Transform do
   @skip_scripts [:common, :inherited, :unknown]
 
   # Detect scripts in the string and chain transforms for each one.
-  defp transform_detected_scripts(string, to) do
+  defp transform_detected_scripts(string, to, backend) do
     to_name = resolve_to_name(to)
 
     case to_name do
@@ -480,7 +519,7 @@ defmodule Unicode.Transform do
           if from_name do
             transform_id = "#{from_name}-#{name}"
 
-            case do_transform(acc, transform_id, :forward) do
+            case do_transform(acc, transform_id, :forward, backend) do
               {:ok, result} -> {:cont, {:ok, result}}
               {:error, _} = error -> {:halt, error}
             end
