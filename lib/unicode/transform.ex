@@ -8,7 +8,7 @@ defmodule Unicode.Transform do
   and support operations such as transliteration between scripts,
   normalization, and case mapping.
 
-  ## Examples
+  ### Usage Examples
 
       iex> Unicode.Transform.transform("Ä Ö Ü ß", from: :latin, to: :ascii)
       {:ok, "A O U ss"}
@@ -18,6 +18,69 @@ defmodule Unicode.Transform do
 
       iex> Unicode.Transform.transform("Ä ö ü", transform: "de-ASCII")
       {:ok, "AE oe ue"}
+
+  ### Transform ID resolution
+
+  When `transform/2` is called, the transform ID is resolved through
+  one of two paths depending on the options provided.
+
+  #### Direct ID (`:transform` option)
+
+  The string is used as-is. If the ID is not found as a built-in or
+  in the CLDR transform files, and it has the form `"Any-Target"`,
+  the library falls back to automatic script detection (see below).
+
+  #### Script-based (`:from` / `:to` options)
+
+  The `:from` and `:to` values are normalized to canonical script
+  names (case-insensitive, supporting both Unicode names like `:greek`
+  and BCP47 codes like `:grek`). Resolution then proceeds as follows:
+
+  1. **Built-in check** — if the ID matches a built-in transform
+     (e.g., `Any-NFC`, `Any-Upper`), it is dispatched directly
+     to the corresponding `String` function.
+
+  2. **Forward file lookup** — the library looks for a CLDR XML
+     file matching `"From-To"` (e.g., `"Greek-Latin"`), checking
+     the alias index built from file metadata.
+
+  3. **Reverse file lookup** — if no forward match is found,
+     the library looks for `"To-From"` and marks the direction
+     as `:reverse` (e.g., `to: :greek, from: :latin` resolves
+     to `"Greek-Latin"` in reverse).
+
+  4. **BCP47 fallback** — if neither exact nor case-insensitive
+     matches succeed, the ID is resolved as a BCP47 transform
+     ID (e.g., `"Grek-Latn"` → `"Greek-Latin"`).
+
+  #### The `Any` source and script detection
+
+  When `:from` is `:any` (the default) or when a `transform: "Any-X"`
+  ID is used, `unicode_transform` first checks for a specific `Any-X` transform
+  (built-in or file-based, such as `Any-Accents` or `Any-Publishing`).
+
+  If no specific `Any-X` transform exists, the library falls back to
+  **automatic script detection**: it calls `Unicode.script_dominance/1`
+  to identify the scripts present in the input string, then chains
+  a `{detected_script}-X` transform for each detected script. Common,
+  inherited, and unknown scripts are skipped.
+
+  For example, `transform("αβγδ абвг", from: :any, to: :latin)` detects
+  Greek and Cyrillic, then applies `Greek-Latin` followed by
+  `Cyrillic-Latin`.
+
+  This is equivalent to using `from: :detect`, which always uses script
+  detection without checking for a specific `Any-X` transform first.
+
+  #### Sub-transform narrowing
+
+  CLDR transform files can reference sub-transforms via `::Name;`
+  rules. When a sub-transform is a bare script name (e.g., `::Latin;`
+  inside `Greek-Latin.xml`), it is narrowed using the parent
+  transform's source and target scripts — resolving `::Latin;` to
+  `Greek-Latin`. Sub-transforms that are already compound names
+  (e.g., `::Bengali-InterIndic;`) or built-ins (e.g., `::NFC;`)
+  are used as-is.
 
   """
 
@@ -193,6 +256,10 @@ defmodule Unicode.Transform do
 
   2. **Direct** — use `:transform` with the string transform ID, and
      optionally `:direction` (default `:forward`).
+
+  See the [Transform ID resolution](#module-transform-id-resolution) section in the
+  module documentation for details on how transform IDs are resolved,
+  including `Any-` handling and automatic script detection.
 
   ### Arguments
 
