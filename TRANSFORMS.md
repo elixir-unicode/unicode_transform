@@ -31,7 +31,8 @@ iex> Unicode.Transform.transform("hello", from: :any, to: :upper)
 {:ok, "HELLO"}
 ```
 
-Both atoms and strings are accepted for `:from` and `:to`:
+Both atoms and strings are accepted for `:from` and `:to`. The
+BCP47 script code or the Unicode script name are both acceptable.
 
 ```elixir
 iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin)
