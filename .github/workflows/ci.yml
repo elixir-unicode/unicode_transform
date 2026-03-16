@@ -99,6 +99,6 @@ jobs:
     # Step: Execute the test with the NIF
     - name: Run tests with NIF
       env:
-        CLDR_COLLATION_NIF: true
+        CLDR_TRANSFORM_NIF: true
       run: mix test
 
