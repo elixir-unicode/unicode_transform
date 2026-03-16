@@ -42,8 +42,8 @@ defmodule UnicodeTransform.MixProject do
 
   defp description do
     """
-    Implementation of the Cldr Transform specification to
-    transform text from one script to another.
+    Transliterates text between scripts, applies normalization and case
+    mappings, and executes arbitrary CLDR transforms.
     """
   end
 
