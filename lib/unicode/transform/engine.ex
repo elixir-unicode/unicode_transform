@@ -42,9 +42,38 @@ defmodule Unicode.Transform.Engine do
   """
   @spec execute(String.t(), CompiledTransform.t()) :: String.t()
   def execute(string, %CompiledTransform{passes: passes, filter: filter}) do
-    Enum.reduce(passes, string, fn pass, acc ->
-      execute_pass(acc, pass, filter)
-    end)
+    execute_passes(passes, string, filter)
+  end
+
+  defp execute_passes([], string, _filter), do: string
+
+  defp execute_passes([pass | rest], string, filter) do
+    result = execute_pass(string, pass, filter)
+
+    normalized =
+      case pass do
+        {:transform, _} ->
+          # Normalize to NFC after sub-transform passes so that combining marks
+          # produced by one transform are recomposed before the next pass.
+          nfc_result = String.normalize(result, :nfc)
+
+          # When chaining through Latin/IPA (e.g., xx-FONIPA → target-script),
+          # ICU implicitly applies Latin-ASCII normalization to strip diacritics
+          # before the next transform consumes the text. We do the same when
+          # the next pass is also a :transform (indicating a chain).
+          case rest do
+            [{:transform, _} | _] ->
+              Unicode.Transform.LatinAscii.transform(nfc_result)
+
+            _ ->
+              nfc_result
+          end
+
+        _ ->
+          result
+      end
+
+    execute_passes(rest, normalized, filter)
   end
 
   defp execute_pass(string, {:builtin, name}, _filter) do

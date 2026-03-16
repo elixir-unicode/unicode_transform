@@ -245,6 +245,7 @@ defmodule SpotCheck do
     |> String.replace("&gt;", ">")
     |> String.replace("&quot;", "\"")
     |> String.replace("&#39;", "'")
+    |> String.replace("&apos;", "'")
     |> String.replace("&nbsp;", " ")
   end
 
@@ -295,8 +296,8 @@ defmodule SpotCheck do
   end
 
   # Normalize text for comparison by trimming whitespace and stripping
-  # directional bidi markers that ICU adds but our library does not.
-  # LRM (U+200E) typically appears at the start; RLM (U+200F) at the end.
+  # ALL directional bidi markers that ICU adds but our library does not.
+  # These can appear anywhere in the string, not just at boundaries.
   defp normalize_for_comparison(text) do
     # U+200E = LRM (Left-to-Right Mark), U+200F = RLM (Right-to-Left Mark)
     lrm = <<0x200E::utf8>>
@@ -304,10 +305,8 @@ defmodule SpotCheck do
 
     text
     |> String.trim()
-    |> String.trim_leading(lrm)
-    |> String.trim_leading(rlm)
-    |> String.trim_trailing(lrm)
-    |> String.trim_trailing(rlm)
+    |> String.replace(lrm, "")
+    |> String.replace(rlm, "")
   end
 
   # Transform IDs the ICU demo rejects even after BCP47 conversion.

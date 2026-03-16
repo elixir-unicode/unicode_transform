@@ -301,8 +301,26 @@ defmodule Unicode.Transform.Compiler do
     end)
   end
 
-  # For reverse direction, reverse the order of passes
-  defp maybe_reverse_passes(passes, :reverse), do: Enum.reverse(passes)
+  # For reverse direction, reverse the order of passes.
+  # Case transforms (Upper, Lower, Title) are treated as output normalization:
+  # they stay at the end of the pass list rather than being moved to the front.
+  # Without this, a reversed chain with ::lower becomes ::Upper at the start,
+  # uppercasing input before case-sensitive conversion rules can match.
+  defp maybe_reverse_passes(passes, :reverse) do
+    reversed = Enum.reverse(passes)
+
+    {case_transforms, rest} =
+      Enum.split_while(reversed, fn
+        %Transform{forward: name} when name != nil ->
+          Builtin.case_transform?(name)
+
+        _ ->
+          false
+      end)
+
+    rest ++ case_transforms
+  end
+
   defp maybe_reverse_passes(passes, :forward), do: passes
 
   # Compile passes into executable form

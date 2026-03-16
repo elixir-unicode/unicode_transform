@@ -94,6 +94,23 @@ defmodule Unicode.Transform.Builtin do
   end
 
   @doc """
+  Returns `true` if the given name is a case transform (Upper, Lower, Title).
+
+  ### Arguments
+
+  * `name` — the transform name.
+
+  ### Returns
+
+  `true` if the transform is a case transform, `false` otherwise.
+
+  """
+  @spec case_transform?(String.t()) :: boolean()
+  def case_transform?(name) do
+    normalize_name(name) in ["Upper", "Any-Upper", "Lower", "Any-Lower", "Title", "Any-Title"]
+  end
+
+  @doc """
   Returns the inverse of a built-in transform name.
 
   ### Arguments

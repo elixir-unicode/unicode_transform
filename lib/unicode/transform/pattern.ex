@@ -150,7 +150,12 @@ defmodule Unicode.Transform.Pattern do
   end
 
   defp token_to_regex({:unicode_set, set}) do
-    case Unicode.Regex.compile(set, "u") do
+    # In ICU's UnicodeSet syntax, unquoted/unescaped whitespace inside [...]
+    # is purely syntactic (for readability) and should be ignored.
+    # Strip such whitespace before regex compilation.
+    cleaned_set = strip_set_whitespace(set)
+
+    case Unicode.Regex.compile(cleaned_set, "u") do
       {:ok, regex} -> Regex.source(regex)
       _ -> Regex.escape(set)
     end
@@ -163,6 +168,33 @@ defmodule Unicode.Transform.Pattern do
   defp token_to_regex({:group_close}), do: ")"
   defp token_to_regex({:quantifier, q}), do: q
   defp token_to_regex({:backref, n}), do: "\\#{n}"
+
+  # Strip unquoted, unescaped whitespace from a Unicode set string.
+  # In ICU's UnicodeSet syntax, unquoted whitespace inside [...] is
+  # purely syntactic and ignored. Escaped spaces (\ ) are preserved.
+  # Note: inside character classes, ' is a literal character (not a
+  # quote delimiter), so we don't treat it specially here.
+  defp strip_set_whitespace(set) do
+    do_strip_set_ws(set, "")
+  end
+
+  defp do_strip_set_ws("", acc), do: acc
+
+  defp do_strip_set_ws(<<"\\", char::utf8, rest::binary>>, acc) do
+    do_strip_set_ws(rest, acc <> "\\" <> <<char::utf8>>)
+  end
+
+  defp do_strip_set_ws(<<" ", rest::binary>>, acc) do
+    do_strip_set_ws(rest, acc)
+  end
+
+  defp do_strip_set_ws(<<"\t", rest::binary>>, acc) do
+    do_strip_set_ws(rest, acc)
+  end
+
+  defp do_strip_set_ws(<<char::utf8, rest::binary>>, acc) do
+    do_strip_set_ws(rest, acc <> <<char::utf8>>)
+  end
 
   @doc """
   Applies backreference substitution in a replacement string.
