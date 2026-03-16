@@ -113,9 +113,9 @@ defmodule Unicode.Transform do
     any: "Any"
   }
 
-  # BCP47 (ISO 15924) script code string -> CLDR full name.
+  # BCP47 (ISO 15924) script code string -> Unicode script name.
   # Used to resolve transform IDs like "Grek-Latn" to "Greek-Latin".
-  @bcp47_to_cldr %{
+  @bcp47_script_to_unicode %{
     "Arab" => "Arabic",
     "Armn" => "Armenian",
     "Beng" => "Bengali",
@@ -148,11 +148,11 @@ defmodule Unicode.Transform do
     "Thai" => "Thai"
   }
 
-  # CLDR full name -> BCP47 (ISO 15924) script code.
+  # Unicode script name -> BCP47 (ISO 15924) script code.
   # Used to convert transform IDs for the ICU demo site.
-  @cldr_to_bcp47 @bcp47_to_cldr
-                 |> Enum.map(fn {k, v} -> {v, k} end)
-                 |> Map.new()
+  @unicode_script_to_bcp47 @bcp47_script_to_unicode
+                           |> Enum.map(fn {k, v} -> {v, k} end)
+                           |> Map.new()
 
   # Reverse lookup: downcased canonical name -> canonical name
   # e.g., "arabic" => "Arabic", "nfc" => "NFC", "canadianaboriginal" => "CanadianAboriginal"
@@ -281,7 +281,7 @@ defmodule Unicode.Transform do
   end
 
   @doc """
-  Converts a BCP47 (ISO 15924) script code to its CLDR full name.
+  Converts a BCP47 (ISO 15924) script code to its Unicode script name.
 
   ### Arguments
 
@@ -289,31 +289,31 @@ defmodule Unicode.Transform do
 
   ### Returns
 
-  The CLDR full name string if found, or `nil`.
+  The Unicode script name string if found, or `nil`.
 
   ### Examples
 
-      iex> Unicode.Transform.bcp47_to_cldr("Latn")
+      iex> Unicode.Transform.bcp47_script_to_unicode("Latn")
       "Latin"
 
-      iex> Unicode.Transform.bcp47_to_cldr("Grek")
+      iex> Unicode.Transform.bcp47_script_to_unicode("Grek")
       "Greek"
 
-      iex> Unicode.Transform.bcp47_to_cldr("Unknown")
+      iex> Unicode.Transform.bcp47_script_to_unicode("Unknown")
       nil
 
   """
-  @spec bcp47_to_cldr(String.t()) :: String.t() | nil
-  def bcp47_to_cldr(code) when is_binary(code) do
-    Map.get(@bcp47_to_cldr, code)
+  @spec bcp47_script_to_unicode(String.t()) :: String.t() | nil
+  def bcp47_script_to_unicode(code) when is_binary(code) do
+    Map.get(@bcp47_script_to_unicode, code)
   end
 
   @doc """
-  Converts a CLDR full script name to its BCP47 (ISO 15924) code.
+  Converts a Unicode script name to its BCP47 (ISO 15924) code.
 
   ### Arguments
 
-  * `name` — a CLDR script name string (e.g., `"Latin"`, `"Greek"`).
+  * `name` — a Unicode script name string (e.g., `"Latin"`, `"Greek"`).
 
   ### Returns
 
@@ -321,19 +321,19 @@ defmodule Unicode.Transform do
 
   ### Examples
 
-      iex> Unicode.Transform.cldr_to_bcp47("Latin")
+      iex> Unicode.Transform.unicode_script_to_bcp47("Latin")
       "Latn"
 
-      iex> Unicode.Transform.cldr_to_bcp47("Greek")
+      iex> Unicode.Transform.unicode_script_to_bcp47("Greek")
       "Grek"
 
-      iex> Unicode.Transform.cldr_to_bcp47("Unknown")
+      iex> Unicode.Transform.unicode_script_to_bcp47("Unknown")
       nil
 
   """
-  @spec cldr_to_bcp47(String.t()) :: String.t() | nil
-  def cldr_to_bcp47(name) when is_binary(name) do
-    Map.get(@cldr_to_bcp47, name)
+  @spec unicode_script_to_bcp47(String.t()) :: String.t() | nil
+  def unicode_script_to_bcp47(name) when is_binary(name) do
+    Map.get(@unicode_script_to_bcp47, name)
   end
 
   @doc """
@@ -366,7 +366,7 @@ defmodule Unicode.Transform do
   def resolve_bcp47_transform_id(transform_id) when is_binary(transform_id) do
     transform_id
     |> String.split("-", parts: 2)
-    |> Enum.map(fn segment -> Map.get(@bcp47_to_cldr, segment, segment) end)
+    |> Enum.map(fn segment -> Map.get(@bcp47_script_to_unicode, segment, segment) end)
     |> Enum.join("-")
   end
 
@@ -400,7 +400,7 @@ defmodule Unicode.Transform do
   def to_bcp47_transform_id(transform_id) when is_binary(transform_id) do
     transform_id
     |> String.split("-", parts: 2)
-    |> Enum.map(fn segment -> Map.get(@cldr_to_bcp47, segment, segment) end)
+    |> Enum.map(fn segment -> Map.get(@unicode_script_to_bcp47, segment, segment) end)
     |> Enum.join("-")
   end
 

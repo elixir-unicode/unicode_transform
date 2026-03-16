@@ -714,19 +714,19 @@ defmodule Unicode.TransformTest do
       assert {:ok, _result} = Unicode.Transform.transform("नमस्ते", transform: "Deva-Latn")
     end
 
-    test "bcp47_to_cldr converts codes correctly" do
-      assert Unicode.Transform.bcp47_to_cldr("Latn") == "Latin"
-      assert Unicode.Transform.bcp47_to_cldr("Grek") == "Greek"
-      assert Unicode.Transform.bcp47_to_cldr("Cyrl") == "Cyrillic"
-      assert Unicode.Transform.bcp47_to_cldr("Arab") == "Arabic"
-      assert Unicode.Transform.bcp47_to_cldr("Unknown") == nil
+    test "bcp47_script_to_unicode converts codes correctly" do
+      assert Unicode.Transform.bcp47_script_to_unicode("Latn") == "Latin"
+      assert Unicode.Transform.bcp47_script_to_unicode("Grek") == "Greek"
+      assert Unicode.Transform.bcp47_script_to_unicode("Cyrl") == "Cyrillic"
+      assert Unicode.Transform.bcp47_script_to_unicode("Arab") == "Arabic"
+      assert Unicode.Transform.bcp47_script_to_unicode("Unknown") == nil
     end
 
-    test "cldr_to_bcp47 converts names correctly" do
-      assert Unicode.Transform.cldr_to_bcp47("Latin") == "Latn"
-      assert Unicode.Transform.cldr_to_bcp47("Greek") == "Grek"
-      assert Unicode.Transform.cldr_to_bcp47("Cyrillic") == "Cyrl"
-      assert Unicode.Transform.cldr_to_bcp47("Unknown") == nil
+    test "unicode_script_to_bcp47 converts names correctly" do
+      assert Unicode.Transform.unicode_script_to_bcp47("Latin") == "Latn"
+      assert Unicode.Transform.unicode_script_to_bcp47("Greek") == "Grek"
+      assert Unicode.Transform.unicode_script_to_bcp47("Cyrillic") == "Cyrl"
+      assert Unicode.Transform.unicode_script_to_bcp47("Unknown") == nil
     end
 
     test "resolve_bcp47_transform_id converts BCP47 to CLDR" do

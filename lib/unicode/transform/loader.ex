@@ -117,7 +117,7 @@ defmodule Unicode.Transform.Loader do
         # Try case-insensitive
         case Map.get(index, String.downcase(transform_id)) do
           nil ->
-            # Try resolving BCP47 script codes to CLDR names
+            # Try resolving BCP47 script codes to Unicode names
             resolved = Unicode.Transform.resolve_bcp47_transform_id(transform_id)
 
             if resolved != transform_id do
