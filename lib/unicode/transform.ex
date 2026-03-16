@@ -411,18 +411,40 @@ defmodule Unicode.Transform do
   @spec do_transform(String.t(), String.t(), :forward | :reverse) ::
           {:ok, String.t()} | {:error, term()}
   def do_transform(string, transform_id, direction) do
-    case compiled_module_transform(string, transform_id, direction) do
+    case nif_transform(string, transform_id, direction) do
       {:ok, _} = result ->
         result
 
-      :not_found ->
-        case get_compiled_transform(transform_id, direction) do
-          {:ok, compiled} ->
-            {:ok, Engine.execute(string, compiled)}
+      :not_available ->
+        case compiled_module_transform(string, transform_id, direction) do
+          {:ok, _} = result ->
+            result
 
-          {:error, _} = error ->
-            error
+          :not_found ->
+            case get_compiled_transform(transform_id, direction) do
+              {:ok, compiled} ->
+                {:ok, Engine.execute(string, compiled)}
+
+              {:error, _} = error ->
+                error
+            end
         end
+    end
+  end
+
+  # Dispatch to ICU via the NIF when available.
+  # Returns {:ok, result} on success, or :not_available if the NIF
+  # is not loaded or ICU doesn't recognize the transform ID.
+  defp nif_transform(string, transform_id, direction) do
+    if Unicode.Transform.Nif.available?() do
+      dir = if direction == :forward, do: 0, else: 1
+
+      case Unicode.Transform.Nif.transform(transform_id, string, dir) do
+        {:ok, _} = result -> result
+        {:error, _} -> :not_available
+      end
+    else
+      :not_available
     end
   end
 

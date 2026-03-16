@@ -10,6 +10,8 @@ defmodule UnicodeTransform.MixProject do
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       build_embedded: Mix.env() == :prod,
+      compilers: maybe_elixir_make() ++ Mix.compilers(),
+      make_makefile: "c_src/Makefile",
       deps: deps(),
       docs: docs(),
       name: "Unicode Transform",
@@ -22,6 +24,12 @@ defmodule UnicodeTransform.MixProject do
         ignore_warnings: ".dialyzer_ignore_warnings"
       ]
     ]
+  end
+
+  @nif_enabled System.get_env("UNICODE_TRANSFORM_NIF") == "true"
+
+  defp maybe_elixir_make do
+    if @nif_enabled, do: [:elixir_make], else: []
   end
 
   defp description do
@@ -39,6 +47,7 @@ defmodule UnicodeTransform.MixProject do
       links: links(),
       files: [
         "lib",
+        "c_src",
         "logo.png",
         "mix.exs",
         "README*",
@@ -62,7 +71,8 @@ defmodule UnicodeTransform.MixProject do
       {:ex_doc, "~> 0.24", only: [:dev, :release], runtime: false, optional: true},
       {:dialyxir, "~> 1.1", only: [:dev], runtime: false, optional: true},
       {:req, "~> 0.5", only: :dev, runtime: false},
-      {:benchee, "~> 1.0", only: :dev, runtime: false}
+      {:benchee, "~> 1.0", only: :dev, runtime: false},
+      {:elixir_make, "~> 0.9", runtime: false, optional: true}
     ]
   end
 
