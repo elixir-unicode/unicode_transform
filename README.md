@@ -447,3 +447,15 @@ used automatically as the default code path for Latin-ASCII transforms.
 mix run bench/backend_comparison.exs
 mix run bench/latin_ascii_benchmark.exs
 ```
+
+## Maintaining the CLDR transform data
+
+The transform rules in `priv/transforms/*.xml` are copied verbatim from a [CLDR](https://github.com/unicode-org/cldr) release. To refresh them for a new CLDR release (CLDR publishes twice a year, in spring and autumn):
+
+1. Check out the target release in a local CLDR clone: `git -C "$CLDR_REPO" fetch --tags && git -C "$CLDR_REPO" checkout release-47`.
+
+2. Run `CLDR_REPO=/path/to/cldr ./update_transforms`. This clears `priv/transforms/` and copies the new `*.xml` files in (so transforms removed upstream do not linger), and prints the CLDR version it copied from.
+
+3. Regenerate the compiled Latin-ASCII fast-path module if `Latin-ASCII.xml` changed: `mix unicode.generate_latin_ascii`.
+
+4. Run `mix test` to confirm the parser and engine still handle every bundled transform.

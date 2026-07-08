@@ -113,29 +113,17 @@ defmodule Unicode.Transform.Loader do
   def find_transform(transform_id) do
     index = ensure_alias_index()
 
-    case Map.get(index, transform_id) do
-      nil ->
-        # Try case-insensitive
-        case Map.get(index, String.downcase(transform_id)) do
-          nil ->
-            # Try resolving BCP47 script codes to Unicode names
-            resolved = Unicode.Transform.Resolve.resolve_bcp47_transform_id(transform_id)
+    Map.get(index, transform_id) ||
+      Map.get(index, String.downcase(transform_id)) ||
+      find_resolved_transform(index, transform_id)
+  end
 
-            if resolved != transform_id do
-              case Map.get(index, resolved) do
-                nil -> Map.get(index, String.downcase(resolved))
-                result -> result
-              end
-            else
-              nil
-            end
+  # Resolve BCP47 script codes to Unicode names and retry the lookup.
+  defp find_resolved_transform(index, transform_id) do
+    resolved = Unicode.Transform.Resolve.resolve_bcp47_transform_id(transform_id)
 
-          result ->
-            result
-        end
-
-      result ->
-        result
+    if resolved != transform_id do
+      Map.get(index, resolved) || Map.get(index, String.downcase(resolved))
     end
   end
 
@@ -200,72 +188,68 @@ defmodule Unicode.Transform.Loader do
 
   # Get or build the alias index as a persistent_term map
   defp ensure_alias_index do
-    try do
-      :persistent_term.get(@alias_index_key)
-    rescue
-      ArgumentError -> build_alias_index()
-    end
+    :persistent_term.get(@alias_index_key)
+  rescue
+    ArgumentError -> build_alias_index()
   end
 
   defp index_transform_file(index, file_path) do
-    try do
-      data = load_file(file_path)
+    data = load_file(file_path)
 
-      # Index forward aliases first (these are authoritative)
-      index =
-        if data.alias != "" do
-          data.alias
-          |> String.split(" ")
-          |> Enum.reduce(index, fn alias_name, acc ->
-            acc
-            |> Map.put(alias_name, {file_path, :forward})
-            |> Map.put(String.downcase(alias_name), {file_path, :forward})
-            |> put_base_alias(alias_name, file_path, :forward)
-          end)
-        else
-          index
-        end
-
-      # Index backward aliases (use put_new so forward aliases take priority)
-      index =
-        if data.backward_alias != "" do
-          data.backward_alias
-          |> String.split(" ")
-          |> Enum.reduce(index, fn alias_name, acc ->
-            acc
-            |> Map.put_new(alias_name, {file_path, :backward})
-            |> Map.put_new(String.downcase(alias_name), {file_path, :backward})
-            |> put_new_base_alias(alias_name, file_path, :backward)
-          end)
-        else
-          index
-        end
-
-      # Index by filename-derived ID only if not already indexed by alias
-      file_id = transform_id_from_file(file_path)
-
-      index =
-        index
-        |> Map.put_new(file_id, {file_path, :forward})
-        |> Map.put_new(String.downcase(file_id), {file_path, :forward})
-
-      # For direction="both", also index the reverse ID
-      if data.direction == "both" do
-        case reverse_transform_id(file_id) do
-          nil ->
-            index
-
-          reverse_id ->
-            index
-            |> Map.put_new(reverse_id, {file_path, :backward})
-            |> Map.put_new(String.downcase(reverse_id), {file_path, :backward})
-        end
+    # Index forward aliases first (these are authoritative)
+    index =
+      if data.alias != "" do
+        data.alias
+        |> String.split(" ")
+        |> Enum.reduce(index, fn alias_name, acc ->
+          acc
+          |> Map.put(alias_name, {file_path, :forward})
+          |> Map.put(String.downcase(alias_name), {file_path, :forward})
+          |> put_base_alias(alias_name, file_path, :forward)
+        end)
       else
         index
       end
-    rescue
-      _ -> index
+
+    # Index backward aliases (use put_new so forward aliases take priority)
+    index =
+      if data.backward_alias != "" do
+        data.backward_alias
+        |> String.split(" ")
+        |> Enum.reduce(index, fn alias_name, acc ->
+          acc
+          |> Map.put_new(alias_name, {file_path, :backward})
+          |> Map.put_new(String.downcase(alias_name), {file_path, :backward})
+          |> put_new_base_alias(alias_name, file_path, :backward)
+        end)
+      else
+        index
+      end
+
+    # Index by filename-derived ID only if not already indexed by alias
+    file_id = transform_id_from_file(file_path)
+
+    index =
+      index
+      |> Map.put_new(file_id, {file_path, :forward})
+      |> Map.put_new(String.downcase(file_id), {file_path, :forward})
+
+    # For direction="both", also index the reverse ID
+    if data.direction == "both" do
+      case reverse_transform_id(file_id) do
+        nil ->
+          index
+
+        reverse_id ->
+          index
+          |> Map.put_new(reverse_id, {file_path, :backward})
+          |> Map.put_new(String.downcase(reverse_id), {file_path, :backward})
+      end
+    else
+      index
     end
+  rescue
+    _ -> index
   end
 
   # Store base alias (without /Variant suffix) using Map.put

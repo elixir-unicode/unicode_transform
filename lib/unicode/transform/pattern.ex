@@ -32,12 +32,10 @@ defmodule Unicode.Transform.Pattern do
   """
   @spec compile(String.t()) :: {:ok, Regex.t()} | {:error, term()}
   def compile(pattern) do
-    try do
-      regex_source = to_regex_source(pattern)
-      Regex.compile(regex_source, "u")
-    rescue
-      e -> {:error, Exception.message(e)}
-    end
+    regex_source = to_regex_source(pattern)
+    Regex.compile(regex_source, "u")
+  rescue
+    e -> {:error, Exception.message(e)}
   end
 
   @doc """
@@ -140,9 +138,7 @@ defmodule Unicode.Transform.Pattern do
 
   # Convert token list to regex source
   defp tokens_to_regex(tokens) do
-    tokens
-    |> Enum.map(&token_to_regex/1)
-    |> Enum.join()
+    Enum.map_join(tokens, &token_to_regex/1)
   end
 
   defp token_to_regex({:literal, text}) do

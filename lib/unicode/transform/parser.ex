@@ -326,26 +326,10 @@ defmodule Unicode.Transform.Parser do
         after_brace_open = Enum.drop(parts, brace_open + 1)
 
         if brace_close && brace_close > brace_open do
-          inner =
-            if brace_open + 1 <= brace_close - 1 do
-              Enum.slice(parts, (brace_open + 1)..(brace_close - 1)//1)
-            else
-              []
-            end
-
+          inner = brace_inner(parts, brace_open, brace_close)
           after_ctx = Enum.drop(parts, brace_close + 1) |> Enum.join("") |> String.trim()
 
-          # Check for revisit inside braces
-          pipe_idx = Enum.find_index(inner, &(&1 == "|"))
-
-          if pipe_idx do
-            text_part = Enum.take(inner, pipe_idx) |> Enum.join("") |> String.trim()
-            revisit = Enum.drop(inner, pipe_idx + 1) |> Enum.join("") |> String.trim()
-            {:full, before_ctx, text_part, revisit, after_ctx}
-          else
-            text_part = Enum.join(inner, "") |> String.trim()
-            {:full, before_ctx, text_part, nil, after_ctx}
-          end
+          build_braced_full(before_ctx, inner, after_ctx)
         else
           # No closing brace — everything after { is the text
           {text_parts, revisit_parts} = split_revisit(after_brace_open)
@@ -367,6 +351,28 @@ defmodule Unicode.Transform.Parser do
 
       true ->
         :flat
+    end
+  end
+
+  # Slice the parts between matched braces, or `[]` when the braces are empty.
+  defp brace_inner(parts, brace_open, brace_close) when brace_open + 1 <= brace_close - 1 do
+    Enum.slice(parts, (brace_open + 1)..(brace_close - 1)//1)
+  end
+
+  defp brace_inner(_parts, _brace_open, _brace_close), do: []
+
+  # Build a `:full` structure from the parts inside matched braces, splitting
+  # on the optional revisit marker `|`.
+  defp build_braced_full(before_ctx, inner, after_ctx) do
+    pipe_idx = Enum.find_index(inner, &(&1 == "|"))
+
+    if pipe_idx do
+      text_part = Enum.take(inner, pipe_idx) |> Enum.join("") |> String.trim()
+      revisit = Enum.drop(inner, pipe_idx + 1) |> Enum.join("") |> String.trim()
+      {:full, before_ctx, text_part, revisit, after_ctx}
+    else
+      text_part = Enum.join(inner, "") |> String.trim()
+      {:full, before_ctx, text_part, nil, after_ctx}
     end
   end
 

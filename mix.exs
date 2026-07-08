@@ -1,7 +1,7 @@
 defmodule UnicodeTransform.MixProject do
   use Mix.Project
 
-  @version "1.0.0"
+  @version "1.0.1"
 
   def project do
     [
@@ -19,10 +19,31 @@ defmodule UnicodeTransform.MixProject do
       description: description(),
       package: package(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_coverage: [
+        summary: [threshold: 90],
+        ignore_modules: coverage_ignore_modules()
+      ],
       dialyzer: [
         plt_add_apps: ~w(mix sweet_xml unicode_set)a,
         ignore_warnings: ".dialyzer_ignore_warnings"
       ]
+    ]
+  end
+
+  # Modules excluded from `mix test --cover` so coverage reflects the runtime
+  # library logic, not build tooling, generated data tables, or the optional
+  # NIF (which is not built during the default test run).
+  defp coverage_ignore_modules do
+    [
+      # Build-time Mix tasks, not runtime code.
+      ~r/^Mix\.Tasks\./,
+      # Optional C NIF; not built during the default test run.
+      Unicode.Transform.Nif,
+      # Auto-generated from priv/transforms/Latin-ASCII.xml: ~800 codepoint
+      # function heads (a data table as code). Its runtime entry point is
+      # exercised by test/latin_ascii_test.exs; covering every codepoint head
+      # would not add meaningful assurance.
+      Unicode.Transform.LatinAscii
     ]
   end
 
@@ -79,6 +100,7 @@ defmodule UnicodeTransform.MixProject do
       {:unicode_set, "~> 1.6"},
       {:sweet_xml, "~> 0.7", runtime: false},
       {:ex_doc, "~> 0.24", only: [:dev, :release], runtime: false, optional: true},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false, optional: true},
       {:dialyxir, "~> 1.1", only: [:dev, :test], runtime: false, optional: true},
       {:req, "~> 0.5", only: :dev, runtime: false},
       {:benchee, "~> 1.0", only: :dev, runtime: false},

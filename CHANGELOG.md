@@ -1,5 +1,15 @@
 # Changelog
 
+## Unicode Transform 1.0.1
+
+### Bug Fixes
+
+* Correct the `Unicode.Transform.Builtin.apply/2` NFD documentation example, which showed a precomposed result where NFD produces a decomposed one.
+
+### Enhancements
+
+* Confirm the library compiles cleanly under Elixir 1.20 with `--warnings-as-errors`, and add Credo strict linting, a 90% test-coverage gate, a formatting pre-commit hook, and OTP/Elixir-scoped CI cache keys.
+
 ## Unicode Transform 1.0.0
 
 This is the changelog for Unicode Transform 1.0.0 released on March 17th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)

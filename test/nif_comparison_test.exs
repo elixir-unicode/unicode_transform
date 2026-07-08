@@ -326,9 +326,7 @@ defmodule Unicode.Transform.NifComparisonTest do
 
     property "script-to-Latin transforms produce results for script input",
              %{available_transforms: available} do
-      if not Nif.available?() do
-        :ok
-      else
+      if Nif.available?() do
         script_transforms =
           @script_ranges
           |> Map.keys()
@@ -353,14 +351,14 @@ defmodule Unicode.Transform.NifComparisonTest do
             end
           end
         end
+      else
+        :ok
       end
     end
 
     property "script-to-Latin transforms: Elixir vs NIF comparison",
              %{available_transforms: available} do
-      if not Nif.available?() do
-        :ok
-      else
+      if Nif.available?() do
         script_transforms =
           @script_ranges
           |> Map.keys()
@@ -394,6 +392,8 @@ defmodule Unicode.Transform.NifComparisonTest do
             end
           end
         end
+      else
+        :ok
       end
     end
   end
@@ -416,11 +416,11 @@ defmodule Unicode.Transform.NifComparisonTest do
 
     for {input, expected} <- @latin_ascii_cases do
       test "Latin-ASCII: #{inspect(input)} → #{inspect(expected)}" do
-        if not Nif.available?() do
-          :ok
-        else
+        if Nif.available?() do
           {:ok, nif_result} = nif_transform(unquote(input), "Latin-ASCII", :forward)
           assert nif_result == unquote(expected)
+        else
+          :ok
         end
       end
     end
@@ -435,11 +435,11 @@ defmodule Unicode.Transform.NifComparisonTest do
 
     for {input, _expected} <- @greek_cases do
       test "Greek-Latin NIF produces output for #{inspect(input)}" do
-        if not Nif.available?() do
-          :ok
-        else
+        if Nif.available?() do
           {:ok, result} = nif_transform(unquote(input), "Greek-Latin", :forward)
           assert is_binary(result) and byte_size(result) > 0
+        else
+          :ok
         end
       end
     end
@@ -451,11 +451,11 @@ defmodule Unicode.Transform.NifComparisonTest do
 
     for {input, _expected} <- @cyrillic_cases do
       test "Cyrillic-Latin NIF produces output for #{inspect(input)}" do
-        if not Nif.available?() do
-          :ok
-        else
+        if Nif.available?() do
           {:ok, result} = nif_transform(unquote(input), "Cyrillic-Latin", :forward)
           assert is_binary(result) and byte_size(result) > 0
+        else
+          :ok
         end
       end
     end
@@ -469,9 +469,7 @@ defmodule Unicode.Transform.NifComparisonTest do
     @describetag :nif_comparison
 
     property "NIF does not crash on arbitrary Unicode input" do
-      if not Nif.available?() do
-        :ok
-      else
+      if Nif.available?() do
         check all(
                 string <- unicode_string(),
                 transform_id <- member_of(["Any-Latin", "Any-NFC", "Any-NFD", "Latin-ASCII"]),
@@ -482,31 +480,33 @@ defmodule Unicode.Transform.NifComparisonTest do
           assert match?({:ok, _}, result) or match?({:error, _}, result),
                  "NIF returned unexpected value: #{inspect(result)}"
         end
+      else
+        :ok
       end
     end
 
     property "NIF handles empty strings" do
-      if not Nif.available?() do
-        :ok
-      else
+      if Nif.available?() do
         check all(
                 transform_id <-
                   member_of(["Any-Latin", "Any-NFC", "Any-Upper", "Latin-ASCII"])
               ) do
           assert {:ok, ""} == Nif.transform(transform_id, "", 0)
         end
+      else
+        :ok
       end
     end
 
     property "NIF forward then reverse is approximately round-trip for Any-Latin" do
-      if not Nif.available?() do
-        :ok
-      else
+      if Nif.available?() do
         check all(string <- latin_string(), max_runs: 100) do
           # Latin input through Any-Latin forward should be largely unchanged
           {:ok, forward} = Nif.transform("Any-Latin", string, 0)
           assert is_binary(forward)
         end
+      else
+        :ok
       end
     end
   end

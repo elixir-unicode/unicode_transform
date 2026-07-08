@@ -59,11 +59,9 @@ defmodule Mix.Tasks.Unicode.GenerateLatinAscii do
 
   defp generate_module(mappings, _context_rules) do
     function_heads =
-      mappings
-      |> Enum.map(fn {pattern, replacement} ->
+      Enum.map_join(mappings, "\n", fn {pattern, replacement} ->
         generate_function_head(pattern, replacement)
       end)
-      |> Enum.join("\n")
 
     combining_mark_ranges = generate_combining_mark_ranges()
 
@@ -147,13 +145,11 @@ defmodule Mix.Tasks.Unicode.GenerateLatinAscii do
       {0xFE20, 0xFE2F}
     ]
 
-    ranges
-    |> Enum.map(fn {first, last} ->
+    Enum.map_join(ranges, "\n", fn {first, last} ->
       "  defp do_transform(<<cp::utf8, rest::binary>>, acc) " <>
         "when cp >= #{hex(first)} and cp <= #{hex(last)}, " <>
         "do: do_transform(rest, acc)"
     end)
-    |> Enum.join("\n")
   end
 
   defp hex(n), do: "0x#{Integer.to_string(n, 16)}"

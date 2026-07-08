@@ -1,13 +1,40 @@
-#! /bin/zsh
+#!/bin/zsh
+set -euo pipefail
 
-# Copies the unicode transforms xml into
-# this repository so we have a stable source
+# Refreshes the bundled CLDR transforms in priv/transforms/ from a local
+# checkout of the CLDR repository (https://github.com/unicode-org/cldr).
+#
+# Before running, point CLDR_REPO at a CLDR checkout that is already switched
+# to the target release tag, for example:
+#
+#     git -C "$CLDR_REPO" fetch --tags
+#     git -C "$CLDR_REPO" checkout release-47
+#
+# Usage:
+#
+#     CLDR_REPO=/path/to/cldr ./update_transforms
+#     mix unicode.generate_latin_ascii   # regenerate the compiled Latin-ASCII module
+#     mix test
 
-# The location of the cloned CLDR repo
-export CLDR_REPO="${CLDR_REPO:=$HOME/Development/cldr_repo}"
-[ ! -d $CLDR_REPO ] && { echo "Unicode CLDR repository $CLDR_REPO was not found."; exit 1; }
+# Location of the cloned CLDR repo.
+CLDR_REPO="${CLDR_REPO:-$HOME/Development/cldr_repo}"
 
-export UNICODE_TRANSFORM="${UNICODE_TRANSFORMS:=$HOME/Development/unicode_transform}"
-[ ! -d $UNICODE_TRANSFORM ] && { echo "Unicode Transform repository $UNICODE_TRANSFORM was not found."; exit 1; }
+# Location of this unicode_transform repo (defaults to the script's own repo).
+UNICODE_TRANSFORM="${UNICODE_TRANSFORM:-${0:A:h}}"
 
-cp $CLDR_REPO/common/transforms/* $UNICODE_TRANSFORM/transforms/
+SOURCE="$CLDR_REPO/common/transforms"
+DEST="$UNICODE_TRANSFORM/priv/transforms"
+
+[[ -d "$SOURCE" ]] || { echo "CLDR transforms not found at $SOURCE"; exit 1; }
+[[ -d "$DEST" ]]   || { echo "Destination not found at $DEST"; exit 1; }
+
+# Clean sync so transforms removed upstream do not linger, and copy only the
+# .xml source files (CLDR may ship other files in that directory).
+rm -f "$DEST"/*.xml
+cp "$SOURCE"/*.xml "$DEST"/
+
+count=$(ls "$DEST"/*.xml | wc -l | tr -d ' ')
+version=$(git -C "$CLDR_REPO" describe --tags --always 2>/dev/null || echo unknown)
+
+echo "Copied $count transform files from CLDR $version into priv/transforms/."
+echo "Next: run 'mix unicode.generate_latin_ascii' (if Latin-ASCII.xml changed) and 'mix test'."

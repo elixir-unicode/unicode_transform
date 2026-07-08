@@ -70,14 +70,18 @@ defmodule Unicode.Transform.Builtin do
 
   ### Examples
 
-      iex> Unicode.Transform.Builtin.apply("Ä", "NFD")
-      "Ä"
-
       iex> Unicode.Transform.Builtin.apply("hello", "Upper")
       "HELLO"
 
+      # NFD decomposes "Ä" (U+00C4) into "A" plus a combining diaeresis.
+      iex> byte_size(Unicode.Transform.Builtin.apply("Ä", "NFD"))
+      3
+
   """
   @spec apply(String.t(), String.t()) :: String.t()
+  # Flat dispatch over the fixed set of built-in transforms; each branch is a
+  # single operation and reads more clearly as one table than split functions.
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   def apply(string, name) do
     case Map.get(@builtin_transforms, normalize_name(name)) do
       :nfc -> String.normalize(string, :nfc)
@@ -123,6 +127,9 @@ defmodule Unicode.Transform.Builtin do
 
   """
   @spec inverse(String.t()) :: String.t() | nil
+  # Flat dispatch mapping each built-in transform to its inverse; a single
+  # case table is clearer than splitting the fixed mapping across functions.
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   def inverse(name) do
     case normalize_name(name) do
       n when n in ["NFC", "Any-NFC"] -> "NFD"
@@ -150,8 +157,10 @@ defmodule Unicode.Transform.Builtin do
     if Map.has_key?(@builtin_transforms, canonical) do
       canonical
     else
+      downcased = String.downcase(canonical)
+
       Enum.find_value(@builtin_transforms, canonical, fn {key, _val} ->
-        if String.downcase(key) == String.downcase(canonical), do: key
+        String.downcase(key) == downcased && key
       end)
     end
   end
@@ -159,12 +168,11 @@ defmodule Unicode.Transform.Builtin do
   defp title_case(string) do
     string
     |> String.split(~r/(\s+)/u, include_captures: true)
-    |> Enum.map(fn word ->
+    |> Enum.map_join("", fn word ->
       case String.next_grapheme(word) do
         {first, rest} -> String.capitalize(first) <> String.downcase(rest)
         nil -> ""
       end
     end)
-    |> Enum.join()
   end
 end

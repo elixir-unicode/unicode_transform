@@ -335,19 +335,23 @@ defmodule Unicode.Transform do
           |> Enum.map(fn {script, _} -> script end)
 
         Enum.reduce_while(scripts, {:ok, string}, fn script, {:ok, acc} ->
-          from_name = Resolve.script_name(script)
-
-          if from_name do
-            transform_id = "#{from_name}-#{name}"
-
-            case do_transform(acc, transform_id, :forward, backend) do
-              {:ok, result} -> {:cont, {:ok, result}}
-              {:error, _} = error -> {:halt, error}
-            end
-          else
-            {:cont, {:ok, acc}}
-          end
+          transform_from_script(acc, script, name, backend)
         end)
+    end
+  end
+
+  # Apply the single-script transform for one detected script, returning a
+  # `reduce_while` control tuple.
+  defp transform_from_script(acc, script, name, backend) do
+    case Resolve.script_name(script) do
+      nil ->
+        {:cont, {:ok, acc}}
+
+      from_name ->
+        case do_transform(acc, "#{from_name}-#{name}", :forward, backend) do
+          {:ok, result} -> {:cont, {:ok, result}}
+          {:error, _} = error -> {:halt, error}
+        end
     end
   end
 

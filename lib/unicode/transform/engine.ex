@@ -20,8 +20,9 @@ defmodule Unicode.Transform.Engine do
 
   """
 
+  alias Unicode.Transform.Builtin
   alias Unicode.Transform.Compiler.CompiledTransform
-  alias Unicode.Transform.{Builtin, Pattern}
+  alias Unicode.Transform.Pattern
 
   # Cache compiled regexes to avoid recompiling on every match attempt
   @regex_cache_table :unicode_transform_regex_cache

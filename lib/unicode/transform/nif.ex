@@ -73,14 +73,12 @@ defmodule Unicode.Transform.Nif do
   end
 
   defp nif_loaded? do
-    try do
-      case transform("Any-Null", "", 0) do
-        {:ok, _} -> true
-        _ -> false
-      end
-    rescue
+    case transform("Any-Null", "", 0) do
+      {:ok, _} -> true
       _ -> false
     end
+  rescue
+    _ -> false
   end
 
   @doc """

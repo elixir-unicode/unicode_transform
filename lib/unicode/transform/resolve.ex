@@ -279,8 +279,7 @@ defmodule Unicode.Transform.Resolve do
   def resolve_bcp47_transform_id(transform_id) when is_binary(transform_id) do
     transform_id
     |> String.split("-", parts: 2)
-    |> Enum.map(fn segment -> Map.get(@bcp47_script_to_unicode, segment, segment) end)
-    |> Enum.join("-")
+    |> Enum.map_join("-", fn segment -> Map.get(@bcp47_script_to_unicode, segment, segment) end)
   end
 
   @doc """
@@ -313,8 +312,7 @@ defmodule Unicode.Transform.Resolve do
   def to_bcp47_transform_id(transform_id) when is_binary(transform_id) do
     transform_id
     |> String.split("-", parts: 2)
-    |> Enum.map(fn segment -> Map.get(@unicode_script_to_bcp47, segment, segment) end)
-    |> Enum.join("-")
+    |> Enum.map_join("-", fn segment -> Map.get(@unicode_script_to_bcp47, segment, segment) end)
   end
 
   @doc """

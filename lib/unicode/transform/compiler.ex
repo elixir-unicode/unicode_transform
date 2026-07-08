@@ -17,8 +17,8 @@ defmodule Unicode.Transform.Compiler do
 
   """
 
-  alias Unicode.Transform.Rule.{Conversion, Definition, Filter, Transform}
   alias Unicode.Transform.Builtin
+  alias Unicode.Transform.Rule.{Conversion, Definition, Filter, Transform}
 
   defmodule CompiledTransform do
     @moduledoc """
@@ -142,7 +142,10 @@ defmodule Unicode.Transform.Compiler do
     end)
   end
 
-  # Filter rules to only those relevant for the given direction
+  # Filter rules to only those relevant for the given direction.
+  # Rule-direction dispatch: one case table over rule type and direction is
+  # clearer than splitting the fixed matrix across many helper clauses.
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   defp filter_by_direction(rules, direction) do
     Enum.flat_map(rules, fn rule ->
       case rule do
