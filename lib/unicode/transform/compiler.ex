@@ -224,13 +224,18 @@ defmodule Unicode.Transform.Compiler do
   end
 
   defp select_transform_direction(%Transform{forward: fwd, backward: bwd}, :reverse) do
-    name = bwd || fwd
+    cond do
+      # An explicit inverse `:: A (B) ;` or `:: (B) ;` already names B as the
+      # reverse-direction transform, so use it directly rather than inverting it
+      # (e.g. `:: (NFD) ;` must run NFD in reverse, not its inverse NFC).
+      not is_nil(bwd) and bwd != fwd ->
+        %Transform{forward: bwd, backward: nil}
 
-    if name do
-      inverted = invert_transform_name(name)
-      %Transform{forward: inverted, backward: nil}
-    else
-      nil
+      true ->
+        case bwd || fwd do
+          nil -> nil
+          name -> %Transform{forward: invert_transform_name(name), backward: nil}
+        end
     end
   end
 
@@ -430,6 +435,14 @@ defmodule Unicode.Transform.Compiler do
 
   defp unescape_string(<<"\\", char::utf8, rest::binary>>) do
     <<char::utf8>> <> unescape_string(rest)
+  end
+
+  # A doubled single-quote is ICU's escape for one literal apostrophe (as in SQL),
+  # inside or outside a quoted region. Must precede the single-quote clause so it
+  # is not misread as an empty quoted string (which would drop the apostrophe —
+  # e.g. the disambiguating `''` in the Indic→Latin transliterations).
+  defp unescape_string(<<"''", rest::binary>>) do
+    "'" <> unescape_string(rest)
   end
 
   defp unescape_string(<<"'", rest::binary>>) do

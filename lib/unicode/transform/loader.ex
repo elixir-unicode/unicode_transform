@@ -115,7 +115,23 @@ defmodule Unicode.Transform.Loader do
 
     Map.get(index, transform_id) ||
       Map.get(index, String.downcase(transform_id)) ||
-      find_resolved_transform(index, transform_id)
+      find_resolved_transform(index, transform_id) ||
+      find_t_swapped_transform(index, transform_id)
+  end
+
+  # Last-resort fallback for a BCP-47 `<target>-t-<source>` id whose rule file is
+  # registered under the swapped `<source>-t-<target>` alias (e.g.
+  # `d0-morse-t-am-Ethi` → `am-Ethi-t-d0-morse`). Only used when the direct and
+  # script-resolved lookups both miss, so it cannot shadow a normal resolution.
+  defp find_t_swapped_transform(index, transform_id) do
+    case String.split(transform_id, "-t-", parts: 2) do
+      [target, source] ->
+        swapped = source <> "-t-" <> target
+        Map.get(index, swapped) || Map.get(index, String.downcase(swapped))
+
+      _ ->
+        nil
+    end
   end
 
   # Resolve BCP47 script codes to Unicode names and retry the lookup.

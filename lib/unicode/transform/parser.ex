@@ -20,7 +20,9 @@ defmodule Unicode.Transform.Parser do
   alias Unicode.Transform.Rule.{Comment, Conversion, Definition, Filter, Transform}
 
   @direction_chars ["→", "←", "↔"]
-  @direction_regex ~r/(?<![\\'])[→←↔]/u
+  # A conversion rule uses a Unicode arrow (→ ← ↔) or the equivalent ICU ASCII
+  # operator (> < <>). The lookbehind excludes an escaped or quoted operator.
+  @direction_regex ~r/(?<![\\'])(<>|[<>→←↔])/u
 
   @doc """
   Parses a complete rule text string into a list of rule structs.
@@ -37,6 +39,7 @@ defmodule Unicode.Transform.Parser do
   @spec parse(String.t()) :: [struct()]
   def parse(rule_text) do
     rule_text
+    |> strip_bidi_controls()
     |> split_rules()
     |> Enum.map(&parse_rule/1)
     |> Enum.reject(&is_nil/1)
@@ -79,16 +82,75 @@ defmodule Unicode.Transform.Parser do
     end
   end
 
+  # Bidi formatting controls (LRM U+200E, RLM U+200F, ALM U+061C) sometimes appear
+  # as invisible editing artifacts in CLDR rule text (e.g. the Uyghur and
+  # Arabic/Hebrew rules); ICU ignores them when parsing rules, so we strip them
+  # before parsing. This is applied to the RULE TEXT only, never to the input being
+  # transformed. ZWJ/ZWNJ (U+200C/U+200D) are deliberately NOT stripped — they are
+  # legitimate output in some transforms. A rule that genuinely emits an LRM/RLM
+  # uses the \u200E escape, which survives (only the literal character is removed).
+  defp strip_bidi_controls(text) do
+    String.replace(text, ["\u200E", "\u200F", "\u061C"], "")
+  end
+
   # Split the rule text into individual rule strings.
   # Rules are terminated by semicolons, but semicolons inside
   # quoted strings or character classes don't count.
   defp split_rules(text) do
     text
+    |> join_bracketed_lines()
     |> String.split("\n")
     |> Enum.map(&String.trim/1)
     |> Enum.flat_map(&split_line_at_semicolons/1)
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
+  end
+
+  # A newline inside a `[...]` set (a multi-line variable/set definition) is not a
+  # statement boundary — replace it with a space so the set is parsed as one unit.
+  # Tracks quote and escape state so a `[` in a comment/quote does not miscount
+  # bracket depth, and leaves comments (`#` to end of line) and their newlines intact.
+  defp join_bracketed_lines(text), do: do_join_bracketed(text, 0, false, "")
+
+  defp do_join_bracketed("", _depth, _quoted, acc), do: acc
+
+  defp do_join_bracketed(<<"\\", char::utf8, rest::binary>>, depth, quoted, acc) do
+    do_join_bracketed(rest, depth, quoted, acc <> "\\" <> <<char::utf8>>)
+  end
+
+  # Track `'` quoting only OUTSIDE a set: inside `[...]` a `'` is a literal set
+  # member (e.g. the apostrophe in `[',.A-Za-z]`), and toggling quote state there
+  # would swallow the closing `]` and collapse the rest of the file into the set.
+  defp do_join_bracketed(<<"'", rest::binary>>, 0, quoted, acc) do
+    do_join_bracketed(rest, 0, not quoted, acc <> "'")
+  end
+
+  # A `#` comment (outside a set and outside quotes) runs to the end of the line;
+  # consume it verbatim so brackets inside it never affect depth.
+  defp do_join_bracketed(<<"#", rest::binary>>, 0, false, acc) do
+    {comment, rest} =
+      case :binary.split(rest, "\n") do
+        [comment, after_newline] -> {comment, "\n" <> after_newline}
+        [comment] -> {comment, ""}
+      end
+
+    do_join_bracketed(rest, 0, false, acc <> "#" <> comment)
+  end
+
+  defp do_join_bracketed(<<"[", rest::binary>>, depth, false, acc) do
+    do_join_bracketed(rest, depth + 1, false, acc <> "[")
+  end
+
+  defp do_join_bracketed(<<"]", rest::binary>>, depth, false, acc) do
+    do_join_bracketed(rest, max(depth - 1, 0), false, acc <> "]")
+  end
+
+  defp do_join_bracketed(<<"\n", rest::binary>>, depth, quoted, acc) when depth > 0 do
+    do_join_bracketed(rest, depth, quoted, acc <> " ")
+  end
+
+  defp do_join_bracketed(<<char::utf8, rest::binary>>, depth, quoted, acc) do
+    do_join_bracketed(rest, depth, quoted, acc <> <<char::utf8>>)
   end
 
   defp split_line_at_semicolons(line) do
@@ -151,9 +213,13 @@ defmodule Unicode.Transform.Parser do
   # Ethiopic transforms define `$ግዕዝ = 'a'`. The name class must therefore admit
   # any letter/mark/number plus underscore, or those definitions are silently
   # dropped and their references pass through unresolved.
+  #
+  # The value uses `.*` (not `.+`): CLDR defines empty variables (`$x = ;`, e.g.
+  # the SERA/ES3842 Ethiopic word-final vowel markers) which must register with an
+  # empty value so their references resolve to "" instead of leaking `$x` verbatim.
   defp parse_definition(rule) do
     case Regex.run(
-           ~r/^\$([\p{L}_][\p{L}\p{M}\p{N}_]*)\s*=\s*(.+)$/u,
+           ~r/^\$([\p{L}_][\p{L}\p{M}\p{N}_]*)\s*=\s*(.*)$/u,
            strip_comment_and_semicolon(rule)
          ) do
       [_, variable, value] ->
@@ -184,9 +250,9 @@ defmodule Unicode.Transform.Parser do
 
         %Filter{unicode_set: unicode_set, direction: :inverse}
 
-      # Forward filter: :: [unicode_set] ;
+      # Forward filter `:: [set] ;`, or a filtered transform `:: [set] Name ;`.
       String.starts_with?(content, "[") ->
-        %Filter{unicode_set: content, direction: :forward}
+        parse_filter_directive(content)
 
       # Transform with forward and backward: :: forward (backward) ;
       Regex.match?(~r/\(/, content) ->
@@ -201,6 +267,25 @@ defmodule Unicode.Transform.Parser do
         else
           %Transform{forward: name, backward: name}
         end
+    end
+  end
+
+  # A directive that begins with a `[set]` is either a bare global filter
+  # (`:: [set] ;`) or a filtered transform (`:: [set] Name ;`). Strip the leading
+  # balanced set: if a transform name follows, emit that transform (the set only
+  # restricts which characters it sees, which is redundant for the transforms that
+  # use this form); otherwise it is a plain forward filter.
+  defp parse_filter_directive(<<"[", rest::binary>>) do
+    {class, remainder} = extract_character_class(rest, 1)
+
+    case String.trim(remainder) do
+      "" ->
+        %Filter{unicode_set: "[" <> class, direction: :forward}
+
+      name ->
+        if String.contains?(name, "("),
+          do: parse_transform_directive(name),
+          else: %Transform{forward: name, backward: name}
     end
   end
 
@@ -281,6 +366,21 @@ defmodule Unicode.Transform.Parser do
     end
   end
 
+  # ICU ASCII operators, normalized to the Unicode arrow so parse_conversion needs
+  # no further change. `<>` must be tried before `<`. These sit after the escape,
+  # quote and `[...]` clauses above, so a literal/quoted/in-set `<`/`>` is untouched.
+  defp do_split_direction(<<"<>", rest::binary>>, acc) do
+    {String.trim(acc), "↔", String.trim(rest)}
+  end
+
+  defp do_split_direction(<<">", rest::binary>>, acc) do
+    {String.trim(acc), "→", String.trim(rest)}
+  end
+
+  defp do_split_direction(<<"<", rest::binary>>, acc) do
+    {String.trim(acc), "←", String.trim(rest)}
+  end
+
   defp do_split_direction(<<char::utf8, rest::binary>>, acc) do
     do_split_direction(rest, acc <> <<char::utf8>>)
   end
@@ -308,13 +408,33 @@ defmodule Unicode.Transform.Parser do
         # No braces — check for revisit marker
         case split_revisit(parts) do
           {text_parts, revisit_parts} ->
+            {text, after_ctx} =
+              text_parts |> Enum.join("") |> String.trim() |> extract_trailing_end_anchor()
+
             %{
               before_context: nil,
-              text: Enum.join(text_parts, "") |> String.trim(),
+              text: text,
               revisit: Enum.join(revisit_parts, "") |> String.trim() |> nilify(),
-              after_context: nil
+              after_context: after_ctx
             }
         end
+    end
+  end
+
+  # A trailing `$` (or `[$]`) end-anchor in a flat (brace-less) source pattern is
+  # not part of the text to match — route it to the after-context so the engine's
+  # end-of-text boundary handling applies it (e.g. the Morse rule `([.-])' ' $`).
+  # An escaped `\$` is a literal dollar, not an anchor.
+  defp extract_trailing_end_anchor(text) do
+    cond do
+      String.ends_with?(text, "[$]") ->
+        {text |> String.replace_suffix("[$]", "") |> String.trim(), "[$]"}
+
+      String.ends_with?(text, "$") and not String.ends_with?(text, "\\$") ->
+        {text |> String.replace_suffix("$", "") |> String.trim(), "$"}
+
+      true ->
+        {text, nil}
     end
   end
 
@@ -439,10 +559,6 @@ defmodule Unicode.Transform.Parser do
   # Extract a quoted string (between single quotes)
   defp extract_quoted(string, acc \\ "")
   defp extract_quoted("", acc), do: {acc, ""}
-
-  defp extract_quoted(<<"\\'"::binary, rest::binary>>, acc) do
-    extract_quoted(rest, acc <> "'")
-  end
 
   defp extract_quoted(<<"'"::utf8, rest::binary>>, acc) do
     {acc, rest}

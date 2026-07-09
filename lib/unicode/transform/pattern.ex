@@ -137,9 +137,28 @@ defmodule Unicode.Transform.Pattern do
   end
 
   # Convert token list to regex source
+  # ICU transliteration matches greedily WITHOUT backtracking, so a quantified
+  # subpattern keeps everything it matched even if that makes the overall rule
+  # fail (unlike PCRE's default backtracking). We reproduce this by emitting
+  # possessive quantifiers (`*+`/`++`/`?+`). Adjacent quantifier tokens are
+  # coalesced (first wins): variable substitution of e.g. `$x+` where `$x` ends in
+  # `*` would otherwise yield an invalid `*+++`.
   defp tokens_to_regex(tokens) do
-    Enum.map_join(tokens, &token_to_regex/1)
+    tokens
+    |> Enum.reduce({[], false}, fn
+      {:quantifier, _q}, {acc, true} -> {acc, true}
+      {:quantifier, q}, {acc, false} -> {[possessive_quantifier(q) | acc], true}
+      token, {acc, _prev_quantifier?} -> {[token_to_regex(token) | acc], false}
+    end)
+    |> elem(0)
+    |> Enum.reverse()
+    |> Enum.join()
   end
+
+  defp possessive_quantifier("+"), do: "++"
+  defp possessive_quantifier("*"), do: "*+"
+  defp possessive_quantifier("?"), do: "?+"
+  defp possessive_quantifier(other), do: other
 
   defp token_to_regex({:literal, text}) do
     Regex.escape(text)
