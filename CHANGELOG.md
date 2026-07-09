@@ -1,26 +1,20 @@
 # Changelog
 
-## Unicode Transform 1.1.0 (unreleased)
+## Unicode Transform 1.1.0
+
+This is the changelog for Unicode Transform 1.1.0 released on July 8th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
 
 ### Bug Fixes
 
 * The pure-Elixir transform engine (`backend: :elixir`) now conforms to 99.99% of the official CLDR transform test data, up from ~81%. Around twenty root-cause fixes across the parser, compiler, engine and resolver correct Unicode-script variable names, text-boundary and `^`/`$` anchor matching, BCP-47 `m0` keyword aliases, `''` apostrophe and backslash escaping, greedy (possessive) matching, backreferences to context groups, ASCII rule operators (`> < <>`), multi-line set definitions, filtered transforms, and CRLF test data.
+
+* Correct the `Unicode.Transform.Builtin.apply/2` NFD documentation example, which showed a precomposed result where NFD produces a decomposed one.
 
 * `Georgian-Latin-BGN` (`ka-Latn-t-ka-m0-bgn-2009`) now emits U+02BC to match CLDR's golden test data, working around an upstream CLDR inconsistency where the rule file itself ships U+2019.
 
 ### Enhancements
 
 * Added a strict CLDR transform conformance suite (`mix test --only cldr_conformance`) driven by ~297k vendored CLDR test cases — one test per transform, red until the engine is fully conformant.
-
-## Unicode Transform 1.0.1
-
-This is the changelog for Unicode Transform 1.0.1 released on July 8th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
-
-### Bug Fixes
-
-* Correct the `Unicode.Transform.Builtin.apply/2` NFD documentation example, which showed a precomposed result where NFD produces a decomposed one.
-
-### Enhancements
 
 * Confirm the library compiles cleanly under Elixir 1.20 with `--warnings-as-errors`, and add Credo strict linting, a 90% test-coverage gate, a formatting pre-commit hook, and OTP/Elixir-scoped CI cache keys.
 
