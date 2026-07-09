@@ -224,18 +224,18 @@ defmodule Unicode.Transform.Compiler do
   end
 
   defp select_transform_direction(%Transform{forward: fwd, backward: bwd}, :reverse) do
-    cond do
+    if is_nil(bwd) or bwd == fwd do
+      # Plain `:: Name ;` (the parser sets forward == backward) or forward-only
+      # `:: A () ;` (bwd is nil): invert the single name for the reverse direction.
+      case bwd || fwd do
+        nil -> nil
+        name -> %Transform{forward: invert_transform_name(name), backward: nil}
+      end
+    else
       # An explicit inverse `:: A (B) ;` or `:: (B) ;` already names B as the
       # reverse-direction transform, so use it directly rather than inverting it
       # (e.g. `:: (NFD) ;` must run NFD in reverse, not its inverse NFC).
-      not is_nil(bwd) and bwd != fwd ->
-        %Transform{forward: bwd, backward: nil}
-
-      true ->
-        case bwd || fwd do
-          nil -> nil
-          name -> %Transform{forward: invert_transform_name(name), backward: nil}
-        end
+      %Transform{forward: bwd, backward: nil}
     end
   end
 
