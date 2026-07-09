@@ -1,7 +1,7 @@
 defmodule UnicodeTransform.MixProject do
   use Mix.Project
 
-  @version "1.0.1"
+  @version "1.1.0"
 
   def project do
     [
@@ -97,7 +97,7 @@ defmodule UnicodeTransform.MixProject do
 
   defp deps do
     [
-      {:unicode_set, "~> 1.6"},
+      {:unicode_set, "~> 1.7"},
       {:sweet_xml, "~> 0.7", runtime: false},
       {:ex_doc, "~> 0.24", only: [:dev, :release], runtime: false, optional: true},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false, optional: true},
