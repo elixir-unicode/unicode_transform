@@ -29,27 +29,31 @@ For terms of use, see http://www.unicode.org/copyright.html
 ზ → z;
 თ → t;
 ი → i;
-კ → k’;
+# NOTE (local deviation from CLDR source): the ejective apostrophe below is
+# U+02BC MODIFIER LETTER APOSTROPHE, to match CLDR's own golden transform test
+# data. CLDR common/transforms ships U+2019 (RIGHT SINGLE QUOTATION MARK) here,
+# which disagrees with its test data — an upstream CLDR inconsistency.
+კ → kʼ;
 ლ → l;
 მ → m;
 ნ → n;
 ო → o;
-პ → p’;
+პ → pʼ;
 ჟ → zh;
 რ → r;
 ს → s;
-ტ → t’;
+ტ → tʼ;
 უ → u;
 ფ → p;
 ქ → k;
 ღ → gh;
-ყ → q’;
+ყ → qʼ;
 შ → sh;
 ჩ → ch;
 ც → ts;
 ძ → dz;
-წ → ts’;
-ჭ → ch’;
+წ → tsʼ;
+ჭ → chʼ;
 ხ → kh;
 ჯ → j;
 ჰ → h;
