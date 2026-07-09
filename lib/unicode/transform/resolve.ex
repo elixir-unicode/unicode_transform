@@ -152,6 +152,21 @@ defmodule Unicode.Transform.Resolve do
                             |> Enum.map(fn name -> {String.downcase(name), name} end)
                             |> Map.new()
 
+  # BCP-47 `m0` (transform mechanism) keyword aliases, from CLDR's
+  # `common/bcp47/transform.xml` (`<type name="..." alias="..."/>`). The CLDR
+  # transform *test data* is named with the `alias` form (e.g. `beta-metsehaf`),
+  # while the transform *rule* XMLs carry the canonical `name` form (e.g.
+  # `betamets`), so a BCP-47 id using the alias must be normalized to the
+  # canonical subtag before it can resolve. Each alias is a whole `m0` mechanism
+  # subtag-sequence that maps to a single canonical subtag.
+  @m0_type_aliases [
+    {"beta-metsehaf", "betamets"},
+    {"ies-jes", "iesjes"},
+    {"tekie-alibekit", "tekieali"},
+    {"names", "prprname"},
+    {"c", "c11"}
+  ]
+
   @doc """
   Resolves keyword options to a `{transform_id, direction}` tuple.
 
@@ -278,8 +293,39 @@ defmodule Unicode.Transform.Resolve do
   @spec resolve_bcp47_transform_id(String.t()) :: String.t()
   def resolve_bcp47_transform_id(transform_id) when is_binary(transform_id) do
     transform_id
+    |> normalize_m0_aliases()
     |> String.split("-", parts: 2)
     |> Enum.map_join("-", fn segment -> Map.get(@bcp47_script_to_unicode, segment, segment) end)
+  end
+
+  # Normalize the BCP-47 `m0` mechanism subtag from its alias form to the
+  # canonical form (see `@m0_type_aliases`). The mechanism is the sequence of
+  # subtags immediately after `-m0-`, so we rewrite only a matching alias prefix
+  # of that value and leave any trailing subtags (e.g. `-geminate`) intact.
+  defp normalize_m0_aliases(transform_id) do
+    case String.split(transform_id, "-m0-", parts: 2) do
+      [prefix, value] -> prefix <> "-m0-" <> normalize_m0_value(value)
+      [_] -> transform_id
+    end
+  end
+
+  defp normalize_m0_value(value) do
+    Enum.reduce_while(@m0_type_aliases, value, fn {alias_form, canonical}, acc ->
+      cond do
+        acc == alias_form ->
+          {:halt, canonical}
+
+        String.starts_with?(acc, alias_form <> "-") ->
+          {:halt, canonical <> "-" <> rest_after(acc, alias_form)}
+
+        true ->
+          {:cont, acc}
+      end
+    end)
+  end
+
+  defp rest_after(value, alias_form) do
+    String.replace_prefix(value, alias_form <> "-", "")
   end
 
   @doc """

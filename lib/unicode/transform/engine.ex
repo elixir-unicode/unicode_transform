@@ -27,6 +27,14 @@ defmodule Unicode.Transform.Engine do
   # Cache compiled regexes to avoid recompiling on every match attempt
   @regex_cache_table :unicode_transform_regex_cache
 
+  # Boundary sentinel used for context matching at the start and end of the text.
+  # ICU transliteration treats the positions before the first and after the last
+  # character as an "anchor" (ETHER): a UnicodeSet such as the word boundary
+  # `[^[:L:][:M:][:N:]]` matches there. We reproduce that by matching a start/end
+  # context against U+FFFF (a noncharacter that cannot occur in real input) rather
+  # than the empty string, so negated-set boundary contexts fire at the text ends.
+  @boundary_sentinel <<0xFFFF::utf8>>
+
   @doc """
   Executes a compiled transform on a string.
 
@@ -163,16 +171,33 @@ defmodule Unicode.Transform.Engine do
   defp check_before_context(_before, nil), do: true
 
   defp check_before_context(before, context) do
-    regex = get_or_compile_regex(context, :suffix)
-    Regex.match?(regex, before)
+    regex = get_or_compile_regex(translate_context_anchors(context), :suffix)
+    # At the start of the text, match against the boundary sentinel (see above).
+    subject = if before == "", do: @boundary_sentinel, else: before
+    Regex.match?(regex, subject)
   end
 
   # Check after context
   defp check_after_context(_after, nil), do: true
 
   defp check_after_context(after_text, context) do
-    regex = get_or_compile_regex(context, :prefix)
-    Regex.match?(regex, after_text)
+    regex = get_or_compile_regex(translate_context_anchors(context), :prefix)
+    # At the end of the text, match against the boundary sentinel (see above).
+    subject = if after_text == "", do: @boundary_sentinel, else: after_text
+    Regex.match?(regex, subject)
+  end
+
+  # Translate the ICU boundary anchor `$` in a context pattern to the boundary
+  # sentinel. In CLDR rules `$` in a context is the start/end-of-text anchor, so a
+  # negated set like `[^.$]` must *exclude* the text boundary (and a bare `$` must
+  # match *only* at the boundary). Variables have already been substituted by the
+  # time contexts reach the engine, so any remaining unescaped `$` is an anchor.
+  defp translate_context_anchors(context) do
+    if String.contains?(context, "$") do
+      Regex.replace(~r/(?<!\\)\$/u, context, @boundary_sentinel)
+    else
+      context
+    end
   end
 
   # Match a pattern at the beginning of the string.

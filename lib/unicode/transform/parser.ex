@@ -146,9 +146,14 @@ defmodule Unicode.Transform.Parser do
   end
 
   # Parse a variable definition: $var = value ;
+  #
+  # CLDR variable names are Unicode identifiers, not just ASCII — for example the
+  # Ethiopic transforms define `$ግዕዝ = 'a'`. The name class must therefore admit
+  # any letter/mark/number plus underscore, or those definitions are silently
+  # dropped and their references pass through unresolved.
   defp parse_definition(rule) do
     case Regex.run(
-           ~r/^\$([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/u,
+           ~r/^\$([\p{L}_][\p{L}\p{M}\p{N}_]*)\s*=\s*(.+)$/u,
            strip_comment_and_semicolon(rule)
          ) do
       [_, variable, value] ->

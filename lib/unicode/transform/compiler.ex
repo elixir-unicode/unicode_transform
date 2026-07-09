@@ -251,8 +251,13 @@ defmodule Unicode.Transform.Compiler do
   # Substitute variable references in a string.
   # Spaces adjacent to variable references are syntactic separators
   # in the CLDR rule format, not literal characters.
+  #
+  # The name class matches `parse_definition/1`: CLDR variable names are Unicode
+  # identifiers (e.g. the Ethiopic `$ግዕዝ`), so the `u` flag and Unicode property
+  # classes are required. A digit-led `$1` is a backreference, not a variable, so
+  # the letter/underscore start deliberately excludes it.
   defp substitute_variables(text, variables) when is_binary(text) do
-    Regex.replace(~r/\s*\$([a-zA-Z_][a-zA-Z0-9_]*)\s*/, text, fn _match, var_name ->
+    Regex.replace(~r/\s*\$([\p{L}_][\p{L}\p{M}\p{N}_]*)\s*/u, text, fn _match, var_name ->
       Map.get(variables, var_name, "$" <> var_name)
     end)
   end
