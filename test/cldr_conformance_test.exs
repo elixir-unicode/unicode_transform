@@ -49,7 +49,9 @@ defmodule Unicode.Transform.CldrConformanceTest do
   defp read_cases(file) do
     file
     |> File.read!()
-    |> String.split("\n")
+    # Split on any line ending. Some CLDR test files are stored CRLF, and a
+    # trailing `\r` would otherwise corrupt the last (expected) field.
+    |> String.split(~r/\r\n|\r|\n/)
     |> Enum.reject(&(&1 == "" or String.starts_with?(String.trim_leading(&1), "#")))
     |> Enum.flat_map(fn line ->
       case String.split(line, "\t") do
