@@ -249,7 +249,7 @@ The `:backend` option controls which engine executes the transform at runtime:
 ```elixir
 # Use the NIF (ICU) backend explicitly
 iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin, backend: :nif)
-{:ok, "avgd"}
+{:ok, "abgd"}
 
 # Use the pure-Elixir backend explicitly
 iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin, backend: :elixir)
@@ -257,7 +257,7 @@ iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin, backend: 
 
 # Default: NIF when available, Elixir otherwise
 iex> Unicode.Transform.transform("αβγδ", from: :greek, to: :latin)
-{:ok, "avgd"}
+{:ok, "abgd"}
 ```
 
 When `:backend` is `:nif` and ICU does not recognise the transform ID (for
