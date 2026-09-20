@@ -80,7 +80,7 @@ iex> Unicode.Transform.transform("हिन्दी", from: :devanagari, to: :b
 {:ok, "হিন্দী"}
 
 iex> Unicode.Transform.transform("বাংলা", from: :bengali, to: :gujarati)
-{:ok, "બাંলা"}
+{:ok, "બાંલા"}
 ```
 
 ### Japanese script conversion

@@ -2,11 +2,11 @@
 
 ## Unicode Transform 1.2.0
 
-This is the changelog for Unicode Transform 1.2.0 released on September 20th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
+This is the changelog for Unicode Transform 1.2.0, as yet unreleased.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
 
 ### Bug Fixes
 
-* Remove fourteen stale `Ethiopic-*` rule files left over from before CLDR renamed them to their BCP-47 identifiers. They shadowed the current rules for the reverse direction, so `und-Ethi-t-und-latn-m0-sera` and its siblings resolved to outdated rule sets. See `TRANSFORMS.md` for the current Ethiopic identifiers.
+* Remove fourteen stale `Ethiopic-*` rule files left over from before CLDR renamed them to their BCP-47 identifiers; they shadowed the current reverse-direction rules, so `und-Ethi-t-und-latn-m0-sera` and its siblings resolved to outdated rule sets. See `TRANSFORMS.md` for the current Ethiopic identifiers.
 
 ### Enhancements
 
