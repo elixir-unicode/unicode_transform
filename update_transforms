@@ -8,7 +8,7 @@ set -euo pipefail
 # to the target release tag, for example:
 #
 #     git -C "$CLDR_REPO" fetch --tags
-#     git -C "$CLDR_REPO" checkout release-47
+#     git -C "$CLDR_REPO" checkout release-49
 #
 # Usage:
 #
@@ -17,7 +17,7 @@ set -euo pipefail
 #     mix test
 
 # Location of the cloned CLDR repo.
-CLDR_REPO="${CLDR_REPO:-$HOME/Development/cldr_repo}"
+CLDR_REPO="${CLDR_REPO:-$HOME/Development/cldr/cldr_repo}"
 
 # Location of this unicode_transform repo (defaults to the script's own repo).
 UNICODE_TRANSFORM="${UNICODE_TRANSFORM:-${0:A:h}}"

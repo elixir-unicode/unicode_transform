@@ -2,7 +2,7 @@
 
 `unicode_transform` is an Elixir implementation of the [CLDR Transform](https://unicode.org/reports/tr35/tr35-general.html#Transforms) specification ([Unicode Technical Standard #35, Section 10](https://unicode.org/reports/tr35/tr35-general.html#Rule_Syntax)). It transliterates text between scripts, applies normalization and case mappings, and executes arbitrary CLDR transform rule sets at runtime. A opt-in NIF is included in the library for high performance transformations (see the [performance](#performance) section for details - the NIF is not always the fastest transformer).
 
-`unicode_transform` ships with all 394 CLDR transform XML files covering script conversions (Greek, Cyrillic, Arabic, Devanagari, Thai, Hangul, and many more), Indic cross-script transliterations, BGN/PCGN romanizations, and specialized transforms like `Any-Publishing` and `Fullwidth-Halfwidth`.
+`unicode_transform` ships with all 380 CLDR transform XML files covering script conversions (Greek, Cyrillic, Arabic, Devanagari, Thai, Hangul, and many more), Indic cross-script transliterations, BGN/PCGN romanizations, and specialized transforms like `Any-Publishing` and `Fullwidth-Halfwidth`.
 
 ## Installation
 
@@ -167,7 +167,7 @@ Transform names are resolved in order of priority:
 
 1. **Built-in transforms** — names like `NFC`, `NFD`, `Any-Upper`, `Any-Lower`, and `Any-Title` map directly to Elixir standard library functions (`String.normalize/2`, `String.upcase/1`, etc.).
 
-2. **CLDR XML alias match** — each of the 394 XML files declares forward and backward aliases in its metadata. The alias `"Greek-Latin"` points to `priv/transforms/Greek-Latin.xml` in the forward direction. The backward alias `"Latin-Greek"` points to the same file but compiles in the reverse direction. Aliases are indexed into a `persistent_term` map on first use.
+2. **CLDR XML alias match** — each of the 380 XML files declares forward and backward aliases in its metadata. The alias `"Greek-Latin"` points to `priv/transforms/Greek-Latin.xml` in the forward direction. The backward alias `"Latin-Greek"` points to the same file but compiles in the reverse direction. Aliases are indexed into a `persistent_term` map on first use.
 
 3. **Filename match** — if no alias matches, `unicode_transform` looks for a file named `priv/transforms/<transform-id>.xml`.
 
@@ -300,7 +300,7 @@ The Elixir engine and the ICU NIF backend produce identical results for built-in
 These deviations will change depending on:
 
 * The version of ICU installed and used with the NIF,
-* The version of the CLDR transform definitions in use. These are part of the `cldr_transform` library and updated from the CLDR repository. The current versions are from CLDR 48.2.
+* The version of the CLDR transform definitions in use. These are part of the `cldr_transform` library and updated from the CLDR repository. The current versions are from the CLDR 49 pre-release (`release-49-alpha2`).
 * The version of Unicode used by Elixir (version 17 as of Elixir 1.19);
 * The Unicode version embedded in OTP (it's Unicode 16 with OTP 28) and
 * The version of Unicode supported by the [unicode](https://hex.pm/packages/unicode) and    [unicode_set](https://hex.pm/packages/unicode_set) packages - Unicode 17 as of `cldr_transform` version 1.0.0.
@@ -452,7 +452,7 @@ mix run bench/latin_ascii_benchmark.exs
 
 The transform rules in `priv/transforms/*.xml` are copied verbatim from a [CLDR](https://github.com/unicode-org/cldr) release. To refresh them for a new CLDR release (CLDR publishes twice a year, in spring and autumn):
 
-1. Check out the target release in a local CLDR clone: `git -C "$CLDR_REPO" fetch --tags && git -C "$CLDR_REPO" checkout release-47`.
+1. Check out the target release in a local CLDR clone: `git -C "$CLDR_REPO" fetch --tags && git -C "$CLDR_REPO" checkout release-49`.
 
 2. Run `CLDR_REPO=/path/to/cldr ./update_transforms`. This clears `priv/transforms/` and copies the new `*.xml` files in (so transforms removed upstream do not linger), and prints the CLDR version it copied from.
 

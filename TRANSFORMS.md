@@ -1,6 +1,6 @@
 # Available Transforms
 
-This document lists all transforms available in `unicode_transform`, including the `:from` and `:to` option atoms, direct transform IDs for the `:transform` option, and the 394 CLDR XML rule sets that ship with `unicode_transform`.
+This document lists all transforms available in `unicode_transform`, including the `:from` and `:to` option atoms, direct transform IDs for the `:transform` option, and the 380 CLDR XML rule sets that ship with `unicode_transform`.
 
 ## Using transforms
 
@@ -409,21 +409,32 @@ iex> Unicode.Transform.transform("İSTANBUL", transform: "tr-Lower")
 
 ## Ethiopic transforms
 
-| Transform ID | Description |
-|---|---|
-| `Ethiopic-Latin-ALALOC` | Ethiopic to Latin (ALA-LOC standard) |
-| `Ethiopic-Latin-Aethiopica` | Ethiopic to Latin (Aethiopica) |
-| `Ethiopic-Latin-BetaMetsehaf` | Ethiopic to Latin (Beta Maṣāḥǝft) |
-| `Ethiopic-Latin-ES3842` | Ethiopic to Latin (ES 3842) |
-| `Ethiopic-Latin-IES_JES_1964` | Ethiopic to Latin (IES/JES 1964) |
-| `Ethiopic-Latin-Lambdin` | Ethiopic to Latin (Lambdin) |
-| `Ethiopic-Latin-SERA` | Ethiopic to Latin (SERA) |
-| `Ethiopic-Latin-TekieAlibekit` | Ethiopic to Latin (Tekie Alibekit) |
-| `Ethiopic-Latin-Xaleget` | Ethiopic to Latin (Xaleget) |
-| `Ethiopic-Braille-Amharic` | Ethiopic to Braille (Amharic) |
-| `Ethiopic-Cyrillic-Gutgarts` | Ethiopic to Cyrillic (Gutgarts) |
-| `Ethiopic-Ethiopic-Gurage` | Ethiopic variant (Gurage) |
-| `Ethiopic-Musnad` | Ethiopic to Musnad |
+CLDR names these rule files by their BCP-47 identifier. Each row lists the forward alias followed by its BCP-47 form; transforms marked "both" also resolve in the reverse direction (for example `Latin-Ethiopic/SERA` or `und-Ethi-t-und-latn-m0-sera`).
+
+| Transform ID | Direction | Description |
+|---|---|---|
+| `Ethiopic-Latin` / `und-Latn-t-und-ethi` | both | Ethiopic to Latin (default) |
+| `Ethiopic-Latin/ALALOC` / `und-Latn-t-und-ethi-m0-alaloc` | both | Ethiopic to Latin (ALA-LC) |
+| `Ethiopic-Latin/ALALOC_Geminate` / `und-Latn-t-und-ethi-m0-alaloc-geminate` | forward | Ethiopic to Latin (ALA-LC, geminated) |
+| `Ethiopic-Latin/Aethiopica` / `und-Latn-t-und-ethi-m0-aethiopi` | both | Ethiopic to Latin (Aethiopica) |
+| `Ethiopic-Latin/Aethiopica_Geminate` / `und-Latn-t-und-ethi-m0-aethiopi-geminate` | forward | Ethiopic to Latin (Aethiopica, geminated) |
+| `Ethiopic-Latin/Beta_Metsehaf` / `und-Latn-t-und-ethi-m0-betamets` | both | Ethiopic to Latin (Beta Maṣāḥǝft) |
+| `Ethiopic-Latin/BetaMetsehaf_Geminate` / `und-Latn-t-und-ethi-m0-betamets-geminate` | forward | Ethiopic to Latin (Beta Maṣāḥǝft, geminated) |
+| `Ethiopic-Latin/ES3842` / `und-Latn-t-und-ethi-m0-es3842` | forward | Ethiopic to Latin (ES 3842) |
+| `Ethiopic-Latin/IES_JES_1964` / `und-Latn-t-und-ethi-m0-iesjes-1964` | both | Ethiopic to Latin (IES/JES 1964) |
+| `Ethiopic-Latin/IES_JES_1964_Geminate` / `und-Latn-t-und-ethi-m0-iesjes-1964-geminate` | forward | Ethiopic to Latin (IES/JES 1964, geminated) |
+| `Ethiopic-Latin/Lambdin` / `und-Latn-t-und-ethi-m0-lambdin` | both | Ethiopic to Latin (Lambdin) |
+| `Ethiopic-Latin/SERA` / `und-Latn-t-und-ethi-m0-sera` | both | Ethiopic to Latin (SERA) |
+| `Ethiopic-Latin/Tekie_Alibekit` / `byn-Latn-t-byn-ethi-m0-tekieali` | both | Blin (Ethiopic) to Latin (Tekie Alibekit) |
+| `Ethiopic-Latin/Xaleget` / `byn-Latn-t-byn-ethi-m0-xaleget` | both | Blin (Ethiopic) to Latin (Xaleget) |
+| `Latin-Ethiopic/Williamson` / `und-Ethi-t-und-latn-m0-williams` | both | Latin to Ethiopic (Williamson) |
+| `Amharic-Latin/BGN` / `am-Latn-t-am-m0-bgn` | forward | Amharic to Latin (BGN/PCGN) |
+| `Amharic-Amharic/Geminate` / `am-Ethi-t-am-ethi-m0-geminate` | forward | Amharic gemination marking |
+| `Ethiopic-Braille/Amharic` / `am-Brai-t-am-ethi` | both | Amharic (Ethiopic) to Braille |
+| `am-Ethi-t-d0-morse` | both | Amharic (Ethiopic) to Morse code |
+| `Ethiopic-Cyrillic/Gutgarts` / `und-Cyrl-t-und-ethi-m0-gutgarts` | both | Ethiopic to Cyrillic (Gutgarts) |
+| `Ethiopic-Ethiopic/Gurage` / `und-Ethi-t-sgw-ethi-m0-gurage-2013` | both | Sebat Bet Gurage (Ethiopic) to standard Ethiopic (2013 orthography) |
+| `Geez-Musnad` / `und-Sarb-t-gz-ethi` | both | Geʽez (Ethiopic) to Old South Arabian (Musnad) |
 
 ## Phonetic (IPA/FONIPA) transforms
 

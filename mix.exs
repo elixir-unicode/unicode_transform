@@ -1,13 +1,13 @@
 defmodule UnicodeTransform.MixProject do
   use Mix.Project
 
-  @version "1.1.0"
+  @version "1.2.0"
 
   def project do
     [
       app: :unicode_transform,
       version: @version,
-      elixir: "~> 1.8",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       build_embedded: Mix.env() == :prod,
       compilers: maybe_elixir_make() ++ Mix.compilers(),
@@ -97,7 +97,7 @@ defmodule UnicodeTransform.MixProject do
 
   defp deps do
     [
-      {:unicode_set, "~> 1.7"},
+      {:unicode_set, "~> 1.9"},
       {:sweet_xml, "~> 0.7", runtime: false},
       {:ex_doc, "~> 0.24", only: [:dev, :release], runtime: false, optional: true},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false, optional: true},

@@ -5,8 +5,8 @@ conformance tests are self-contained and reproducible (idempotent) without a
 local CLDR checkout.
 
 * Source: <https://github.com/unicode-org/cldr> — `common/testData/transforms/`
-* CLDR version: **48** (matches the CLDR 48.2 transform rules shipped in `priv/transforms/`)
-* Branch/tag: `maint/maint-48` (`release-48`)
+* CLDR version: **49** pre-release (matches the CLDR 49 transform rules shipped in `priv/transforms/`)
+* Branch/tag: `release-49-alpha2` (commit `a4d52a51ff`)
 * Vendored: 291 `*.txt` files
 
 Each `*.txt` file is named with the BCP-47 transform identifier it exercises
@@ -14,8 +14,9 @@ Each `*.txt` file is named with the BCP-47 transform identifier it exercises
 Every non-comment line is a tab-separated `source<TAB>expected` pair: applying
 the named transform (forward direction) to `source` must produce `expected`.
 
-`_readme.txt` is the original README from the CLDR test-data directory (it is not
-a test file and is skipped by the conformance harness).
+`_readme.txt` is the original README from the CLDR test-data directory (CLDR 49
+renamed it to `README.md` upstream). It is not a test file and is skipped by the
+conformance harness.
 
 ## Updating
 

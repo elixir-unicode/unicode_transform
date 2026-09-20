@@ -1,5 +1,21 @@
 # Changelog
 
+## Unicode Transform 1.2.0
+
+This is the changelog for Unicode Transform 1.2.0 released on September 20th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
+
+### Bug Fixes
+
+* Remove fourteen stale `Ethiopic-*` rule files left over from before CLDR renamed them to their BCP-47 identifiers. They shadowed the current rules for the reverse direction, so `und-Ethi-t-und-latn-m0-sera` and its siblings resolved to outdated rule sets. See `TRANSFORMS.md` for the current Ethiopic identifiers.
+
+### Enhancements
+
+* Update the bundled transform rules and the conformance test data to the CLDR 49 pre-release (`release-49-alpha2`). `Han-Latin` gains the Unihan 18 readings, `ug-Latin` moves to the new-style rule format, and `de-ASCII`, `Latin-NumericPinyin` and `blt-fonipa-t-blt` receive upstream set-syntax corrections.
+
+* Require `unicode_set ~> 1.9` (and therefore `unicode ~> 2.2`), which resolves every UCD property value including `@missing` defaults, and raise the Elixir floor to 1.17 to match.
+
+* Update the CI matrix to OTP 27.3.4.17, 28.5.0.6 and 29.1 with Elixir 1.20.4 on the lint row.
+
 ## Unicode Transform 1.1.0
 
 This is the changelog for Unicode Transform 1.1.0 released on July 8th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
