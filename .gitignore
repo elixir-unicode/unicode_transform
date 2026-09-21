@@ -27,3 +27,4 @@ priv/*.so
 c_src/*.o
 c_src/env.mk
 
+CLAUDE.local.md
