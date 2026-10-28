@@ -126,6 +126,7 @@ defmodule UnicodeTransform.MixProject do
       logo: "logo.png",
       extras: [
         "README.md",
+        "TRANSFORMS.md",
         "LICENSE.md",
         "CHANGELOG.md"
       ],

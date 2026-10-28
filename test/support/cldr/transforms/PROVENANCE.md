@@ -5,8 +5,8 @@ conformance tests are self-contained and reproducible (idempotent) without a
 local CLDR checkout.
 
 * Source: <https://github.com/unicode-org/cldr> — `common/testData/transforms/`
-* CLDR version: **49** pre-release (matches the CLDR 49 transform rules shipped in `priv/transforms/`)
-* Branch/tag: `release-49-alpha2` (commit `a4d52a51ff`)
+* CLDR version: **49** (matches the CLDR 49 transform rules shipped in `priv/transforms/`)
+* Branch/tag: `release-49` (commit `96e54b273d`)
 * Vendored: 291 `*.txt` files
 
 Each `*.txt` file is named with the BCP-47 transform identifier it exercises

@@ -9,7 +9,7 @@
 ```elixir
 def deps do
   [
-    {:unicode_transform, "~> 1.0"}
+    {:unicode_transform, "~> 1.2"}
   ]
 end
 ```
@@ -299,11 +299,15 @@ The Elixir engine and the ICU NIF backend produce identical results for built-in
 
 These deviations will change depending on:
 
-* The version of ICU installed and used with the NIF,
-* The version of the CLDR transform definitions in use. These are part of the `cldr_transform` library and updated from the CLDR repository. The current versions are from the CLDR 49 pre-release (`release-49-alpha2`).
-* The version of Unicode used by Elixir (version 17 as of Elixir 1.19);
-* The Unicode version embedded in OTP (it's Unicode 16 with OTP 28) and
-* The version of Unicode supported by the [unicode](https://hex.pm/packages/unicode) and    [unicode_set](https://hex.pm/packages/unicode_set) packages - Unicode 17 as of `cldr_transform` version 1.0.0.
+* The version of ICU installed and used with the NIF.
+
+* The version of the CLDR transform definitions in use. These are part of the `unicode_transform` library and updated from the CLDR repository. The current versions are from CLDR 49 (`release-49`).
+
+* The version of Unicode used by Elixir (Unicode 17 as of Elixir 1.20).
+
+* The Unicode version embedded in OTP.
+
+* The version of Unicode supported by the [unicode](https://hex.pm/packages/unicode) and [unicode_set](https://hex.pm/packages/unicode_set) packages (Unicode 18 as of `unicode_transform` 1.2.0).
 
 ### Armenian: different romanization standards
 

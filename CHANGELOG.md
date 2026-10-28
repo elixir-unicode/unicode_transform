@@ -2,7 +2,7 @@
 
 ## Unicode Transform 1.2.0
 
-This is the changelog for Unicode Transform 1.2.0, as yet unreleased.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
+This is the changelog for Unicode Transform 1.2.0 released on October 28th, 2026.  For older changelogs please consult the release tag on [GitHub](https://github.com/elixir-unicode/unicode_transform/tags)
 
 ### Bug Fixes
 
@@ -10,11 +10,11 @@ This is the changelog for Unicode Transform 1.2.0, as yet unreleased.  For older
 
 ### Enhancements
 
-* Update the bundled transform rules and the conformance test data to the CLDR 49 pre-release (`release-49-alpha2`). `Han-Latin` gains the Unihan 18 readings, `ug-Latin` moves to the new-style rule format, and `de-ASCII`, `Latin-NumericPinyin` and `blt-fonipa-t-blt` receive upstream set-syntax corrections.
+* Update the bundled transform rules and the conformance test data to CLDR 49. `Han-Latin` gains the Unihan 18 readings, `ug-Latin` moves to the new-style rule format, and `de-ASCII`, `Latin-NumericPinyin` and `blt-fonipa-t-blt` receive upstream set-syntax corrections.
 
 * Require `unicode_set ~> 1.9` (and therefore `unicode ~> 2.2`), which resolves every UCD property value including `@missing` defaults, and raise the Elixir floor to 1.17 to match.
 
-* Update the CI matrix to OTP 27.3.4.17, 28.5.0.6 and 29.1 with Elixir 1.20.4 on the lint row.
+* Update the CI matrix to the latest OTP 27, 28 and 29 patch releases with Elixir 1.20.4 on the lint row, and add a docs warnings-as-errors gate.
 
 ## Unicode Transform 1.1.0
 
